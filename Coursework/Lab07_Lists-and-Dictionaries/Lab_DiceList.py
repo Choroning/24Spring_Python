@@ -1,6 +1,6 @@
 """
 @file    Lab_DiceList.py
-@brief   주사위를 1000번 던져 눈마다 리스트 원소로 횟수를 세고 상대 빈도를 계산
+@brief   주사위를 1000번 던져 눈마다 리스트 요소로 횟수를 세고 상대 빈도를 계산
 @author  박철원 (Cheolwon Park)
 @date    2024-05-23
 """

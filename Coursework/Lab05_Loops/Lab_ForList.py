@@ -1,6 +1,6 @@
 """
 @file    Lab_ForList.py
-@brief   리스트의 원소를 차례로 꺼내는 for문
+@brief   리스트의 요소를 차례로 꺼내는 for문
 @author  박철원 (Cheolwon Park)
 @date    2024-04-04
 """

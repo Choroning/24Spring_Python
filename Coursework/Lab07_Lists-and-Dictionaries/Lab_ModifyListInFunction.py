@@ -1,6 +1,6 @@
 """
 @file    Lab_ModifyListInFunction.py
-@brief   함수로 리스트의 첫 원소를 바꾸는 두 방법
+@brief   함수로 리스트의 첫 요소를 바꾸는 두 방법
 @author  박철원 (Cheolwon Park)
 @date    2024-05-20
 """

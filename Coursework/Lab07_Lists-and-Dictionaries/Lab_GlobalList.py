@@ -1,6 +1,6 @@
 """
 @file    Lab_GlobalList.py
-@brief   함수 안에서 전역 리스트에 원소를 추가
+@brief   함수 안에서 전역 리스트에 요소를 추가
 @author  박철원 (Cheolwon Park)
 @date    2024-05-16
 """

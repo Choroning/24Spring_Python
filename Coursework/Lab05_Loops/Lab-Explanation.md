@@ -16,8 +16,8 @@
 ## Table of Contents
 
 - [1. Lab Layout and How to Run](#1-lab-layout-and-how-to-run)
-- [2. The for Loop and range()](#2-the-for-loop-and-range)
-  - [2.1 A for Loop over a List](#21-a-for-loop-over-a-list)
+- [2. The for Statement and range()](#2-the-for-statement-and-range)
+  - [2.1 A for Statement over a List](#21-a-for-statement-over-a-list)
   - [2.2 range() and Indices](#22-range-and-indices)
   - [2.3 Start, Stop, and Step](#23-start-stop-and-step)
   - [2.4 Counting Down](#24-counting-down)
@@ -26,10 +26,10 @@
   - [3.1 The Sum from 1 to n](#31-the-sum-from-1-to-n)
   - [3.2 The Sum of the Digits](#32-the-sum-of-the-digits)
   - [3.3 Repeating Circles with Turtle Graphics](#33-repeating-circles-with-turtle-graphics)
-- [4. The while Loop](#4-the-while-loop)
+- [4. The while Statement](#4-the-while-statement)
   - [4.1 Password Check](#41-password-check)
-  - [4.2 A Running Sum with a while Loop](#42-a-running-sum-with-a-while-loop)
-  - [4.3 Converting a for Loop to a while Loop](#43-converting-a-for-loop-to-a-while-loop)
+  - [4.2 A Running Sum with a while Statement](#42-a-running-sum-with-a-while-statement)
+  - [4.3 Converting a for Statement to a while Statement](#43-converting-a-for-statement-to-a-while-statement)
 - [5. break and continue](#5-break-and-continue)
   - [5.1 break](#51-break)
   - [5.2 continue](#52-continue)
@@ -48,7 +48,7 @@ This code was written while following [Lecture 5, Loops](../../Lecture-Notes/Lec
 Coursework/Lab05_Loops/
 ├── Lab-Explanation.ko.md          # This document (Korean)
 ├── Lab-Explanation.md             # This document (English)
-├── Lab_ForList.py                 # 2.1 A for loop over a list
+├── Lab_ForList.py                 # 2.1 A for statement over a list
 ├── Lab_ForRangeIndex.py           # 2.2 range() and indices
 ├── Lab_RangeStep.py               # 2.3 Start, stop, and step
 ├── Lab_RangeCountdown.py          # 2.4 Counting down
@@ -57,8 +57,8 @@ Coursework/Lab05_Loops/
 ├── Lab_DigitSum.py                # 3.2 The sum of the digits
 ├── Lab_TurtleCircles.py           # 3.3 Repeating circles with turtle graphics
 ├── Lab_PasswordCheck.py           # 4.1 Password check
-├── Lab_WhileSumToN.py             # 4.2 A running sum with a while loop
-├── Lab_ForToWhile.py              # 4.3 Converting a for loop to a while loop
+├── Lab_WhileSumToN.py             # 4.2 A running sum with a while statement
+├── Lab_ForToWhile.py              # 4.3 Converting a for statement to a while statement
 ├── Lab_Break.py                   # 5.1 break
 └── Lab_Continue.py                # 5.2 continue
 ```
@@ -76,9 +76,9 @@ python3 Lab_ForList.py
 
 <br>
 
-## 2. The for Loop and range()
+## 2. The for Statement and range()
 
-### 2.1 A for Loop over a List
+### 2.1 A for Statement over a List
 
 **Code:** [Lab_ForList.py](Lab_ForList.py)
 
@@ -325,7 +325,7 @@ for count in range(12):
 
 <br>
 
-## 4. The while Loop
+## 4. The while Statement
 
 ### 4.1 Password Check
 
@@ -352,7 +352,7 @@ print("로그인 성공")
 로그인 성공
 ```
 
-### 4.2 A Running Sum with a while Loop
+### 4.2 A Running Sum with a while Statement
 
 **Code:** [Lab_WhileSumToN.py](Lab_WhileSumToN.py)
 
@@ -396,7 +396,7 @@ while (i <= n):
 
 > **Caution:** If `i += 1` is left out of the block, `i` stays 0 and the condition `i <= n` stays true forever. A loop that never ends in this way is called an **infinite loop**, and a running program can be stopped with Ctrl+C.
 
-### 4.3 Converting a for Loop to a while Loop
+### 4.3 Converting a for Statement to a while Statement
 
 **Code:** [Lab_ForToWhile.py](Lab_ForToWhile.py)
 
@@ -537,7 +537,7 @@ End of Program
 
    </details>
 
-4. **Converting to a while loop:** Write a `while` statement that does the same as the following `for` statement.
+4. **Converting to a while statement:** Write a `while` statement that does the same as the following `for` statement.
 
    ```python
    for k in range(10, 0, -2):

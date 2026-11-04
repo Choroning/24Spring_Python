@@ -1,6 +1,6 @@
 """
 @file    Lab_ListRepetition.py
-@brief   리스트의 반복(*)과 연결(+)
+@brief   리스트의 반복(*)과 접합(+)
 @author  박철원 (Cheolwon Park)
 @date    2024-05-16
 """
