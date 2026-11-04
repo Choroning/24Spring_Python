@@ -177,7 +177,7 @@ print(val)
 
 ## Exercise 8: Automatic Coffee Ordering Machine
 
-**Problem:** Create an automatic coffee ordering machine program that works as follows. Use the `input()` function, the `print()` function, and compound operators.
+**Problem:** Create an automatic coffee ordering machine program that works as follows. Use the `input()` function, the `print()` function, and compound assignment operators.
 
 - The price per cup is 2500 won for an americano, 3000 won for a cafe latte, and 3000 won for a cappuccino.
 - Two americanos, two cafe lattes, and one cappuccino were ordered at the coffee ordering machine.

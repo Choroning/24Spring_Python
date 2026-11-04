@@ -107,7 +107,7 @@ Loops are divided into two kinds according to how they decide when to stop. Pyth
 
 ### 2.1 Structure of the for Statement
 
-In Python, count-controlled repetition is written with the `for` statement, also called the **`for` statement**. Its basic form is as follows.
+In Python, count-controlled repetition is written with the `for` statement, also called the **`for` loop**. Its basic form is as follows.
 
 ```python
 for variable in sequence:
@@ -236,7 +236,7 @@ for variable in range(stop):
     statement
 ```
 
-`range(stop)` produces the integers from 0 to (stop - 1) in order. A loop of the form above therefore executes exactly stop times. The following program assigns 0, 1, 2, 3, 4 produced by `range(5)` to `i` in turn and executes the body 5 times.
+`range(stop)` produces the integers from 0 to (stop - 1) in order. A loop of the form above therefore executes exactly stop times when the stop is positive, and never when the stop is 0 or less. The following program assigns 0, 1, 2, 3, 4 produced by `range(5)` to `i` in turn and executes the body 5 times.
 
 ```python
 for i in range(5):
@@ -326,7 +326,7 @@ for i in range(10, 1, -1):   # from 10 down to 2, decreasing by 1
 
 > **Caution:** The stop is excluded in a decreasing range as well. `range(10, 1, -1)` goes down to 2, not to 1, and certainly not to 0. To repeat from 10 down to 1, write `range(10, 0, -1)`.
 
-If the step is omitted, 1 is used, so when the start is greater than the stop, no element satisfies the condition and the result is an **empty range**. Looping over an empty range never executes the body, and the following program prints nothing.
+If the step is omitted, 1 is used, so when the start is greater than or equal to the stop, no element satisfies the condition and the result is an **empty range**. Looping over an empty range never executes the body, and the following program prints nothing.
 
 ```python
 for i in range(10, 0):       # range(10, 0) is an empty range
@@ -458,7 +458,7 @@ Sum: 55
 
 *Table 4. Accumulating the sum from 1 to 10*
 
-The result can be checked with the formula for an arithmetic series. Pairing the numbers 1 to $n$ from both ends gives $n/2$ pairs, $(1 + n), (2 + (n-1)), \ldots$, each summing to $n + 1$, so the following holds.
+The result can be checked with the formula for an arithmetic series. Writing the sum $S = 1 + 2 + \cdots + n$ in reverse order as $S = n + (n-1) + \cdots + 1$ and adding the two term by term gives $n$ pairs, $(1 + n), (2 + (n-1)), \ldots$, each summing to $n + 1$, so $2S = n(n+1)$ and the following holds.
 
 $$1 + 2 + \cdots + n = \frac{n(n+1)}{2}, \qquad \frac{10 \times 11}{2} = 55$$
 
@@ -509,7 +509,7 @@ Figure 4 likens the `while` statement to a loop road. The child starts with `res
 response = "no"
 while response == "no":
     response = input("Mom, is it ready? ")
-print("Let's eat!")
+print("Let us eat")
 ```
 
 The following is the result when "no" is entered twice and then "yes" is entered.
@@ -518,10 +518,10 @@ The following is the result when "no" is entered twice and then "yes" is entered
 Mom, is it ready? no
 Mom, is it ready? no
 Mom, is it ready? yes
-Let's eat!
+Let us eat
 ```
 
-Because the first line sets `response` to `"no"`, the condition is true at the first check, so the question is printed at least once. Entering `"yes"` makes `response == "no"` false, so the repetition ends and `"Let's eat!"` is printed.
+Because the first line sets `response` to `"no"`, the condition is true at the first check, so the question is printed at least once. Entering `"yes"` makes `response == "no"` false, so the repetition ends and `"Let us eat"` is printed.
 
 ```mermaid
 flowchart TD
@@ -872,7 +872,7 @@ The list contains no even number, so `break` is never executed and the loop ends
    <details>
    <summary>Answer</summary>
 
-   `6 21` is printed. `total` grows as 1, 3, 6, 10, 15, 21, and when it reaches 21 the condition `total < 20` becomes false and the repetition ends. At that point `n` is 6. That is, `n` is the last number added when the running sum from 1 first reaches 20 or more.
+   `6 21` is printed. `total` grows as 1, 3, 6, 10, 15, 21, and when it reaches 21 the condition `total < 20` becomes false and the repetition ends. At that point `n` is 6. That is, `n` is the last number added when the sum of the numbers from 1 first reaches 20 or more.
 
    </details>
 

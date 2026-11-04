@@ -84,6 +84,7 @@ graph LR
     outp["Output Device"]
     mem <--> cu
     mem <--> alu
+    cu <--> alu
     inp --> cpu
     cpu --> outp
 ```
@@ -109,7 +110,7 @@ Opening the case of a desktop computer reveals parts that correspond to the comp
 
 *Figure 2. The CPU, RAM, mainboard, and hard disk of a desktop computer*
 
-- **CPU:** A semiconductor chip about the size of a fingernail, connected to the mainboard through the many contacts on its underside. The two chips at the upper left of the figure show the underside and the top of a CPU.
+- **CPU:** A part that holds a semiconductor chip in a square package smaller than a palm, connected to the mainboard through the many contacts on its underside. The two chips at the upper left of the figure show the underside and the top of a CPU.
 - **RAM:** A module in which several memory chips are mounted on a long board. It is used as main memory.
 - **Mainboard:** A large circuit board into which the other parts are plugged. The wiring that connects modules such as the CPU, RAM, and hard disk to one another, that is, the **bus**, is on this board (Section 5).
 - **Hard disk:** A secondary storage device that records data on magnetized disks (platters).
@@ -170,7 +171,7 @@ Steps 1-3 are performed by the control unit and step 4 by the arithmetic logic u
 | 2. Decode | Control unit | Interprets the instruction | Finds out that it means add the values at addresses 100 and 101 and put the sum at address 102 |
 | 3. Control | Control unit | Moves data and directs the operation | Moves 3 and 4 to the arithmetic logic unit and orders an addition |
 | 4. Execute | Arithmetic logic unit | Calculates | Computes 3 + 4 = 7 |
-| 5. Store | Memory | Stores the result | Writes 7 to address 102 (`c`) |
+| 5. Store | Arithmetic logic unit → memory | Stores the result | Writes 7 to address 102 (`c`) |
 
 *Table 3. The five steps of processing the instruction corresponding to `c = a + b`*
 
@@ -210,7 +211,7 @@ Table 4 lists the representative technology used for each kind of memory along w
 
 *Table 4. Representative access time, price, and volatility of each kind of memory*
 
-The ns (nanosecond) in Table 4 is one billionth of a second. The access time of a hard disk is millions of times that of a cache, so if all data were read from the hard disk without a hierarchy, the CPU would spend most of its time waiting.
+The ns (nanosecond) in Table 4 is one billionth of a second. The access time of a hard disk is millions to tens of millions of times that of a cache, so if all data were read from the hard disk without a hierarchy, the CPU would spend most of its time waiting.
 
 > **Definition:** Memory whose contents are lost when the power is turned off is called **volatile** memory, and memory whose contents remain when the power is turned off is called **nonvolatile** memory. Cache and RAM are volatile, while SSDs and hard disks are nonvolatile.
 
@@ -293,7 +294,7 @@ Java and C# mix the two approaches. A compiler translates the source code not in
 
 Python is a representative interpreted language. Python interpreters exist for all major operating systems, including Windows, macOS, and Linux, so a Python program written once usually runs on other operating systems without modification. Programmers also need to worry less about hardware details such as the CPU and memory, and the syntax is close to human language, which makes it familiar to beginners.
 
-> **Note:** **Python bytecode.** The standard Python interpreter (CPython) does not convert source code directly into machine code line by line. It first compiles the entire source code into an intermediate form called **bytecode**, and the Python virtual machine interprets and executes this bytecode one instruction at a time. The bytecode of a module imported from another file (Lecture 6) is saved as a `.pyc` file in the `__pycache__` folder and reused in later runs [4]. Classifying Python as an interpreted language therefore means that no machine-code executable is built in advance, and that the interpreter interprets the program at run time.
+> **Note:** **Python bytecode.** The standard Python interpreter (CPython) does not convert source code directly into machine code line by line. It first compiles the entire source code into an intermediate form called **bytecode**, and the Python virtual machine interprets and executes this bytecode one instruction at a time [4]. The bytecode of a module imported from another file (Lecture 6) is saved as a `.pyc` file in the `__pycache__` folder and, as long as the source file has not changed, reused in later runs [5]. Classifying Python as an interpreted language therefore means that no machine-code executable is built in advance, and that the interpreter interprets the program at run time.
 
 ---
 
@@ -303,7 +304,15 @@ Python is a representative interpreted language. Python interpreters exist for a
 
 ### 8.1 A Calculator
 
-With Python, one can build anything from a simple calculator to data analysis and artificial intelligence programs. The simplest example is a calculator. Consider a calculator program that prints a separator line, reads the expression `3+10*3`, and prints `3+10*3= 39`. Like a desktop calculator, this program calculates in the order of input, that is, from the front. It first computes 3 + 10 = 13 and then multiplies by 3 to get 39.
+With Python, one can build anything from a simple calculator to data analysis and artificial intelligence programs. The simplest example is a calculator. The following is the output of a calculator program written in Python. The program prints a separator line made of `=` and a `=` sign indicating that it is waiting for input, and when the user types `3+10*3=` as if pressing the keys of a desktop calculator, it prints the calculated result after the entered expression, `3+10*3= 39`.
+
+```text
+=============
+=3+10*3=
+3+10*3= 39
+```
+
+Like a desktop calculator, this program calculates in the order of input, that is, from the front. It first computes 3 + 10 = 13 and then multiplies by 3 to get 39.
 
 However, entering the same expression into Python gives a different result, because Python, as in mathematics, computes multiplication before addition (operator precedence in Lecture 2). `>>>` indicates that Python is waiting for a command, and the line below it is the result printed by Python.
 
@@ -324,7 +333,7 @@ Python is widely used for collecting, storing, processing, and analyzing large a
 
 *Figure 7. Terms related to big data and a graph of a regression line fitted to data*
 
-Regression analysis is a statistical technique that expresses as a formula how one variable (x) is related to another variable (y). The graph on the right of Figure 7, drawn with matplotlib, shows nine data points with x from 1 to 9 (red dots, data set) and the straight line drawn as close as possible to these points (blue line, regression). This line is called the regression line, and it shows the tendency of y to increase generally as x increases. Once the regression line is found, y can also be predicted for an x that has not yet been observed.
+Regression analysis is a statistical technique that expresses as a formula how one variable (x) is related to another variable (y). The graph at the lower right of Figure 7, drawn with matplotlib, shows nine data points with x from 1 to 9 (red dots, data set) and the straight line drawn as close as possible to these points (blue line, regression). This line is called the regression line, and it shows the tendency of y to increase generally as x increases. Once the regression line is found, y can also be predicted for an x that has not yet been observed.
 
 > **[Machine Learning]** The regression line $y = ax + b$ is usually determined by the **least squares method**. The vertical distance $y_i - (ax_i + b)$ from each data point $(x_i, y_i)$ to the line is treated as an error, and the $a$ and $b$ that minimize the sum of squared errors $\sum_i \left(y_i - (ax_i + b)\right)^2$ are chosen. Training and evaluating regression models are covered in Machine Learning.
 
@@ -338,7 +347,7 @@ Regression analysis is a statistical technique that expresses as a formula how o
 
 The **neural network** at the top of Figure 8 is a structure in which nodes, drawn as circles, are stacked in layers. The **input layer**, where data comes in, has 3 nodes, each of the two **hidden layers**, which perform intermediate calculations, has 4 nodes, and the **output layer**, which produces the result, has 1 node, and arrows connect every node of one layer to every node of the next layer. Each arrow carries a number called a weight, and learning is the process of adjusting these weights by looking at data. The name deep learning comes from the network being deep, with several hidden layers stacked.
 
-The bottom of Figure 8 shows images of handwritten digits from 0 to 9. The MNIST dataset, a collection of such handwritten digits, consists of 28 × 28 pixel grayscale images, with 60,000 for training and 10,000 for testing [5]. A neural network can be trained to classify which digit an image shows by feeding it the pixel values of the image, so this is a common first example in deep learning.
+The bottom of Figure 8 shows images of handwritten digits from 0 to 9. The MNIST dataset, a collection of such handwritten digits, consists of 28 × 28 pixel grayscale images, with 60,000 for training and 10,000 for testing [6]. A neural network can be trained to classify which digit an image shows by feeding it the pixel values of the image, so this is a common first example in deep learning.
 
 > **[Deep Learning]** The weights of a neural network are learned by gradient descent, which adjusts them little by little in the direction that reduces the difference between the prediction and the correct answer, and how much to adjust each weight is computed by backpropagation, which passes the error backward from the output layer toward the input layer. Neural network architectures such as CNNs used for image classification and training techniques are covered in Deep Learning.
 
@@ -469,4 +478,5 @@ The bottom of Figure 8 shows images of handwritten digits from 0 to 9. The MNIST
 2. J. von Neumann, "First Draft of a Report on the EDVAC," Moore School of Electrical Engineering, University of Pennsylvania, Philadelphia, PA, USA, Jun. 1945.
 3. D. A. Patterson and J. L. Hennessy, *Computer Organization and Design: The Hardware/Software Interface*, 5th ed. Waltham, MA, USA: Morgan Kaufmann, 2014.
 4. Python Software Foundation, "Glossary," *Python 3 Documentation*, accessed Nov. 4, 2026. https://docs.python.org/3/glossary.html
-5. Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner, "Gradient-based learning applied to document recognition," *Proceedings of the IEEE*, vol. 86, no. 11, pp. 2278-2324, 1998.
+5. Python Software Foundation, "Modules," *The Python Tutorial*, accessed Nov. 4, 2026. https://docs.python.org/3/tutorial/modules.html
+6. Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner, "Gradient-based learning applied to document recognition," *Proceedings of the IEEE*, vol. 86, no. 11, pp. 2278-2324, 1998.

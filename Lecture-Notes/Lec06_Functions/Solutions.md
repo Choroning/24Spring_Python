@@ -119,7 +119,7 @@ for i in range(10):
     n_polygon(6, 100)
 ```
 
-**Output:** No text is printed, and a picture like Figure 2 of Exercise 2 is drawn. All hexagons share the starting point as one vertex, and the 10 hexagons are placed at 20-degree intervals, so they spread like a fan over $10 \times 20 = 200$ degrees in total. The function `n_polygon()` is called 10 times in total, and the turtle moves 60 times and turns 70 times (60 times inside the hexagons and 10 times in the loop).
+**Output:** No text is printed, and a picture like Figure 2 of Exercise 2 is drawn. All hexagons share the starting point as one vertex, and the directions of their first sides run from 20 degrees to $20 + 9 \times 20 = 200$ degrees at 20-degree intervals. At the starting point each hexagon occupies the range of its interior angle, 120 degrees, counterclockwise from the direction of its first side, so the whole picture covers 300 degrees, from 20 to 320 degrees, and only the 60 degrees to the right of the starting point remain empty. The function `n_polygon()` is called 10 times in total, and the turtle moves 60 times and turns 70 times (60 times inside the hexagons and 10 times in the loop).
 
 > **Caution:** The integer division `360//n` is exact only when $n$ divides 360. For example, for $n = 7$, $360 / 7 \approx 51.43$, but `360//7` is 51, so even after 7 turns the turtle has turned only $7 \times 51 = 357$ degrees. Drawing a heptagon with side 100 this way leaves the turtle about 6.08 units away from the starting point, and the shape does not close. To draw an exact polygon for any $n$, use the floating-point division `360/n`.
 
@@ -172,7 +172,7 @@ main()
 원의 둘레: 15.70796326794895
 ```
 
-For a radius of 10, the area is $3.14159265358979 \times 10 \times 10 = 314.159265358979$ and the circumference is $2 \times 3.14159265358979 \times 10 = 62.8318530717958$. The long trailing digits in the results for the radius 2.5 come from the representation error that occurs when real numbers are stored in binary.
+For a radius of 10, the area is $3.14159265358979 \times 10 \times 10 = 314.159265358979$ and the circumference is $2 \times 3.14159265358979 \times 10 = 62.8318530717958$. The area for the radius 2.5 has many digits because the exact product $3.14159265358979 \times 6.25 = 19.6349540849361875$ has more digits. Floating-point numbers are stored in binary, so the floating-point number closest to this product is stored, and `print()` prints `19.634954084936187`, the shortest decimal that represents that floating-point number.
 
 - **Order of function definitions:** The body of `main()` calls `circleArea()` and `circleCircumference()`, which are defined further down, but no error occurs. The body is executed when `main()` is called, and the last line, which calls `main()`, comes after all three functions have been defined ([Lecture 6, Section 2.3](Concepts_Lecture.md#23-the-error-of-calling-before-defining)).
 - **Local variables:** `radius` is a local variable of `main()`, and the parameter `radius` of each computing function is a local variable of that function. They have the same name but are different variables, and the value is passed as an argument in the call.
@@ -222,7 +222,7 @@ print(sub(b=4, a=10), div(a=7, b=2))
 6 3.5
 ```
 
-The first line, 610, is the answer to the problem. The second line checks the other two functions. `sub(b=4, a=10)` writes the keyword arguments in a different order, but they correspond by name, so it is $10 - 4 = 6$, and `div(a=7, b=2)` is 3.5 because `/` is floating-point division. Subtraction and division are not commutative, so stating with keyword arguments which value is `a` and which is `b` reduces mistakes.
+The first line, 610, is the answer to the problem. The second line shows the results of calling the other two functions with keyword arguments. `sub(b=4, a=10)` writes the keyword arguments in a different order, but they correspond by name, so it is $10 - 4 = 6$, and `div(a=7, b=2)` is 3.5 because `/` is floating-point division. Subtraction and division are not commutative, so stating with keyword arguments which value is `a` and which is `b` reduces mistakes.
 
 ---
 
@@ -265,9 +265,9 @@ print(get_max3(7, 7, 3))
 7
 ```
 
-The tests cover the maximum in the first, second, and third positions, all negative numbers, and equal values. For example, in `get_max3(10, 30, 20)`, `get_max(10, 30)` returns 30, and `get_max(30, 20)` returns 30 again. Reusing an existing function as a part avoids writing a new `if` statement that compares three numbers.
+The five calls cover, in order, the maximum in the second, first, and third positions, all negative numbers, and equal values. For example, in `get_max3(10, 30, 20)`, `get_max(10, 30)` returns 30, and `get_max(30, 20)` returns 30 again. Reusing an existing function as a part avoids writing a new `if` statement that compares three numbers.
 
-> **Note:** Python has the built-in function `max()`, which returns the largest value, 30, when given several arguments as in `max(10, 30, 20)`. This problem does not use `max()` in order to practice combining functions.
+> **Note:** Python has the built-in function `max()`, which returns the largest value, 30, when given several arguments as in `max(10, 30, 20)`. This problem is an exercise in combining functions, so it does not use `max()`.
 
 ---
 
@@ -334,6 +334,6 @@ print(30+10/5*10)             # with Python's operator precedence
 
 The first line is the value computed step by step while storing intermediate results in variables, and the second line is the same computation written as one expression with nested function calls. Nested calls are executed starting from the innermost `cals.add(30, 10)`. The third line, for comparison, applies Python's operator precedence as it is: division and multiplication are computed first, giving $30 + (10 / 5) \times 10 = 30 + 20.0 = 50.0$. `div()` uses the floating-point division `/`, so the results are real numbers.
 
-When `import cals` is executed, Python looks for `cals.py` in `cals_demo/`, the folder of `main.py` and the first entry of the module search path, executes the file once to create the four functions, and binds the module object to the name `cals` ([Lecture 6, Section 8.3](Concepts_Lecture.md#83-how-the-import-statement-finds-a-module)). After the run, a `__pycache__` folder holding the compiled file appears inside `cals_demo/`. If `cals.py` is moved to another folder, `ModuleNotFoundError: No module named 'cals'` occurs.
+When `import cals` is executed, Python looks for `cals.py` in `cals_demo/`, the folder of `main.py` and the first entry of the module search path, executes the file once to create the four functions, and binds the module object to the name `cals` ([Lecture 6, Section 8.3](Concepts_Lecture.md#83-how-the-import-statement-finds-a-module)). In this process, a `__pycache__` folder holding the compiled file is created inside `cals_demo/`. If `cals.py` is moved to another folder, `ModuleNotFoundError: No module named 'cals'` occurs.
 
 > **Note:** If a module name is long or used often, `import cals as c` gives it an alias so that it can be used as `c.add(30, 10)`. With `from cals import *`, the functions can be used without the module name, as in `add(30, 10)`, but care is needed because a function of the same name in the current program is overwritten.

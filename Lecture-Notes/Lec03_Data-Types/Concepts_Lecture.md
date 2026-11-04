@@ -489,7 +489,7 @@ Omitting the start index slices from the beginning, and omitting the end index s
 
 ### 5.3 String Length and Immutability
 
-The length of a string, that is, the number of its characters, is obtained with the built-in function `len()` [2]. A space also counts as one character. The index of the last character is always `len(s) - 1`.
+The length of a string, that is, the number of its characters, is obtained with the built-in function `len()` [2]. A space also counts as one character. For a nonempty string, the index of the last character is always `len(s) - 1`.
 
 ```pycon
 >>> len(s)
@@ -517,7 +517,7 @@ TypeError: 'str' object does not support item assignment
 
 ## 6. Escape Sequences
 
-Characters that are hard to type directly into a string, such as a line break or a tab, and characters that have a special meaning inside a string, such as quotes, are represented by two characters starting with a backslash (`\`). Such a notation is called an **escape sequence** [3].
+Characters that are hard to type directly into a string, such as a line break or a tab, and characters that have a special meaning inside a string, such as quotes, are represented by a combination of characters starting with a backslash (`\`). Such a notation is called an **escape sequence** [3], and the main escape sequences consist of a backslash and one character, that is, two characters.
 
 | Escape Sequence | Meaning |
 |:-----|:-----|
@@ -546,7 +546,7 @@ He said "Hi"
 - Printing `\n` breaks the line at that point.
 - `\t` moves to the next tab stop.
 - A backslash marks the start of an escape sequence, so the backslash character itself is written twice, as in `\\`.
-- An escape sequence is written with two characters but is a single character, so `len("\n")` is 1.
+- The escape sequences of Table 4 are written with two characters, but each is a single character, so `len("\n")` is 1.
 
 > **Caution:** Writing a Windows path as a string with single backslashes creates unintended escape sequences. In `"C:\new\test"`, `\n` and `\t` are interpreted as a newline character and a tab character. Write each backslash twice, or put `r` before the quote to make a raw string, in which escape sequences are not interpreted [3].
 > ```pycon
@@ -565,7 +565,7 @@ He said "Hi"
 
 ## 7. String Input and Output in Turtle Graphics
 
-Turtle graphics is Python's standard module `turtle`, which draws pictures by moving a turtle (cursor) on the screen (Lecture 2). Strings can also be read and written in a turtle graphics window.
+Turtle graphics is a facility that draws pictures by moving a turtle-shaped cursor on the screen, and Python provides it in the standard module `turtle` (Lecture 2). Strings can also be read and written in a turtle graphics window.
 
 ### 7.1 String Input
 

@@ -4,7 +4,7 @@
 
 > **Last Updated:** 2026-11-04
 
-Exercises 1 and 2 practice string input, output, and conversion, and Exercises 3 and 4 practice lists. All problems can be solved with the content of [Lecture 3](Concepts_Lecture.md) alone.
+Exercises 1 and 2 practice string input, output, and conversion, and Exercises 3 and 4 practice lists. All problems can be solved with the content of [Lecture 3](Concepts_Lecture.md) together with the turtle graphics commands and arithmetic operations of Lecture 2.
 
 ---
 
@@ -25,7 +25,7 @@ Exercises 1 and 2 practice string input, output, and conversion, and Exercises 3
 
 **Problem:** Write a program that reads the user's name through the input dialog of turtle graphics, writes at the turtle's position a greeting containing the name, such as `안녕하세요? 홍길동씨, 터틀 인사드립니다.` (a Korean greeting in which the turtle says hello to the user by name), and draws a square whose sides are 100 long.
 
-**Sample Run:** The following is the turtle graphics window after the greeting is written and the square is drawn.
+**Sample Run:** The following is the turtle graphics window after the greeting is written and the square is drawn, showing where the greeting is placed relative to the square. The greeting in the figure contains no name, but the program to be written inserts the input name, as in `안녕하세요? 홍길동씨, 터틀 인사드립니다.`.
 
 ![Figure 1. Turtle graphics window with a greeting and a square](../../images/Lec03_p15.png)
 

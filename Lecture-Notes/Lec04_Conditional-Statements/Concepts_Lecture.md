@@ -49,7 +49,7 @@
 The order in which the statements of a program are executed is called the **control flow**, and the way the control flow is determined is called a **control structure**. The control flow of a program is made of the following three basic control structures.
 
 - **Sequence:** A structure in which commands are executed one by one in the order written. All programs of Lectures 2 and 3 are sequence structures.
-- **Selection:** A structure that selects and executes one of two commands depending on a condition. The conditional statements covered in Lecture 4 create selection structures.
+- **Selection:** A structure that selects and executes one of two commands depending on a condition. Conditional statements (Sections 3-6) create selection structures.
 - **Iteration:** A structure that executes the same commands repeatedly while a condition holds. Loops are covered in Lecture 5.
 
 ```mermaid
@@ -104,7 +104,7 @@ False
 <class 'bool'>
 ```
 
-Values that are not Boolean can also appear where a condition is expected. In that case, Python judges empty values such as the number 0, the empty string `""`, and the empty list `[]` as false, and other values as true [2]. Whether a value is judged true or false can be checked with `bool()`.
+Values that are not Boolean can also appear where a condition is expected. In that case, Python judges numeric zero (`0`, `0.0`), empty values such as the empty string `""` and the empty list `[]`, and `None` (Lecture 3), which means no value, as false, and other values as true [2]. Whether a value is judged true or false can be checked with `bool()`.
 
 ```pycon
 >>> bool(0)
@@ -166,7 +166,7 @@ True
 > SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?
 > ```
 
-When values of different data types are compared, the result depends on the operator. `==` returns `False` without an error for values that cannot be compared, such as a number and a string, but `<`, which compares magnitude, raises a `TypeError`. Therefore, an input string must be converted with `int()` or `float()` before being compared with a number (Lecture 3).
+When values of different data types are compared, the result depends on the operator. `==` returns `False` without an error even for values whose magnitudes cannot be compared, such as a number and a string, but `<`, which compares magnitude, raises a `TypeError`. Therefore, an input string must be converted with `int()` or `float()` before being compared with a number (Lecture 3).
 
 ```pycon
 >>> 10 == "10"
@@ -321,7 +321,7 @@ else:
 불합격입니다.
 ```
 
-- **Line 1:** Converts the input string ("Enter your score: ") to an integer with `int()` and stores it in `score` (Lecture 3).
+- **Line 1:** Converts the string entered at the prompt ("Enter your score: ") to an integer with `int()` and stores it in `score` (Lecture 3).
 - **Line 2:** Computes `score >= 60`. It is true if 80 is entered and false if 50 is entered.
 - **Line 3:** Executed only when the condition is true.
 - **Line 5:** Executed only when the condition is false. A score of 60 passes because `60 >= 60` is true.
@@ -402,7 +402,7 @@ Languages such as C and Java mark blocks with braces `{ }`, but Python marks blo
 - A line ending with a colon (`:`) must be followed by an indented block.
 - All statements in the same block are indented by the same number of columns. Four spaces is the convention [6].
 - A block ends when the indentation returns to the original column.
-- If tabs and spaces are mixed for indentation in one file, Python may be unable to decide whether two lines have the same indentation and raise a `TabError`, so use spaces only [5].
+- If tabs and spaces are mixed for indentation in one file, Python may be unable to decide whether two lines have the same indentation and raise a `TabError` [5]. For this reason, spaces alone are recommended for indentation [6].
 
 Wrong indentation raises an **`IndentationError`**. The following are a case in which a statement that should be indented is not, and a case in which statements of the same block are indented differently.
 
@@ -665,7 +665,7 @@ When writing a program containing conditional statements, organizing the problem
 | 1. Problem analysis | The input, the output, and the data the program must remember | The input is the number of cups of each coffee and the amount paid; the output is the price per cup of each coffee, the total, and the change |
 | 2. Deciding the processing order | The processing steps from input to output and the places where a decision is needed | Print the menu, read the number of cups, compute the total, read the amount, and decide whether the amount is insufficient |
 | 3. Deciding the variables | The names and meanings of the variables that hold the data | `noA` (number of americanos), `money` (amount paid), and so on |
-| 4. Programming | Translate the decided order into code and run it with various inputs | Accumulate the total with the compound operator `+=` and decide whether the amount is insufficient with an `if-else` statement |
+| 4. Programming | Translate the decided order into code and run it with various inputs | Accumulate the total with the compound assignment operator `+=` and decide whether the amount is insufficient with an `if-else` statement |
 
 *Table 5. The four steps of program design*
 

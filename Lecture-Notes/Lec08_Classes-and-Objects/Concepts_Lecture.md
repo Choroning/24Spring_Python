@@ -99,7 +99,7 @@ One of the best-known ways to sort a list is **bubble sort**. Adjacent elements 
 | Pass 3 | Exchange 4 with 1 and 4 with 3 | `[1, 3, 4, 5, 7]` |
 | Pass 4 | Leave 1 and 3 as they are | `[1, 3, 4, 5, 7]` |
 
-*Table 1. Bubble sort of the list [7, 4, 5, 1, 3]*
+*Table 1. Bubble sort of the list `[7, 4, 5, 1, 3]`*
 
 After pass 1 the largest value, 7, has settled at the back; after pass 2, 5 has settled; and after pass 3, 4 has settled. With $n$ elements, all elements are sorted after $n-1$ passes, and pass $k$ need not compare the last $k-1$ elements, which have already settled.
 
@@ -126,7 +126,7 @@ pass 4 : [1, 3, 4, 5, 7]
 ```
 
 - **Outer loop:** When `p` is 0-3, passes 1-4 are performed.
-- **Inner loop:** Before pass `p` the last `p` elements have already settled, so adjacent elements are compared only up to just before index `n - 1 - p`.
+- **Inner loop:** After `p` passes the last `p` elements have already settled, so in pass `p + 1`, `i` runs from 0 to `n - 2 - p` and `a[i]` is compared with `a[i + 1]`, leaving the settled last `p` elements uncompared.
 - **Exchange:** `a[i], a[i + 1] = a[i + 1], a[i]` swaps the two elements by tuple unpacking ([Lecture 7, Section 7.4](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#74-tuple-unpacking)).
 - **Final `print(data)`:** `data` is sorted even though the function returned no list. The parameter `a` refers to the same list object as the argument `data`, so the exchanges made inside the function are visible to the caller as they are ([Lecture 7, Section 9.5](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#95-passing-a-list-to-a-function)).
 
@@ -173,11 +173,11 @@ sort_func_v1(age_list)
 | 1 | `j = 0`: 30 < 50, so exchange, giving `[30, 50, 20]` | `[30, 50, 20]` |
 | 2 | `j = 0`: 20 < 30, so exchange, giving `[20, 50, 30]`; `j = 1`: 30 < 50, so exchange, giving `[20, 30, 50]` | `[20, 30, 50]` |
 
-*Table 2. How `sort_func_v1` sorts [30, 50, 20]*
+*Table 2. How `sort_func_v1` sorts `[30, 50, 20]`*
 
 The result is in ascending order despite the condition `list_[i] < list_[j]` because of the following property. When `i` is 0, `j` runs over every index and an exchange occurs whenever a larger value is met, so after that iteration `list_[0]` holds the maximum. Thereafter, at the end of each iteration `i`, the front part `list_[0]`-`list_[i]` is sorted in ascending order and `list_[i]` is the maximum of the whole list. Therefore, after the last iteration the entire list is in ascending order [1]. The number of comparisons is always $n^2$, so it is slower than bubble sort, but its code is short, which makes it useful for learning the principle of sorting.
 
-> **[Algorithms]** Bubble sort and `sort_func_v1` both make $O(n^2)$ comparisons. In practice `sort()` and `sorted()` of [Lecture 7, Section 4.3](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#43-sorting) are used, and in Python these functions are implemented with a sorting algorithm that makes $O(n \log n)$ comparisons even in the worst case.
+> **[Algorithms]** Bubble sort and `sort_func_v1` both make $O(n^2)$ comparisons. In practice `sort()` and `sorted()` of [Lecture 7, Section 4.3](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#43-sorting) are used, and in CPython, the standard implementation, these functions are implemented with a sorting algorithm that makes $O(n \log n)$ comparisons even in the worst case.
 
 ### 1.3 Sorting Several Lists Together
 
@@ -294,7 +294,7 @@ The real world is full of things. A person knitting, a tablet, a television, a d
 
 The contrasting style is **procedural programming**. In procedural programming, data and the functions that process them are separate, and a program is expressed as a procedure that calls functions in sequence. Keeping parallel lists and sort functions separate, as in [Section 1.3](#13-sorting-several-lists-together), is an example. In object orientation, data and the functions that handle them are together in one object, so related code gathers in one place and the chance of mishandling the data decreases.
 
-As seen in [Lecture 7, Section 1.3](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#13-objects-and-dot-notation), every value in Python, including lists, strings, and integers, is already an object. What is new here is how to define the kinds of objects one wants.
+As seen in [Lecture 7, Section 1.3](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#13-objects-and-dot-notation), every value in Python, including lists, strings, and integers, is already an object. Defining a class makes it possible to create objects of any kind one wants.
 
 ### 2.2 Interaction between Objects
 
@@ -500,9 +500,9 @@ print(a.__dict__)
 {'count': 2}
 ```
 
-Calling `Counter.increment(a)` directly increases the `count` of `a` from 1 to 2, exactly as `a.increment()` would. The special attribute `__dict__`, which every object has, shows the instance variables of the object as a dictionary.
+Calling `Counter.increment(a)` directly increases the `count` of `a` from 1 to 2, exactly as `a.increment()` would. The special attribute `__dict__`, which objects of user-defined classes have, shows the instance variables of the object as a dictionary. Some objects, such as integers, strings, and lists, do not have this attribute.
 
-> **Note:** `self` is not a Python keyword but a conventional name. Naming the first parameter differently would work the same, but every Python programmer uses `self`, so it is a convention that should always be followed [3].
+> **Note:** `self` is not a Python keyword but a conventional name. Naming the first parameter differently would work the same, but other Python programmers would find such code harder to read, so the convention of using `self` is followed [3].
 
 ### 4.4 Two Objects with Independent State
 
@@ -583,7 +583,7 @@ print(c.get())
 1
 ```
 
-When `Counter()` is called, Python creates a new object, automatically calls `__init__()` with that object as `self`, and returns the initialized object. A program never calls `__init__()` directly.
+When `Counter()` is called, Python creates a new object, automatically calls `__init__()` with that object as `self`, and returns the initialized object. A program normally does not call `__init__()` directly.
 
 > **Note:** Strictly speaking, creating an object in Python is done by another special method, `__new__()`, and `__init__()` is responsible for initializing the object that has already been created [4]. For this reason `__init__()` is also called the initializer. In ordinary classes only `__init__()` needs to be defined, so it is conventional to call `__init__()` the constructor.
 
@@ -712,7 +712,7 @@ print("p =", p)
 p = (3, 4)
 ```
 
-- **Default output:** An object of `Point`, which has no `__str__()`, is printed in the form `<__main__.Point object at 0x...>`. The hexadecimal number after `0x` indicates the memory location of the object and differs from run to run.
+- **Default output:** An object of `Point`, which has no `__str__()`, is printed in the form `<__main__.Point object at 0x...>`. The hexadecimal number after `0x` is the identity of the object (the value of `id()`); in CPython, the standard implementation, it is the memory address of the object, so it may differ from run to run.
 - **`__str__()`:** Takes only `self` as a parameter and must return a string. Here `%` formatting ([Lecture 3, Section 4.3](../Lec03_Data-Types/Concepts_Lecture.md#43-string-formatting)) builds `'(3, 4)'`.
 - **When it is called:** `print(p)`, `str(p)`, and `print("p =", p)` all call `__str__()` internally, so the same string is printed. Methods whose names have two underscores on each side, like `__init__()`, are **special methods** that Python calls automatically in particular situations.
 
@@ -778,7 +778,7 @@ print(obj.__dict__)
 
 ### 7.3 Getters and Setters
 
-Private instance variables cannot be used directly outside the class, so separate methods read and change their values. A method that returns the value of an instance variable is called a **getter**, and a method that sets the value of an instance variable is called a **setter**. Just as bank customers do not walk into the vault but deposit and withdraw money only through a teller, code outside the class accesses instance variables only through getters and setters.
+Private instance variables cannot be used directly outside the class, so separate methods read and change their values. A method that returns the value of an instance variable is called a **getter**, and a method that sets the value of an instance variable is called a **setter**. A setter is also called a **mutator**. Just as bank customers do not walk into the vault but deposit and withdraw money only through a teller, code outside the class accesses instance variables only through getters and setters.
 
 ```python
 class Student:

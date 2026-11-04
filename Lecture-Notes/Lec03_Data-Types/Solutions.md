@@ -51,7 +51,7 @@ t.forward(100)
 turtle.done()
 ```
 
-**Output:** If `홍길동` is entered in the dialog, `안녕하세요? 홍길동씨, 터틀 인사드립니다.` is written at the origin, and the turtle moves in the following order, draws a square to the upper left of the origin, and returns to the origin. The greeting is written to the right from the origin, the position at the moment `write()` was called, so it starts at the lower right corner of the square, as in Figure 1.
+**Output:** If `홍길동` is entered in the dialog, `안녕하세요? 홍길동씨, 터틀 인사드립니다.` is written at the origin, and the turtle moves in the following order, draws a square to the upper left of the origin, and returns to the origin. The greeting is written to the right from the origin, the position at the moment `write()` was called, so it starts at the lower right corner of the square, as in [Figure 1 of Exercise 1](Exercises.md#exercise-1-greeting-the-turtle).
 
 | Commands | Direction Faced | Change of Position |
 |:-----|:-----|:-----|
@@ -92,9 +92,9 @@ print("내년이면", str(age+1), "이 되시는군요.")
 
 - **Lines 1-2:** Print a greeting ("Hello?"), read the name ("What is your name?"), and store it in `name`. Double and single quotes are mixed, but strings created in the two ways are the same.
 - **Line 4:** Concatenates three strings and prints `만나서 반갑습니다. 홍길동씨` ("Nice to meet you, Hong Gildong").
-- **Line 5:** `print()` normally outputs a newline character after its output, but with `end=' '` it outputs one space instead of the newline. So the output of the next `print()` continues on the same line ("The length of your name is:").
+- **Line 5:** `print()` normally outputs a newline character after its output, but with `end=' '` it outputs one space instead of the newline. So the output of the next `print()` continues on the same line as "이름의 길이는 다음과 같군요:" ("The length of your name is:").
 - **Line 6:** `len(name)` is the number of characters in the name. `홍길동` consists of three Hangul characters, so it is 3. `len()` counts characters, not bytes.
-- **Line 8:** The inner `input()` runs first and returns the string `"21"` ("How old are you?"), and the outer `int()` converts it to the integer 21 and stores it in `age`.
+- **Line 8:** The inner `input()` (prompt: "How old are you?") runs first and returns the string `"21"`, and the outer `int()` converts it to the integer 21 and stores it in `age`.
 - **Line 9:** `age+1` is 22, and `str()` makes it the string `"22"`. `print()` inserts spaces between the three comma-separated values, so `내년이면 22 이 되시는군요.` ("Next year you will be 22.") is printed.
 
 **Output:**

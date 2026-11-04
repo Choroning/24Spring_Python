@@ -101,7 +101,7 @@ When the input is 5, `fact` changes as follows.
 
 *Table 1. Changes of the accumulator fact while computing 5!*
 
-The spaces between `10` and `!은` and between `3628800` and `이다.` in the output appear because `print()` puts one space between values separated by commas ([Lecture 5, Section 2.2](Concepts_Lecture.md#22-using-the-loop-variable)). To print without these spaces as in the sample run, build a single string with % formatting (Lecture 3) and print it. The following code also handles the case where a negative number is entered.
+The spaces between `10` and `!은` and between `3628800` and `이다.` in the output appear because `print()` puts one space between values separated by commas ([Lecture 5, Section 2.2](Concepts_Lecture.md#22-using-the-loop-variable)). To print without these spaces as in the sample run, build a single string with string formatting (Lecture 3) and print it. The following code also handles the case where a negative number is entered.
 
 ```python
 n = int(input("정수를 입력하시오: "))
@@ -138,7 +138,7 @@ else:
 - **When 0 is entered:** `range(1, 1)` is an empty range, so the body is never executed and `fact` keeps its initial value 1. This value agrees with the definition $0! = 1$.
 - **When a negative number is entered:** In the first program, `range(1, n+1)` becomes an empty range and the wrong result `-3 !은 1 이다.` (-3! is 1.) is printed. The factorial is defined only for non-negative integers, so the revised program first filters out negative numbers with an `if` statement (Lecture 4) and prints `음수의 팩토리얼은 정의되지 않는다.` (The factorial of a negative number is undefined.).
 
-> **Note:** Python integers have no size limit, so even large values such as 30! are computed exactly. In contrast, the largest value a 64-bit integer type in C can represent is $2^{63} - 1 = 9223372036854775807$, so it can store up to $20! = 2432902008176640000$ but overflows from $21! = 51090942171709440000$.
+> **Note:** Python integers have no size limit, so even large values such as 30! are computed exactly. In contrast, the largest value a signed 64-bit integer type in C can represent is $2^{63} - 1 = 9223372036854775807$, so it can store up to $20! = 2432902008176640000$ but overflows from $21! = 51090942171709440000$.
 
 ---
 
@@ -260,7 +260,7 @@ The output of this program is the same as that of the `while` program above.
 
 The body `sum = sum + 1` adds 1, not `i`, so this program counts how many times the body is executed. `range(1001)` has the 1001 elements 0 to 1000, so `sum` becomes 1001.
 
-**Code:** `print(sum, i)` has been appended to both programs to compare their results.
+**Code:** `print(sum, i)` is placed at the end of both programs so that their results can be compared.
 
 ```python
 sum=0
@@ -311,7 +311,7 @@ This repetition has no predetermined count and ends by a condition, so it is a p
 
 The original program checks the condition before the body, so to keep the same order the `break` check is placed at the very beginning of the body.
 
-**Code:** `print(sum, i)` has been appended to both programs to compare their results.
+**Code:** `print(sum, i)` is placed at the end of both programs so that their results can be compared.
 
 ```python
 i=1

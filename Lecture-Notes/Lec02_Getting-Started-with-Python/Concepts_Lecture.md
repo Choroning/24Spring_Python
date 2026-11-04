@@ -138,6 +138,8 @@ Running the installer for Windows displays the following window. Figure 4 is an 
 
 > **Definition:** **PATH** is an environment variable holding the list of folders in which the operating system looks for the executable file matching a command name. If the folder where Python is installed is not in PATH, the operating system cannot find Python even when `python` is entered in a terminal.
 
+> **Note:** The traditional Windows installer shown in Figure 4 has been deprecated since Python 3.14 and will not be produced for Python 3.16 or later. Instead, the official Python documentation recommends the **Python install manager**, available from python.org/downloads or the Microsoft Store. After installing this tool, install the desired version of Python with the `py install` command and run it with the `py` or `python` command [1].
+
 On macOS, running the macOS installer from python.org installs IDLE in the Python 3.x folder inside the Applications folder. Linux usually has `python3` installed already, and if IDLE is missing it can be installed with the distribution's package manager (for example, `sudo apt install idle3` on Ubuntu). After installation, the version can be checked with the following command in a terminal. On Windows, enter `python --version` or `py --version`.
 
 ```bash
@@ -152,7 +154,7 @@ The version number printed depends on the version installed.
 
 ### 3.2 IDLE and the Interactive Mode
 
-**IDLE** is the Integrated Development and Learning Environment installed together with Python [1]. It provides a shell window for entering and running code and an editor window for writing code in files. On Windows, search for IDLE in the Start menu or find IDLE in the Python 3.x folder and run it.
+**IDLE** is the Integrated Development and Learning Environment installed together with Python [2]. It provides a shell window for entering and running code and an editor window for writing code in files. On Windows, search for IDLE in the Start menu or find IDLE in the Python 3.x folder and run it.
 
 When IDLE starts, the **Python shell** window opens. The first lines show the Python version information, and the `>>>` below them is the **prompt**, a sign that Python is waiting for a command. Typing `print("hello world!")` after the prompt and pressing Enter prints the result on the next line right away.
 
@@ -160,7 +162,7 @@ When IDLE starts, the **Python shell** window opens. The first lines show the Py
 
 *Figure 5. The IDLE shell after printing hello world!*
 
-> **Definition:** The mode in which Python executes each line as soon as it is entered and shows the result is called the **interactive mode**, and the window through which the user exchanges input and output with Python in this way is called the **shell**. Code entered in the shell is not saved, so programs to be kept are written in the script mode of Section 5.2.
+> **Definition:** The mode in which Python executes each line as soon as it is entered and shows the result is called the **interactive mode** or the interpreter mode, and the window through which the user exchanges input and output with Python in this way is called the **shell**. Code entered in the shell disappears when the shell is closed, so programs to be kept are written in the script mode of Section 5.2.
 
 ---
 
@@ -170,7 +172,7 @@ When IDLE starts, the **Python shell** window opens. The first lines show the Py
 
 ### 4.1 Statements and Sequential Execution
 
-A Python program consists of several lines of instructions. One line of instruction is called a **statement**, and statements are executed **sequentially** from top to bottom by the Python interpreter. A statement runs only after the previous one has finished, so changing the order of statements changes what the program does.
+A Python program consists of several lines of instructions. One line of instruction is called a **statement**, and statements are executed **sequentially** from top to bottom by the Python interpreter. A statement runs only after the previous one has finished, so changing the order of statements changes what the program does. Some statements, such as the `if` statement, consist of several lines (Lecture 4), but a simple statement is usually written on a line of its own.
 
 ### 4.2 The `print()` Function
 
@@ -196,7 +198,7 @@ The result is 14 units.
 
 The argument `2*7` is calculated to 14 before it is printed. `print()` puts one space between values and moves to a new line after the last value. So the output is `The result is 14 units.`.
 
-> **Note:** The character placed between values and the character added at the end can be changed with the `sep` and `end` arguments of `print()`. Their default values are a single space and a newline character, respectively [2]. For example, `print("2024", "03", "11", sep="-")` puts a hyphen between the values and prints `2024-03-11`.
+> **Note:** The character placed between values and the character added at the end can be changed with the `sep` and `end` arguments of `print()`. Their default values are a single space and a newline character, respectively [3]. For example, `print("2024", "03", "11", sep="-")` puts a hyphen between the values and prints `2024-03-11`.
 
 ---
 
@@ -225,7 +227,7 @@ After starting IDLE, entering the calculation that converts 90 degrees Fahrenhei
 
 In the interactive mode, entering just a variable name or an expression, without `print()`, also displays its value. For example, entering `>>> ctemp` shows `32.22222222222222`.
 
-> **Note:** **Division that differs from C.** In C, dividing an integer by an integer is integer division, which keeps only the quotient. So if `.0` is removed from the constants of the formula and the calculation uses integers only, `5 / 9` becomes 0, and when the Fahrenheit temperature is the integer 90, `(90 - 32) * 5 / 9` becomes 32 instead of 32.222..., so no digits after the decimal point appear in the result. In Python 3, `/` always produces a floating-point result even when the operands are integers, so `5 / 9` is `0.5555555555555556` and `(90 - 32) * 5 / 9` is `32.22222222222222` [3]. Division that keeps only the quotient uses a separate operator, `//` (Section 8.2).
+> **Note:** **Division that differs from C.** In C, dividing an integer by an integer is integer division, which keeps only the quotient. So if `.0` is removed from the constants of the formula and the calculation uses integers only, `5 / 9` becomes 0, and when the Fahrenheit temperature is the integer 90, `(90 - 32) * 5 / 9` becomes 32 instead of 32.222..., so no digits after the decimal point appear in the result. In Python 3, `/` always produces a floating-point result even when the operands are integers, so `5 / 9` is `0.5555555555555556` and `(90 - 32) * 5 / 9` is `32.22222222222222` [4]. Division that keeps only the quotient uses a separate operator, `//` (Section 8.2).
 
 ### 5.2 Script Mode and Source Files
 
@@ -272,7 +274,7 @@ yumyumyumyumyumyumyumyumyumyum
 
 The three statements are executed in order from the top. Multiplying a string by an integer, as in `"pizza"*10`, produces a new string in which the string is repeated and joined that many times. String operations are covered in detail in Lecture 3.
 
-> **Caution:** Run Module runs the file in which the content of the editor window has been saved. Pressing F5 in a new, unsaved file makes IDLE ask to save it first. Also, code entered in the shell window is not kept in a file, so write programs from the start in an editor window opened with [File] → [New File].
+> **Caution:** Run Module runs the file in which the content of the editor window has been saved. Pressing F5 in a new, unsaved file makes IDLE ask to save it first. Also, code entered in the shell window disappears when the shell is closed, so write programs from the start in an editor window opened with [File] → [New File].
 
 ---
 
@@ -313,7 +315,7 @@ t.forward(100)
 - **`t.forward(100)`:** Moves 100 forward in the direction the turtle is facing, drawing a line.
 - **`t.right(90)`:** Turns 90 degrees to the right (clockwise) in place. To turn left, use `t.left(angle)`.
 
-The state of the turtle is determined by its position and heading. The heading is an angle measured counterclockwise with east as 0 degrees, so north is 90 degrees, west is 180 degrees, and south is 270 degrees [4]. Tracing the state after each command gives the following.
+The state of the turtle is determined by its position and heading. In the default (standard) mode, the heading is an angle measured counterclockwise with east as 0 degrees, so north is 90 degrees, west is 180 degrees, and south is 270 degrees [5]. Tracing the state after each command gives the following.
 
 | Order | Command | Position $(x, y)$ | Heading |
 |:-----|:-----|:-----|:-----|
@@ -330,7 +332,7 @@ The state of the turtle is determined by its position and heading. The heading i
 
 The turtle moves from the origin right, down, left, and up in that order, so the square is drawn to the lower right of the origin, and the turtle returns to the origin facing up. The arrow at the upper-left corner of the square in Figure 9 is this final state. Changing every `right(90)` to `left(90)` draws the square to the upper right of the origin.
 
-> **Caution:** In IDLE, the turtle graphics window stays open after the program ends, but when the program is run from a terminal with `python filename.py`, the window closes the moment the program ends. In that case, put `turtle.done()` on the last line of the program so that it waits until the user closes the window [4].
+> **Caution:** In IDLE, the turtle graphics window stays open after the program ends, but when the program is run from a terminal with `python filename.py`, the window closes the moment the program ends. In that case, put `turtle.done()` on the last line of the program so that it waits until the user closes the window [5].
 
 ---
 
@@ -356,12 +358,12 @@ A **variable** is a space that stores a value and lets the stored value be used 
 
 > **Definition:** `=` does not mean equality; it is the **assignment operator**, which stores the value on the right in the variable on the left. Python calculates the right side first and then stores the result in the variable on the left, so `x = x + 1`, which cannot hold in mathematics, is a valid Python statement that increases the value of `x` by 1.
 
-Using a variable that has never been assigned a value causes an error.
+Using a variable that has never been assigned a value causes an error. The following is the result in the interactive mode of Python 3.13 run in a terminal.
 
 ```pycon
 >>> print(height)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+  File "<python-input-0>", line 1, in <module>
     print(height)
           ^^^^^^
 NameError: name 'height' is not defined
@@ -408,7 +410,7 @@ Even the same digits become a string when enclosed in quotation marks, and are n
 
 The following rules must be followed when making variable names.
 
-- Use English letters and digits. Python 3 also accepts Unicode letters such as Hangul in names, but the convention is to use English letters only [5].
+- Use English letters and digits. Python 3 also accepts Unicode letters such as Hangul in names, but PEP 8 requires ASCII-only names that use English words wherever feasible in the standard library and encourages open source projects with a global audience to adopt the same policy [6].
 - Uppercase and lowercase letters are distinguished. `Score` and `score` are different variables.
 - A name must start with a letter and must not start with a digit.
 - A name may start with `_` (the underscore character), and underscores may also appear in the middle.
@@ -436,7 +438,7 @@ Using a name that breaks the rules causes an error. A name starting with a digit
 35
 ```
 
-There are two conventions for names made of several words. **Camel case** writes the first letter of the variable in lowercase and the first letter of each remaining word in uppercase. For example, as in `myNewCar`, the first `m` is lowercase and the first letters of the remaining words are uppercase. The name comes from the capital letters rising like the humps of a camel. On the other hand, PEP 8, Python's official style guide, recommends **snake case**, which joins lowercase words with underscores, for variable and function names (`my_new_car`) [5]. Whichever is chosen, it is best to use one consistently within a program and to use names that reveal the meaning of the value, such as `score` and `total_price`, rather than `a` and `b`.
+There are two conventions for names made of several words. **Camel case** writes the first letter of the variable in lowercase and the first letter of each remaining word in uppercase. For example, as in `myNewCar`, the first `m` is lowercase and the first letters of the remaining words are uppercase. The name comes from the capital letters rising like the humps of a camel. On the other hand, PEP 8, Python's official style guide, recommends **snake case**, which joins lowercase words with underscores, for variable and function names (`my_new_car`) [6]. Whichever is chosen, it is best to use one consistently within a program and to use names that reveal the meaning of the value, such as `score` and `total_price`, rather than `a` and `b`.
 
 ---
 
@@ -475,9 +477,9 @@ Python represents addition, subtraction, multiplication, division, and the remai
 
 *Table 5. Python's arithmetic operators and examples of their calculation*
 
-The multiplication symbol is `*`, not ×. There are two division operators. `/` is division calculated to the digits after the decimal point, and even `8 / 4`, which divides evenly, gives the floating-point number `2.0`. `//` is **floor division**, which gives only the quotient, and `%` gives the **remainder** left after division. Dividing 7 by 4 gives a quotient of 1 and a remainder of 3, so `7 // 4` is 1 and `7 % 4` is 3. In C, the same `/` produces a quotient or a floating-point result depending on whether the operands are integers or floating-point numbers, but in Python variables are not declared with data types, so the data types of the operands cannot be known just by looking at the code, and the two divisions are therefore distinguished as different operators [3].
+The multiplication symbol is `*`, not ×. There are two division operators. `/` is division calculated to the digits after the decimal point, and even `8 / 4`, which divides evenly, gives the floating-point number `2.0`. `//` is **floor division**, which gives only the quotient, and `%` gives the **remainder** left after division. Dividing 7 by 4 gives a quotient of 1 and a remainder of 3, so `7 // 4` is 1 and `7 % 4` is 3. In C, the same `/` produces a quotient or a floating-point result depending on whether the operands are integers or floating-point numbers, but in Python variables are not declared with data types, so the data types of the operands cannot be known just by looking at the code, and the two divisions are therefore distinguished as different operators [4].
 
-> **Caution:** When negative numbers are involved, `//` does not discard the digits after the decimal point but rounds down toward the left on the number line, that is, toward the smaller integer. So `-7 // 2` is -4, not -3, and `-7 % 2` is 1. In Python, `a == (a // b) * b + a % b` always holds, and the result of `%` has the same sign as the divisor `b` [6]. For example, (-4) × 2 + 1 = -7.
+> **Caution:** When negative numbers are involved, `//` does not discard the digits after the decimal point but rounds down toward the left on the number line, that is, toward the smaller integer. So `-7 // 2` is -4, not -3, and `-7 % 2` is 1. For integers `a` and `b` (with `b` not 0), `a == (a // b) * b + a % b` always holds in Python, and the result of `%` is 0 or has the same sign as the divisor `b` [7]. For example, (-4) × 2 + 1 = -7.
 
 ---
 
@@ -627,7 +629,7 @@ Substituting a principal of 1000, an annual rate of 5% (0.05), and a period of 1
 
 Because `**` is calculated before `*` (Section 13), $(1 + 0.05)^{10} = 1.05^{10} \approx 1.628894626777442$ is found first and then multiplied by 1000. The principal plus interest after 10 years is about 1628.89.
 
-> **Note:** Floating-point numbers are stored in binary inside the computer, so a value such as 0.05 that cannot be represented exactly in binary is stored as the nearest approximation. As a result, a small error can appear in the last digits of floating-point calculations. For example, `0.1 + 0.2` is `0.30000000000000004` [7]. Values that must be exact, such as money, are printed after rounding the result.
+> **Note:** Floating-point numbers are stored in binary inside the computer, so a value such as 0.05 that cannot be represented exactly in binary is stored as the nearest approximation. As a result, a small error can appear in the last digits of floating-point calculations. For example, `0.1 + 0.2` is `0.30000000000000004` [8]. Values that must be exact, such as money, are printed after rounding the result.
 
 ### 11.2 Compound Assignment Operators
 
@@ -741,7 +743,7 @@ The first expression calculates 20 / 2 = 10.0 first, giving 10 + 10.0 = 20.0. Th
 
 The **unary operators** of rank 2 are operators attached to a single operand: the sign `-` in `-5`, the sign `+` in `+5`, and `~`, which flips bits (Section 13.3). The `+` and `-` of rank 4 are addition and subtraction as binary operators placed between two operands.
 
-When operators of the same precedence follow one another, they are calculated according to their **associativity**. Most operators are calculated from left to right, so `7 - 4 - 1` is (7 - 4) - 1 = 2 and `8 / 4 / 2` is (8 / 4) / 2 = 1.0. Only exponentiation `**` is calculated from right to left, so `2 ** 3 ** 2` is $2^{(3^2)} = 2^9 = 512$, which differs from `(2 ** 3) ** 2` = 64 [6].
+When operators of the same precedence follow one another, they are calculated according to their **associativity**. Most operators are calculated from left to right, so `7 - 4 - 1` is (7 - 4) - 1 = 2 and `8 / 4 / 2` is (8 / 4) / 2 = 1.0. Only exponentiation `**` is calculated from right to left, so `2 ** 3 ** 2` is $2^{(3^2)} = 2^9 = 512$, which differs from `(2 ** 3) ** 2` = 64 [7].
 
 ```pycon
 >>> 7 - 4 - 1
@@ -754,7 +756,7 @@ When operators of the same precedence follow one another, they are calculated ac
 4
 ```
 
-> **Caution:** `**` is calculated before a unary operator on its left, so `-2 ** 2` is $-(2^2) = -4$. To square a negative number, use parentheses, as in `(-2) ** 2`. On the other hand, a unary operator on the right is applied first, so `2 ** -1` is $2^{-1} = 0.5$. Also, Table 7 is simplified; in Python, `&`, `^`, and `|` each have a different rank, in that order. Relational operators (`<`, `==`, and so on) and logical operators (`not`, `and`, `or`) have lower precedence than all the operators in the table and are covered in Lecture 4 [6].
+> **Caution:** `**` is calculated before a unary operator on its left, so `-2 ** 2` is $-(2^2) = -4$. To square a negative number, use parentheses, as in `(-2) ** 2`. On the other hand, a unary operator on the right is applied first, so `2 ** -1` is $2^{-1} = 0.5$. Also, Table 7 is simplified; in Python, `&`, `^`, and `|` each have a different rank, in that order. Relational operators (`<`, `==`, and so on) and logical operators (`not`, `and`, `or`) have lower precedence than all the operators in the table and are covered in Lecture 4 [7].
 
 ### 13.3 Bitwise Operators
 
@@ -778,7 +780,7 @@ AND is 1 only when both bits are 1, OR is 1 when at least one is 1, and XOR is 1
       010  (2)        111  (7)        101  (5)
 ```
 
-The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 1` shifts `110` one place to the left, giving `1100`, which is 12, and `6 >> 1` shifts it one place to the right, dropping the last bit and giving `11`, which is 3. Shifting one place to the left gives the value multiplied by 2, and shifting one place to the right gives the quotient divided by 2.
+The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 1` shifts `110` one place to the left, giving `1100`, which is 12, and `6 >> 1` shifts it one place to the right, dropping the last bit and giving `11`, which is 3. Shifting one place to the left gives the value multiplied by 2, and shifting one place to the right gives the quotient of division by 2 (the result of `// 2`).
 
 ```pycon
 >>> 6 & 3
@@ -822,7 +824,7 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
 
 | Statement | Judgment and Reason |
 |:-----|:------------|
-| Code entered in the IDLE shell remains after IDLE is closed and opened again. | **F.** Code in the shell is not saved. Code to be kept is saved as a `.py` file by opening an editor with [File] → [New File]. |
+| Code entered in the IDLE shell remains after IDLE is closed and opened again. | **F.** Code entered in the shell disappears when the shell is closed. Code to be kept is saved as a `.py` file by opening an editor with [File] → [New File]. |
 | `print("Sum:", 3 + 4)` prints `Sum: 7`. | **T.** The argument `3 + 4` is first evaluated to 7, and one space is placed between the two values. |
 | When the turtle executes `t.right(90)`, it moves 90 to the right. | **F.** `right(90)` turns the turtle 90 degrees clockwise in place; moving is done by `forward()`. |
 | `_count` and `count2` are valid variable names, but `2count` is not. | **T.** A name must start with a letter or an underscore and cannot start with a digit. |
@@ -843,7 +845,7 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
 | Programming languages and translation | A person writes source code in a high-level language, and a compiler or interpreter turns it into a form the machine can execute. |
 | Features of Python | Its syntax is easy, it runs on many platforms, its libraries are rich, and graphics are easy to use. |
 | Installation and IDLE | Download Python 3 from python.org, check Add Python to PATH when installing, and write code with the IDLE shell and editor. |
-| Interactive mode | Statements entered after `>>>` in the shell are executed immediately, and the code entered is not saved. |
+| Interactive mode | Statements entered after `>>>` in the shell are executed immediately, and the code entered disappears when the shell is closed. |
 | Script mode | Code is saved in a `.py` source file and the entire file is run with Run Module (F5). |
 | `print()` | Prints several comma-separated values with one space between them and then moves to a new line. |
 | Turtle graphics | Draws its trail as lines while changing the position and heading of the turtle with `forward()`, `right()`, and `left()`. |
@@ -869,7 +871,7 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
    <details>
    <summary>Answer</summary>
 
-   The interactive mode executes each statement immediately as it is entered after the shell prompt `>>>` and shows the result, and the code entered is not kept in a file. The script mode saves code as a `.py` source file in secondary storage and runs the entire file at once, so the code remains after the computer is turned off and can be reopened and edited.
+   The interactive mode executes each statement immediately as it is entered after the shell prompt `>>>` and shows the result, and the code entered disappears when the shell is closed. The script mode saves code as a `.py` source file in secondary storage and runs the entire file at once, so the code remains after the computer is turned off and can be reopened and edited.
 
    </details>
 
@@ -966,10 +968,11 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
 
 ## References
 
-1. Python Software Foundation, "IDLE," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/idle.html
-2. Python Software Foundation, "Built-in Functions," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/functions.html
-3. M. Zadka and G. van Rossum, "PEP 238: Changing the Division Operator," *Python Enhancement Proposals*, 2001. https://peps.python.org/pep-0238/
-4. Python Software Foundation, "turtle: Turtle graphics," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/turtle.html
-5. G. van Rossum, B. Warsaw, and A. Coghlan, "PEP 8: Style Guide for Python Code," *Python Enhancement Proposals*, 2001. https://peps.python.org/pep-0008/
-6. Python Software Foundation, "Expressions," *The Python Language Reference*, accessed Nov. 4, 2026. https://docs.python.org/3/reference/expressions.html
-7. Python Software Foundation, "Floating-Point Arithmetic: Issues and Limitations," *The Python Tutorial*, accessed Nov. 4, 2026. https://docs.python.org/3/tutorial/floatingpoint.html
+1. Python Software Foundation, "Using Python on Windows," *Python Setup and Usage*, accessed Nov. 4, 2026. https://docs.python.org/3/using/windows.html
+2. Python Software Foundation, "IDLE: Python editor and shell," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/idle.html
+3. Python Software Foundation, "Built-in Functions," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/functions.html
+4. M. Zadka and G. van Rossum, "PEP 238: Changing the Division Operator," *Python Enhancement Proposals*, 2001. https://peps.python.org/pep-0238/
+5. Python Software Foundation, "turtle: Turtle graphics," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/turtle.html
+6. G. van Rossum, B. Warsaw, and A. Coghlan, "PEP 8: Style Guide for Python Code," *Python Enhancement Proposals*, 2001. https://peps.python.org/pep-0008/
+7. Python Software Foundation, "Expressions," *The Python Language Reference*, accessed Nov. 4, 2026. https://docs.python.org/3/reference/expressions.html
+8. Python Software Foundation, "Floating-Point Arithmetic: Issues and Limitations," *The Python Tutorial*, accessed Nov. 4, 2026. https://docs.python.org/3/tutorial/floatingpoint.html

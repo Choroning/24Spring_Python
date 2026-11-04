@@ -402,7 +402,7 @@ print(first, heroes)
 | Method | What is specified | Return value | When the target is missing |
 |:-----|:-----|:-----|:-----|
 | `list.remove(x)` | Value `x` (the first one if several are equal) | `None` | `ValueError` |
-| `del list[i]` | Index `i` (a slice `del list[i:j]` is also allowed) | None (it is a statement) | `IndexError` |
+| `del list[i]` | Index `i` (a slice `del list[i:j]` is also allowed) | No value (it is a statement) | `IndexError` |
 | `list.pop()` | The last element when the index is omitted | The removed element | `IndexError` for an empty list |
 | `list.pop(i)` | Index `i` | The removed element | `IndexError` |
 
@@ -488,7 +488,7 @@ apple
 
 ### 4.3 Sorting
 
-`sort()` is a method that sorts the elements of a list in ascending order. It does not create a new list but rearranges the elements of the original list (in-place sorting), and its return value is `None`.
+`sort()` is a method that sorts the elements of a list in ascending order. Like lining people up from shortest to tallest, it rearranges the elements so that smaller values come first. It does not create a new list but rearranges the elements of the original list (in-place sorting), and its return value is `None`.
 
 ```python
 heroes = ["아이언맨", "토르", "헐크", "스칼렛 위치"]
@@ -844,7 +844,7 @@ True True
 
 Tuples also support indexing and slicing, and the result of slicing is a new tuple. Tuples have only two methods: `index()`, which finds a value, and `count()`, which counts occurrences.
 
-> **Note:** `cmp(t1, t2)` is sometimes introduced as a function that compares two tuples, but it existed only in Python 2 and was removed in Python 3 [4]. Calling `cmp(1, 2)` in Python 3 raises `NameError: name 'cmp' is not defined`. Use comparison operators such as `<`, `==`, and `>` instead. For the same reason, the Python 2 statement `print x,` is written `print(x, end=" ")` in Python 3.
+> **Note:** `cmp(t1, t2)` is sometimes introduced as a function that compares two tuples, but it existed only in Python 2 and was removed in Python 3 [4]. Calling `cmp(1, 2)` in Python 3 raises `NameError: name 'cmp' is not defined`. Use comparison operators such as `<`, `==`, and `>` instead. Likewise, because `print` changed from a statement into a function in Python 3, the Python 2 statement `print x,`, which prints without a newline, is written `print(x, end=" ")` in Python 3 [4].
 
 ### 7.4 Tuple Unpacking
 
@@ -1272,7 +1272,7 @@ print()
 1 2 3
 ```
 
-The order in which a set is traversed follows the internal storage positions of the set and cannot be determined by the program. In particular, for security reasons the hash values of strings are computed with an unpredictable random value mixed in each time Python starts [8], so a set of strings may print in a different order from run to run. When a fixed order is needed, traverse a sorted list made with `sorted(set_name)`.
+The order in which a set is traversed follows the internal storage positions of the set and cannot be determined by the program. In particular, for security reasons the hash values of strings are computed with an unpredictable random value mixed in each time Python starts under the default settings [8], so a set of strings may print in a different order from run to run. When a fixed order is needed, traverse a sorted list made with `sorted(set_name)`.
 
 ### 10.3 Adding and Removing Elements
 

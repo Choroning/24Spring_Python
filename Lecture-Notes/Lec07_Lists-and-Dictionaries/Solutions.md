@@ -128,7 +128,7 @@ A 파티에만 참석: ['Kim', 'Lee']
 - **Union:** `Park` is in both parties but appears only once in a set, so the union has 4 elements.
 - **Difference:** `partyA - partyB` is `partyA` without `Park`, which is also in `partyB`, so it is `{'Kim', 'Lee'}`. `partyB - partyA` is `{'Choi'}`, a different result.
 
-> **Note:** `sorted()` is used in Part 2 because the output order of a set of strings may differ from run to run ([Lecture 7, Section 10.2](Concepts_Lecture.md#102-membership-tests-and-iteration)). For example, `print(partyA | partyB)` prints `{'Choi', 'Kim', 'Lee', 'Park'}` in one run and `{'Lee', 'Kim', 'Park', 'Choi'}` in another. The result of Part 1 has only one element, so order is not an issue.
+> **Note:** `sorted()` is used in Part 2 because the output order of a set of strings may differ from run to run ([Lecture 7, Section 10.2](Concepts_Lecture.md#102-membership-tests-and-iteration)). For example, `print(partyA | partyB)` may print `{'Choi', 'Kim', 'Lee', 'Park'}` in one run and `{'Lee', 'Kim', 'Park', 'Choi'}` in another. The result of Part 1 has only one element, so order is not an issue.
 
 ---
 
