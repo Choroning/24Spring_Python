@@ -269,7 +269,7 @@ for i in range(5):
 
 *표 3. range() 함수의 세 인수*
 
-증가값이 양수이면 `range(start, stop, step)`의 요소는 $r_k = \text{start} + \text{step} \times k$ ($k = 0, 1, 2, \ldots$) 가운데 $r_k < \text{stop}$인 값들이다 [3]. 즉 범위는 시작값을 포함하고 종료값을 포함하지 않는 반열린 구간 $[\text{start}, \text{stop})$에서 증가값 간격으로 고른 정수이다. 요소의 개수는 $\max\left(0, \left\lceil \frac{\text{stop} - \text{start}}{\text{step}} \right\rceil\right)$이다.
+증가값이 양수이면 `range(start, stop, step)`의 요소는 $r_k = \text{start} + \text{step} \times k$ ($`k = 0, 1, 2, \ldots`$) 가운데 $r_k < \text{stop}$인 값들이다 [3]. 즉 범위는 시작값을 포함하고 종료값을 포함하지 않는 반열린 구간 $[\text{start}, \text{stop})$에서 증가값 간격으로 고른 정수이다. 요소의 개수는 $\max\left(0, \left\lceil \frac{\text{stop} - \text{start}}{\text{step}} \right\rceil\right)$이다.
 
 1부터 시작하여 5까지 출력하려면 종료값이 범위에 포함되지 않는다는 점을 고려하여 종료값을 6으로 준다.
 
@@ -460,7 +460,9 @@ print("합계:", total)
 
 결과는 등차수열의 합 공식으로 확인할 수 있다. 합 $S = 1 + 2 + \cdots + n$과 이를 거꾸로 쓴 $S = n + (n-1) + \cdots + 1$을 같은 자리끼리 더하면 $(1 + n), (2 + (n-1)), \ldots$처럼 합이 $n + 1$인 쌍이 $n$개 생기므로 $2S = n(n+1)$이 되어 다음이 성립한다.
 
-$$1 + 2 + \cdots + n = \frac{n(n+1)}{2}, \qquad \frac{10 \times 11}{2} = 55$$
+```math
+1 + 2 + \cdots + n = \frac{n(n+1)}{2}, \qquad \frac{10 \times 11}{2} = 55
+```
 
 ### 5.2 곱의 누적과 팩토리얼
 

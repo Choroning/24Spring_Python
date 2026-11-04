@@ -269,7 +269,7 @@ Figure 2 likens `range(5)` to a factory that produces integers and the `for` sta
 
 *Table 3. The three arguments of the range() function*
 
-When the step is positive, the elements of `range(start, stop, step)` are the values $r_k = \text{start} + \text{step} \times k$ ($k = 0, 1, 2, \ldots$) that satisfy $r_k < \text{stop}$ [3]. In other words, the range consists of the integers taken at intervals of the step from the half-open interval $[\text{start}, \text{stop})$, which includes the start and excludes the stop. The number of elements is $\max\left(0, \left\lceil \frac{\text{stop} - \text{start}}{\text{step}} \right\rceil\right)$.
+When the step is positive, the elements of `range(start, stop, step)` are the values $r_k = \text{start} + \text{step} \times k$ ($`k = 0, 1, 2, \ldots`$) that satisfy $r_k < \text{stop}$ [3]. In other words, the range consists of the integers taken at intervals of the step from the half-open interval $[\text{start}, \text{stop})$, which includes the start and excludes the stop. The number of elements is $\max\left(0, \left\lceil \frac{\text{stop} - \text{start}}{\text{step}} \right\rceil\right)$.
 
 To print from 1 to 5, the stop is given as 6, because the stop is not included in the range.
 
@@ -460,7 +460,9 @@ Sum: 55
 
 The result can be checked with the formula for an arithmetic series. Writing the sum $S = 1 + 2 + \cdots + n$ in reverse order as $S = n + (n-1) + \cdots + 1$ and adding the two term by term gives $n$ pairs, $(1 + n), (2 + (n-1)), \ldots$, each summing to $n + 1$, so $2S = n(n+1)$ and the following holds.
 
-$$1 + 2 + \cdots + n = \frac{n(n+1)}{2}, \qquad \frac{10 \times 11}{2} = 55$$
+```math
+1 + 2 + \cdots + n = \frac{n(n+1)}{2}, \qquad \frac{10 \times 11}{2} = 55
+```
 
 ### 5.2 Accumulating a Product and the Factorial
 

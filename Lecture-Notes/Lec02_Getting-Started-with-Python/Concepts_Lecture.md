@@ -210,7 +210,9 @@ The argument `2*7` is calculated to 14 before it is printed. `print()` puts one 
 
 The formula for converting a Fahrenheit temperature $F$ to a Celsius temperature $C$ is as follows.
 
-$$C = (F - 32) \times \frac{5}{9}$$
+```math
+C = (F - 32) \times \frac{5}{9}
+```
 
 After starting IDLE, entering the calculation that converts 90 degrees Fahrenheit to Celsius in the shell one line at a time looks like this.
 
@@ -615,7 +617,9 @@ To calculate a power (exponentiation), use the `**` operator. `a ** b` is $a^b$.
 
 $2^7 = 2 \times 2 \times 2 \times 2 \times 2 \times 2 \times 2 = 128$. The exponentiation operator can be used to calculate the principal plus interest. If a principal $a$ is deposited for $n$ years with compound interest at an annual rate $r$, it becomes $a(1 + r)$ after one year and $a(1 + r)(1 + r) = a(1 + r)^2$ after two years, and in the same way the principal plus interest after $n$ years is as follows.
 
-$$a(1 + r)^n$$
+```math
+a(1 + r)^n
+```
 
 Substituting a principal of 1000, an annual rate of 5% (0.05), and a period of 10 years gives the following.
 

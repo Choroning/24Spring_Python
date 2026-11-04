@@ -66,7 +66,7 @@ Call the function above to draw 3 squares with side length 100. The three square
 
 ## Exercise 3: Circle Area and Circumference with a Global Constant
 
-**Problem:** Declare pi ($\pi$) as a global variable and use it to write functions that compute the area and the circumference of a circle. Read the radius and print the two values. The input prompt is `원의 반지름을 입력하시오: ` (Enter the radius of the circle:), and the area and circumference are printed after `원의 면적:` (Area of the circle:) and `원의 둘레:` (Circumference of the circle:).
+**Problem:** Declare pi ($`\pi`$) as a global variable and use it to write functions that compute the area and the circumference of a circle. Read the radius and print the two values. The input prompt is `원의 반지름을 입력하시오: ` (Enter the radius of the circle:), and the area and circumference are printed after `원의 면적:` (Area of the circle:) and `원의 둘레:` (Circumference of the circle:).
 
 **Sample Run:**
 

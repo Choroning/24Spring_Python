@@ -1455,7 +1455,7 @@ False True
 
 - **`get(key)`:** Returns the value if the key exists and `None` otherwise, without raising an error. `get(key, default)` returns the default instead of `None` when the key is missing.
 - **`in`:** `in` on a dictionary tests the **keys**. Hence the value `'01012345678'` gives `False` with `in contacts`; to search the values, write `in contacts.values()`.
-- **Lookup speed:** Like a set, a dictionary finds positions by the hash values of keys, so looking up a value by its key takes $O(1)$ time on average even when there are many items. This contrasts with the sequential search ($O(n)$) for a value in a list.
+- **Lookup speed:** Like a set, a dictionary finds positions by the hash values of keys, so looking up a value by its key takes $O(1)$ time on average even when there are many items. This contrasts with the sequential search ($`O(n)`$) for a value in a list.
 
 The next example stores the information of one student with the names of the fields as keys.
 
