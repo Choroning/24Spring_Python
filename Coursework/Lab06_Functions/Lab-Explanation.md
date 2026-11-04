@@ -204,7 +204,7 @@ print(x)
 ```
 
 - **Multi-line string:** The `'''...'''` at the top is a string assigned to nothing, so it does not affect execution. It is used like a comment that keeps the code from before it was turned into a function.
-- **Type hints:** `x : int` indicates that the parameter `x` is expected to be an integer, and `-> (int, int)` describes the form of the return value. Such **type hints** are information for readers and tools only, and Python does not check types at run time. As the comments note, writing `def add(x,y):` without hints behaves the same.
+- **Type hints:** `x : int` indicates that the parameter `x` is expected to be an integer, and `-> (int, int)` describes the form of the return value. Such **type hints** are information for readers and tools only, and Python does not check types at run time. As the comments note, writing `def add(x,y):` without hints behaves the same. The standard notation for a tuple of two integers is `tuple[int, int]`, and `(int, int)` causes no problem at run time, but type checkers such as mypy do not accept it as a valid type annotation. The `-> int` in the second comment also runs, but because this function returns a tuple, that hint does not match the actual return value.
 - **Returning and unpacking:** `add` returns the sum `z` and the first argument `x` as a tuple, and the main part receives the two values separately with `z,x=add(x,y)`. `x` is assigned its original value again, so it does not change. The comment explains that receiving the result as `z=add(x,y)` stores the tuple (sum, x) in `z`, and that `return z` is needed to receive only the sum.
 
 **Output:** With inputs 3 and 4. The prompts `x:` and `y:` have no space after them, so the inputs follow them directly.

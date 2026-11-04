@@ -1,6 +1,6 @@
 """
 @file    Lab_ListComprehension.py
-@brief   for문과 리스트 함축으로 같은 리스트 만들기
+@brief   for문과 리스트 컴프리헨션으로 같은 리스트 만들기
 @author  박철원 (Cheolwon Park)
 @date    2024-05-13
 """

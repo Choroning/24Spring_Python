@@ -377,7 +377,7 @@ print(Car(), Car(color="red"), Car(30, 2, "black"))
 **Approach:** Make a class that adds an identification number `id` to the `Counter` class of [Lecture 8, Section 4](Concepts_Lecture.md#4-the-counter-class). The constructor receives and stores `id` and initializes `count` to 0, and `increment()` increases `count` by 1.
 
 - **Creating objects:** Traverse `id_set`, create one object per value, and put the objects in the list `objects`.
-- **Increasing:** For each object, `increment()` is called `range(obj.id)` times, so when the loop ends `count` equals `id`.
+- **Increasing:** For each object, the loop over `range(obj.id)` calls `increment()` `obj.id` times, so when the loop ends `count` equals `id`.
 - **Selective output:** If `obj.id % 2 == 0`, the `id` is even.
 
 **Code (Using a Class):**
@@ -439,4 +439,4 @@ id = 10, count = 10
 id = 2, count = 2
 ```
 
-The list solution uses parallel lists that pair `id_set` and `counts` by the same index `k` ([Lecture 8, Section 1.1](Concepts_Lecture.md#11-the-problem)). With only two kinds of data, as in this problem, the list solution is also short, but sorting or removing objects or adding attributes would require changing both lists together every time. In the class solution, `id` and `count` are inside one object, so no such synchronization is needed, and the only way to change `count` is fixed as `increment()`.
+The list solution uses parallel lists that pair `id_set` and `counts` by the same index `k` ([Lecture 8, Section 1.1](Concepts_Lecture.md#11-the-problem)). With only two kinds of data, as in this problem, the list solution is also short, but sorting or removing objects or adding attributes would require changing both lists together every time. In the class solution, `id` and `count` are inside one object, so no such synchronization is needed, and the operation that increases `count` is also defined inside the class together with the data, as the method `increment()`.

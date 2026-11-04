@@ -359,7 +359,7 @@ print("답은 %d입니다." %val)
 ```
 
 - **`random.randint(a, b)`:** Returns an integer from `a` to `b` inclusive. Unlike `randrange()`, it includes the end value `b`, so `val` is one of 1-10. The prompt says 0-10, but 0 can never be the answer.
-- **`if-elif-else`:** The conditions are checked from the top, and only the first block whose condition is true runs. If the input is greater than the answer, the program prints a message meaning "the answer is smaller than your input", and if it is smaller, a message meaning "larger". If both conditions are false, then `guess == val`, so `else` judges it correct.
+- **`if-elif-else`:** The conditions are checked from the top, and only the first block whose condition is true runs. If the input is greater than the answer, the program prints `입력한 값보다 작습니다.`, meaning that the answer is smaller than the input, and if it is smaller, `입력한 값보다 큽니다.`. If both conditions are false, then `guess == val`, so `else` judges it correct.
 - **Printing the answer:** The last line reveals the answer regardless of the result. The two commented-out lines build the same sentence with string concatenation (`+` and `str()`) and with the format specifier `%s`, and `%d` is the format specifier that inserts an integer in decimal.
 
 **Output:** An example with input 5 when `val` was 7. The output means "The answer is larger than your input." and "The answer is 7."

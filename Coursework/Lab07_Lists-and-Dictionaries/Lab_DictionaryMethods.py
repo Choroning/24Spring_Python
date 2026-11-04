@@ -1,6 +1,6 @@
 """
 @file    Lab_DictionaryMethods.py
-@brief   딕셔너리의 keys(), values(), items(), get(), update() 메소드
+@brief   딕셔너리의 keys(), values(), items(), get(), update() 메서드
 @author  박철원 (Cheolwon Park)
 @date    2024-05-30
 """

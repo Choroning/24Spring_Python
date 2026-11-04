@@ -81,7 +81,7 @@ a.increment()
 print("카운터 a의 값은", a.get())
 ```
 
-- **Classes and objects:** A **class** is a blueprint for objects, and calling a class, as in `Counter()`, creates one **object** according to that blueprint. An object created this way is an **instance** of the class. `Counter` represents a mechanical counter for counting the visitors entering a stadium.
+- **Classes and objects:** A **class** is a blueprint for objects, and calling a class, as in `Counter()`, creates one **object** according to that blueprint. An object created this way is an **instance** of the class. `Counter` represents a mechanical counter that can be used to count the spectators entering a stadium or a concert.
 - **Methods and `self`:** A function defined inside a class is called a **method**. The first parameter of a method, `self`, is the object that called the method. Calling `a.reset()` makes Python put `a` into `self` and run it like `Counter.reset(a)`.
 - **Instance variables:** Assigning to a variable prefixed with `self.`, as in `self.count = 0`, creates an **instance variable** belonging to that object. Each object has its own, so if another `b = Counter()` is created, `b.count` is separate from `a.count`.
 - **Order of execution:** `reset()` creates `count` and sets it to 0, `increment()` adds 1, and `get()` returns the value.

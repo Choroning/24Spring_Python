@@ -119,7 +119,7 @@ d=[1,2,3,c] #c가 존재하므로 오류 발생 X
 print(type(d)) #리스트 안에 리스트가 존재할 수 있음
 ```
 
-- **Ways to create a list:** Empty brackets `[]` and `list()` both create an empty list. `type()` returns the type of a value, so all four lines print `<class 'list'>` (the first comment reads "things printed as <class 'list'>").
+- **Ways to create a list:** Empty brackets `[]` and `list()` both create an empty list. `type()` returns the type of a value, so all four lines print `<class 'list'>`.
 - **Elements of several types:** As in `c`, one list can hold the integers `1` and `2` together with the string `'4'`.
 - **Nested list:** The last element of `d` is the list `c`. A list can have other lists as elements, and the comments note that no error occurs because `c` is already defined. `d[3][2]` is `'4'`, the third element of `c`.
 

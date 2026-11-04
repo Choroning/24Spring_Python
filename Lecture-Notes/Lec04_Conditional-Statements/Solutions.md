@@ -111,7 +111,7 @@ if n < 0:
 turtle.done()
 ```
 
-**Output:** The three messages were written with the pen up, so no lines remain along that path. The comments say: lift the pen so nothing is drawn, move the turtle to (100, 100), move it back to (0, 0), and put the pen down so lines are drawn. Depending on the input, the turtle moves as follows, and the result of a positive input is the same as [Figure 1 of Exercise 2](Exercises.md#exercise-2-moving-the-turtle-by-sign).
+**Output:** The three messages were written with the pen up, so no lines remain along that path. Depending on the input, the turtle moves as follows, and the result of a positive input is the same as [Figure 1 of Exercise 2](Exercises.md#exercise-2-moving-the-turtle-by-sign).
 
 | Input | Condition That Is True | Movement of the Turtle (Line Drawn) |
 |:-----|:-----|:-----|
@@ -221,7 +221,7 @@ if sunny:
 else:
     print("현재 날씨가 화창하지 않습니다.")
 
-# 종달새가 노래를 할 것인지를 판단한다.
+# decide whether the lark will sing
 if time >= 6 and time < 9 and sunny:
     print("종달새가 노래를 한다.")
 else:
@@ -231,7 +231,7 @@ else:
 - **Line 2:** `randint(1, 24)` includes both 1 and 24, so it produces one of 1-24.
 - **Line 3:** Converts the integer `time` to a string with `str()` and concatenates it ("Good morning. The time is now ... o'clock.") ([Lecture 3, Section 3.2](../Lec03_Data-Types/Concepts_Lecture.md#32-converting-numbers-to-strings)).
 - **Lines 5-9:** `sunny` is `True` or `False`, so it is written directly in the place of a condition, as in `if sunny:`. This means the same as `if sunny == True:` ("The weather is sunny." or "not sunny.").
-- **Line 12:** The lark sings ("The lark sings.") only when all three conditions are true. Because of `time < 9`, 9 o'clock is not included. The comment reads "Decide whether the lark will sing."
+- **Line 12:** The lark sings ("The lark sings.") only when all three conditions are true. Because of `time < 9`, 9 o'clock is not included.
 
 **Output:** The time and weather change on every run. The following are three example runs.
 
@@ -480,7 +480,7 @@ flowchart TD
 
 *Table 3. Variables of the automatic coffee ordering machine*
 
-**Step 4, programming:** The values received with `input()` are strings, so `int()` is applied to convert them to integers for integer arithmetic. The total starts from 0 and is obtained by adding the amount of each drink one at a time with the compound operator `+=` (Lecture 2). `total += noA * priceA` is the same as `total = total + (noA * priceA)`.
+**Step 4, programming:** The values received with `input()` are strings, so `int()` is applied to convert them to integers for integer arithmetic. The total starts from 0 and is obtained by adding the amount of each drink one at a time with the compound assignment operator `+=` (Lecture 2). `total += noA * priceA` is the same as `total = total + (noA * priceA)`.
 
 **Code:**
 
@@ -508,8 +508,8 @@ else:
     print("거스름돈은 %d원입니다." % (money - total))
 ```
 
-- **Lines 1-3:** Keep the price per cup in variables (the comments name each drink). If a price changes, only these three lines need to be edited.
-- **Line 5:** Prints the menu and prices. There are three values, so they are grouped in parentheses and passed to `%`. Line 6 asks the customer to order ("Please tell us the drinks you want.").
+- **Lines 1-3:** Keep the price per cup in variables. If a price changes, only these three lines need to be edited.
+- **Line 5:** Prints the menu and prices. There are three values, so they are grouped in parentheses and passed to `%`. Line 6 prints a message asking for the drinks to order ("Please tell us the drinks you want.").
 - **Lines 7-9:** Read the number of cups of each coffee as integers.
 - **Lines 11-14:** Accumulate the total. 2 cups × 2500 = 5000, 2 cups × 3000 = 6000, and 1 cup × 3000 = 3000, so `total` changes to 0, 5000, 11000, and 14000 ("The total is ... won.").
 - **Lines 17-21:** Read the payment ("Enter the amount to pay."); if it is less than the total, report that it is insufficient ("The amount is insufficient."); otherwise print the change `money - total` ("The change is ... won.").
@@ -584,7 +584,7 @@ else:
 ```
 
 - **Lines 1-5:** Read the scores of the five subjects (Korean, English, Korean history, elective 1, elective 2) as integers.
-- **Line 7:** Computes the addition in parentheses first and then divides by 5. Without the parentheses, only `sel2 / 5` would be computed first. The result of `/` is a floating-point number. Line 8 prints it as the average (평균).
+- **Line 7:** Computes the addition in parentheses first and then divides by 5. Without the parentheses, only `sel2 / 5` would be computed first. The result of `/` is a floating-point number. Line 8 prints this value as the average (평균).
 - **Line 10:** If even one of the five conditions is true, the whole condition is true, and the result is a failing score.
 
 **Output:** In the first run the average is (50 + 60 + 70 + 58 + 63) / 5 = 301 / 5 = 60.2 and every subject is 40 or more, so there is no failing score. In the second run the average is a high 78.0, but Korean history is 35, so the result is a failing score.

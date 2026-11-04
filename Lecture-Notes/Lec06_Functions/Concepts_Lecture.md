@@ -73,7 +73,7 @@ The input of a function is called an **argument**, and the output that the funct
 
 ### 1.2 Built-in Functions and Function Calls
 
-`print()`, `input()`, and `abs()`, which have been used so far, are all **built-in functions** that Python provides in advance. To execute the instructions inside a function, one **calls** the function. A call is written by putting parentheses after the function name, with the arguments inside the parentheses. The following example calls the absolute value function `abs()` in the Python interactive shell.
+Functions that Python provides in advance, such as `print()`, `input()`, and `abs()`, are called **built-in functions**. To execute the instructions inside a function, one **calls** the function. A call is written by putting parentheses after the function name, with the arguments inside the parentheses. The following example calls the absolute value function `abs()` in the Python interactive shell.
 
 ```pycon
 >>> value = abs(-100)
@@ -315,7 +315,7 @@ print(get_sum(1, 10))
 
 As in Figure 3, arguments correspond to parameters in the order in which they are written. The first argument 1 goes into the first parameter `start`, and the second argument 10 into the second parameter `end`. Arguments matched by position in this way are called **positional arguments**. `sum += i` is a compound assignment that abbreviates `sum = sum + i` (Lecture 2). The loop in the body is the same as the accumulation pattern of Lecture 5.
 
-If the number of positional arguments differs from the number of parameters, an error occurs. For example, giving only one argument as in `get_sum(1)` raises `TypeError: get_sum() missing 1 required positional argument: 'end'`.
+When the parameters have no default values (Section 6.1), an error occurs if the number of positional arguments differs from the number of parameters. For example, giving only one argument as in `get_sum(1)` raises `TypeError: get_sum() missing 1 required positional argument: 'end'`.
 
 > **Note:** The `sum` inside the function has the same name as the built-in function `sum()`. This `sum` is a local variable used only inside the function (Section 5), so it does not affect the built-in `sum()` outside the function, but inside the function it hides the built-in. It is safer to use a name that does not clash with built-in functions, such as `total` (Lecture 5, Section 6.3).
 
@@ -578,7 +578,7 @@ Radius of the circle: 10
 314.0
 ```
 
-When looking up the name `r` inside the function, there is no local variable `r`, so Python uses the global variable `r`. By the time the function is called on lines 5-6, 10.0 has already been stored in `r`.
+When looking up the name `r` inside the function, there is no local variable `r`, so Python uses the global variable `r`. By the time the function is called on line 6, 10.0 has already been stored in `r` on line 5.
 
 > **Caution:** A function that depends on a global variable works only in a program that has that global variable, and it is hard to trace where the value changes. Values that a function needs should be received as parameters whenever possible.
 
@@ -773,15 +773,15 @@ def greet(name, msg="How have you been?"):
     print("Hello ", name + ', ' + msg)
 
 greet("Younghee")
-greet("Cheolsu", "Long time no see!")
+greet("Cheolsu", "How are you doing?")
 ```
 
 ```text
 Hello  Younghee, How have you been?
-Hello  Cheolsu, Long time no see!
+Hello  Cheolsu, How are you doing?
 ```
 
-`greet("Younghee")` has no argument corresponding to `msg`, so the default value `"How have you been?"` is used, while `greet("Cheolsu", "Long time no see!")` uses the passed value instead of the default. `name + ', ' + msg` builds `"Younghee, How have you been?"` by string concatenation (Lecture 3). The two spaces after `Hello` in the output come from the one space at the end of the string `"Hello "` plus the one space that `print()` puts between two values.
+`greet("Younghee")` has no argument corresponding to `msg`, so the default value `"How have you been?"` is used, while `greet("Cheolsu", "How are you doing?")` uses the passed value instead of the default. `name + ', ' + msg` builds `"Younghee, How have you been?"` by string concatenation (Lecture 3). The two spaces after `Hello` in the output come from the one space at the end of the string `"Hello "` plus the one space that `print()` puts between two values.
 
 > **Caution:** Parameters with default values must come after parameters without default values. Writing `def greet(msg="hi", name):` raises the error `SyntaxError: parameter without a default follows parameter with a default`.
 
@@ -806,7 +806,7 @@ The first call specifies all three arguments by name, so even in a different ord
 
 | Method | Example Call | Basis of Correspondence | Rule |
 |:-----|:-----|:-----|:-----|
-| Positional argument | `calc(10, 20, 30)` | The order of the arguments | The count must equal that of the parameters |
+| Positional argument | `calc(10, 20, 30)` | The order of the arguments | They cannot outnumber the parameters, and every parameter without a default must receive a value |
 | Keyword argument | `calc(y=20, x=10, z=30)` | The names of the parameters | Order does not matter, but they come after positional arguments |
 | Default argument | `greet("Younghee")` | Omitted parameters take their default values | Parameters with defaults are placed last in the definition |
 
@@ -891,7 +891,7 @@ flowchart TB
 
 *Figure 6. A package made of the modules a.py and b.py and the initialization file __init__.py*
 
-`__init__.py` is a file that marks the folder as a package and holds initialization code to run when the package is first imported. Dividing a program into modules lets related functions be managed together in one file and lets a function written once be reused in several programs.
+`__init__.py` is a file that marks the folder as a package and holds initialization code to run when the package is first imported. A folder without this file can also be imported in a special form called a namespace package, but an ordinary package contains this file [4]. Dividing a program into modules lets related functions be managed together in one file and lets a function written once be reused in several programs.
 
 ### 8.2 Writing and Using a Module
 
@@ -1128,7 +1128,7 @@ When run directly, `__name__` is `"__main__"`, so the test code in the `if` stat
    <details>
    <summary>Answer</summary>
 
-   When the program is run with `python app.py`, the first entry of the module search path is the folder containing `app.py`. `tools.py` is in neither that folder, `PYTHONPATH`, nor the standard library path, so Python could not find the module. The simplest fix is to move `tools.py` into the same folder as `app.py`. If the folder cannot be moved, add the folder containing `tools.py` to the environment variable `PYTHONPATH`.
+   When the program is run with `python app.py`, the first entry of the module search path is the folder containing `app.py`. `tools.py` is in neither that folder, `PYTHONPATH`, nor the standard library path, so Python could not find the module. The simplest fix is to move `tools.py` into the same folder as `app.py`. If `tools.py` cannot be moved, add the folder containing `tools.py` to the environment variable `PYTHONPATH`.
 
    </details>
 

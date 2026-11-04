@@ -139,8 +139,10 @@
 | Type | Contents |
 |:-----|:-----|
 | Reference Book | I. Chun, *두근두근 파이썬*. Paju, South Korea: Life & Power Press, 2017. |
+| Reference Book | S. Kim, C. Kim, and C. Park, *컴퓨팅 사고와 함께하는 파이썬 기초부터 인공지능 응용까지*. Yeondu Edition, 2019. |
 | Lecture Slides | PDF slides for each chapter provided by the instructor (CH0-CH7) and supplementary decks (CH1_2 연산자, CH3_2 조건문_추가문제) |
 | Lecture Videos | Two lecture videos of week 14 |
 
 - The syllabus states that the main textbook would be announced later. The Week 1 course introduction material states that the lecture slides refer to 두근두근 파이썬 (Life & Power Press) and that any Python book is acceptable.
-- The lecture slides were made with reference to this book and do not correspond one to one with its chapters.
+- The lecture slides were made with reference to 두근두근 파이썬 and do not correspond one to one with its chapters.
+- The Chapter 3 review problem of CH3 조건문_강의용 (pages 26-33) and the function definition part of CH5 함수_강의용 (page 30) name 컴퓨팅 사고와 함께하는 파이썬 기초부터 인공지능 응용까지 as their reference.
