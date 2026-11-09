@@ -3,7 +3,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/Choroning/24Spring_Python)
 ![Languages](https://img.shields.io/github/languages/top/Choroning/24Spring_Python)
 
-이 레포지토리는 파이썬 과목의 이중 언어 강의 노트와 수업 결과물을 정리한 아카이브입니다.
+이 레포지토리는 파이썬 과목의 강의 노트와 수업 결과물을 정리한 아카이브입니다.
 
 *작성자: 박철원 (고려대학교(세종), 컴퓨터소프트웨어학과) - 2024년 기준 1학년*
 <br><br>
@@ -26,8 +26,8 @@
 - `Coursework/`에는 수업 시간에 작성한 단원별 파이썬 실습 코드(`Lab04`\~`Lab08`)와 해설, 자율 발표에서 소개한 도서관 열람실 좌석 예약 프로그램이 있습니다.
 - 단원은 강의자료의 순서(`Lec01`\~`Lec08`)를 따르며, 모든 문서는 영어(`.md`)와 한국어(`.ko.md`) 파일이 짝을 이룹니다.
 
-> **🤖 AI 에이전트 활용**
-> [Claude Code](https://claude.ai/download)를 노트 정리와 번역, 레포지토리 정리에 활용했습니다.
+> **🤖 생성형 AI 도구 사용**
+> 이 레포지토리는 문서화에 [Claude Code](https://claude.ai/download)를 사용합니다.
 
 <br><a name="course-information"></a>
 ## 📚 강의 정보

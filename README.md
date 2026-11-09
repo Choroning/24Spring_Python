@@ -3,7 +3,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/Choroning/24Spring_Python)
 ![Languages](https://img.shields.io/github/languages/top/Choroning/24Spring_Python)
 
-This repository archives bilingual lecture notes and coursework for the Python course.
+This repository archives lecture notes and coursework for the Python course.
 
 *Author: Cheolwon Park (Korea University Sejong, CSE) - Year 1 (Freshman) as of 2024*
 <br><br>
@@ -26,8 +26,8 @@ This repository archives bilingual lecture notes and coursework for the Python c
 - `Coursework/` holds the Python lab code written in class for each unit (`Lab04`-`Lab08`) with explanations, and the library reading room seat reservation program presented in a voluntary presentation.
 - Units follow the order of the lecture decks (`Lec01`-`Lec08`), and every document comes as an English (`.md`) and Korean (`.ko.md`) pair.
 
-> **🤖 AI Agent Usage**
-> [Claude Code](https://claude.ai/download) was used to organize and translate the notes and to restructure the repository.
+> **🤖 Use of Generative AI Tools**
+> This repository uses [Claude Code](https://claude.ai/download) for documentation.
 
 <br><a name="course-information"></a>
 ## 📚 Course Information
