@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Explain the concept and advantages of functions, and define and call functions with the `def` statement
@@ -267,7 +267,9 @@ Gildong Hong
 
 When `print_address("Gildong Hong")` is called, the argument `"Gildong Hong"` is assigned to the parameter `name`, and then the body is executed. Therefore `print(name)` in the body prints `Gildong Hong`. Giving another name as the argument prints the address of another person with the same function.
 
-> **Definition:** A **parameter** is a variable name written in the function definition (`name` in `def print_address(name):`), and an **argument** is the value actually passed in a call (`"Gildong Hong"` in `print_address("Gildong Hong")`). On each call, the value of the argument is assigned to the parameter.
+> **Definition:** A **parameter** is a variable name written in the function definition. `name` in `def print_address(name):` is a parameter, and on each call the value of the argument is assigned to the parameter.
+
+> **Definition:** An **argument** is the value actually passed when a function is called. `"Gildong Hong"` in `print_address("Gildong Hong")` is an argument.
 
 Giving `sumandavg()` of Section 2.4 the parameters `a` and `b` lets it compute the sum and average of any two numbers.
 

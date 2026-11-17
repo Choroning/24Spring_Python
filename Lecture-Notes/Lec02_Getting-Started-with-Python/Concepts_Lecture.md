@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Explain the relationship among programs, programming languages, and translator programs
@@ -162,7 +162,9 @@ When IDLE starts, the **Python shell** window opens. The first lines show the Py
 
 *Figure 5. The IDLE shell after printing hello world!*
 
-> **Definition:** The mode in which Python executes each line as soon as it is entered and shows the result is called the **interactive mode** or the interpreter mode, and the window through which the user exchanges input and output with Python in this way is called the **shell**. Code entered in the shell disappears when the shell is closed, so programs to be kept are written in the script mode of Section 5.2.
+> **Definition:** The **interactive mode** is the mode in which Python executes each line as soon as it is entered and shows the result, and it is also called the interpreter mode.
+
+> **Definition:** The **shell** is the window through which the user exchanges entered statements and the results shown by Python in the interactive mode. Code entered in the shell disappears when the shell is closed, so programs to be kept are written in the script mode of Section 5.2.
 
 ---
 
@@ -516,7 +518,7 @@ Line 2 stores 400 in `y` in the same way, and line 3 calculates 300 + 400 = 700 
 
 ```mermaid
 flowchart LR
-    U1["User input<br>300"] --> I1["input()"] -->|"string '300'"| N1["int()"] -->|"integer 300"| P["+"]
+    U1["User input<br>300"] --> I1["input()"] -->|"string '300'"| N1["int()"] -->|"integer 300"| P["#43;"]
     U2["User input<br>400"] --> I2["input()"] -->|"string '400'"| N2["int()"] -->|"integer 400"| P
     P -->|"700"| S["sum"]
 ```
@@ -953,7 +955,7 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
    <details>
    <summary>Answer</summary>
 
-   `**` is calculated first: 4 ** 2 = 16. Next, `*` and `//`, which have the same precedence, are calculated from the left: 3 * 16 = 48 and 48 // 5 = 9. Finally, 2 + 9 = 11.
+   `**` is calculated first: `4 ** 2` = 16. Next, `*` and `//`, which have the same precedence, are calculated from the left: `3 * 16` = 48 and `48 // 5` = 9. Finally, 2 + 9 = 11.
 
    </details>
 

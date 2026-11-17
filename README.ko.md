@@ -61,7 +61,7 @@
 ```plaintext
 24Spring_Python
 ├── Lecture-Notes               강의 노트, 연습 문제, 풀이 (강의자료 순서로 배열)
-├── Coursework                  단원별 Python 실습 코드와 해설, 자율 발표 프로그램
+├── Coursework                  단원별 파이썬 실습 코드와 해설, 자율 발표 프로그램
 ├── images                      강의 노트의 그림
 ├── Course-Information.ko.md    수업 운영 정보
 ├── Course-Information.md

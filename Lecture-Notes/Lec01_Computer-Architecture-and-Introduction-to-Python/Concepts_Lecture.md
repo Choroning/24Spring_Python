@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Explain the components of the von Neumann architecture and the stored-program concept
@@ -213,7 +213,9 @@ Table 4 lists the representative technology used for each kind of memory along w
 
 The ns (nanosecond) in Table 4 is one billionth of a second. The access time of a hard disk is millions to tens of millions of times that of a cache, so if all data were read from the hard disk without a hierarchy, the CPU would spend most of its time waiting.
 
-> **Definition:** Memory whose contents are lost when the power is turned off is called **volatile** memory, and memory whose contents remain when the power is turned off is called **nonvolatile** memory. Cache and RAM are volatile, while SSDs and hard disks are nonvolatile.
+> **Definition:** **Volatile memory** is memory whose contents are lost when the power is turned off. Cache and RAM are volatile memory.
+
+> **Definition:** **Nonvolatile memory** is memory whose contents remain when the power is turned off. SSDs and hard disks are nonvolatile memory.
 
 > **Key Point:** RAM loses its contents when the power is turned off, so any result of a program that must remain after the power is turned off has to be saved as a file in secondary storage. This is also why Python code is saved as a source file in Lecture 2.
 

@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Create lists and look up, add, change, and remove elements with indexing, slicing, and methods
@@ -80,7 +80,11 @@
 
 Consider a program that processes the scores of 10 students. If each variable stores one value, ten variables such as `score1`, `score2`, ..., `score10` are needed, and the expression for the total must name every one of them. When the number of students grows to 100, the code grows with it. What is needed is a way to store many values of the same kind under one name and retrieve them by number.
 
-> **Definition:** A **list** is a Python data type that stores several values in order. Each value in a list is called an **element**, and elements are distinguished by their position number, the **index**, which starts from 0.
+> **Definition:** A **list** is a Python data type that stores several values in order.
+
+> **Definition:** An **element** is each value in a list.
+
+> **Definition:** An **index** is the position number that distinguishes the elements of a list, and it starts from 0.
 
 A list is written by placing values, separated by commas, inside square brackets `[` `]`. This basic syntax, together with `append()` and access by index, was first introduced in [Lecture 3, Section 8](../Lec03_Data-Types/Concepts_Lecture.md#8-lists).
 

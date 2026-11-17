@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Explain the problems that arise when related data are stored in several separate lists, and compare ways of bundling the data together
@@ -288,7 +288,9 @@ Lee 50 168
 
 ### 2.1 Objects and Object Orientation
 
-> **Definition:** An **object** bundles related variables (data) and functions (features) into a single unit. The programming style that builds a program out of objects and the interactions between them is called **object-oriented programming (OOP)**.
+> **Definition:** An **object** bundles related variables (data) and functions (features) into a single unit.
+
+> **Definition:** **Object-oriented programming (OOP)** is the programming style that builds a program out of objects and the interactions between them.
 
 The real world is full of things. A person knitting, a tablet, a television, a dog, and a ball of yarn each have their own characteristics and influence one another. Object-oriented programming represents each thing in a problem as an object and writes the program so that the objects get work done by requesting features from each other.
 
@@ -338,7 +340,9 @@ The current values of the attributes are called the **state** of the object, and
 
 ### 3.1 The Blueprint of Objects
 
-> **Definition:** The blueprint for creating objects is called a **class**. Each object created from a class is called an **instance** of that class.
+> **Definition:** A **class** is the blueprint for creating objects.
+
+> **Definition:** An **instance** of a class is each object created from that class.
 
 A class is like a waffle iron that stamps out waffles. One iron can bake many waffles, and the baked waffles have the same shape but are each separate waffles. The same relationship holds between one blueprint of a house and the many houses that can be built from it. Likewise, one `Car` class can create many car objects; each object has the same kinds of attributes, but their values (color, model, and so on) differ from object to object.
 

@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-17
 
 > **Learning Objectives:**
 > 1. Distinguish the three basic control structures of sequence, selection, and iteration, and represent them as flowcharts
@@ -669,7 +669,7 @@ When writing a program containing conditional statements, organizing the problem
 
 *Table 5. The four steps of program design*
 
-Drawing a flowchart (Section 1) in step 2 reveals the places where decisions are needed, that is, where conditional statements go, as diamonds. In step 4, inputs for which the condition is true, inputs for which it is false, and inputs at the boundary, such as `money == total`, must all be tried. A solution applying this whole process is in [Exercise 8](Exercises.md#exercise-8-automatic-coffee-ordering-machine).
+Drawing a flowchart (Section 1) in step 2 reveals the places where decisions are needed, that is, where conditional statements go, as diamonds. In step 4, inputs for which the condition is true, inputs for which it is false, and inputs at the boundary, such as `money == total`, must all be tried. A problem that applies this whole process is [Exercise 8](Exercises.md#exercise-8-automatic-coffee-ordering-machine).
 
 ---
 
