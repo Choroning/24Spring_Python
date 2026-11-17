@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-17
+> **Last Updated:** 2026-11-18
 
 > **Learning Objectives:**
 > 1. Explain the concept and advantages of functions, and define and call functions with the `def` statement
@@ -17,9 +17,9 @@
 ## Table of Contents
 
 - [1. The Concept of a Function](#1-the-concept-of-a-function)
-  - [1.1 What Is a Function](#11-what-is-a-function)
+  - [1.1 Definition of a Function](#11-definition-of-a-function)
   - [1.2 Built-in Functions and Function Calls](#12-built-in-functions-and-function-calls)
-  - [1.3 Why Use Functions](#13-why-use-functions)
+  - [1.3 Reasons to Use Functions](#13-reasons-to-use-functions)
 - [2. Defining and Calling Functions](#2-defining-and-calling-functions)
   - [2.1 Structure of the def Statement](#21-structure-of-the-def-statement)
   - [2.2 Function Calls and the Flow of Execution](#22-function-calls-and-the-flow-of-execution)
@@ -57,7 +57,7 @@
 
 ## 1. The Concept of a Function
 
-### 1.1 What Is a Function
+### 1.1 Definition of a Function
 
 A **function** is a named group of code. A function can be thought of as a box that receives input and produces output. Even without knowing what happens inside the box, one can use a function as long as one knows what comes out for what goes in.
 
@@ -85,7 +85,7 @@ When `abs(-100)` is executed, the function returns 100, the absolute value of -1
 
 A function that users create themselves with the `def` statement is called a **user-defined function**. Section 2 onward covers how to define and use user-defined functions.
 
-### 1.3 Why Use Functions
+### 1.3 Reasons to Use Functions
 
 Once a function is defined, it can be called to do its work whenever it is needed. Functions have the following further advantages.
 
