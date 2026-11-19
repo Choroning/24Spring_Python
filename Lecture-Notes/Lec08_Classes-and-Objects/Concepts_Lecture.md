@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-17
+> **Last Updated:** 2026-11-19
 
 > **Learning Objectives:**
 > 1. Explain the problems that arise when related data are stored in several separate lists, and compare ways of bundling the data together
@@ -10,6 +10,7 @@
 > 3. Define instance variables and methods with the `class` statement and explain the role of `self`
 > 4. Initialize objects with the constructor `__init__()` and create and use several objects from one class
 > 5. Hide information with instance variables whose names start with `__` and handle them with getters and setters
+> 6. Distinguish class variables from instance variables, and define how objects are printed, compared, and measured with special methods such as `__str__()`, `__repr__()`, `__eq__()`, and `__len__()`
 
 ---
 
@@ -28,6 +29,7 @@
   - [3.1 The Blueprint of Objects](#31-the-blueprint-of-objects)
   - [3.2 Form of a Class Definition](#32-form-of-a-class-definition)
   - [3.3 Creating Many Objects from One Class](#33-creating-many-objects-from-one-class)
+  - [3.4 Class Variables and Instance Variables](#34-class-variables-and-instance-variables)
 - [4. The Counter Class](#4-the-counter-class)
   - [4.1 Class Definition and Instance Variables](#41-class-definition-and-instance-variables)
   - [4.2 Creating an Object and Calling Methods](#42-creating-an-object-and-calling-methods)
@@ -40,6 +42,9 @@
   - [6.1 Defining Methods](#61-defining-methods)
   - [6.2 Calling Methods](#62-calling-methods)
   - [6.3 The String Representation Method](#63-the-string-representation-method)
+  - [6.4 `__repr__()` and `__str__()`](#64-__repr__-and-__str__)
+  - [6.5 Special Methods for Comparison and Length](#65-special-methods-for-comparison-and-length)
+  - [6.6 Common Mistakes in Defining Methods](#66-common-mistakes-in-defining-methods)
 - [7. Information Hiding](#7-information-hiding)
   - [7.1 Private Instance Variables](#71-private-instance-variables)
   - [7.2 Name Mangling](#72-name-mangling)
@@ -423,6 +428,67 @@ myCar  ──▶ [Car] speed = 60, color = "blue",   model = "E-class"
 - **`object.variable`:** Dot notation reads an instance variable of an object.
 - **`type()` and `isinstance()`:** `type(myCar)` shows the class of `myCar`, and `__main__` means the class was defined in the program that was run directly. `isinstance(myCar, Car)` is `True` because `myCar` is an instance of `Car`.
 
+### 3.4 Class Variables and Instance Variables
+
+An instance variable made with `self.name = value` exists separately in each object. In contrast, a variable assigned directly in the body of the `class` statement, outside any method, exists only once, in the class itself, and is shared by all objects made from that class. Such a variable is called a **class variable**. In general, instance variables are used for data that differs from object to object, and class variables for data shared by all objects [3].
+
+```python
+class Car:
+    wheels = 4                 # class variable
+    count = 0                  # class variable
+
+    def __init__(self, model):
+        self.model = model     # instance variable
+        Car.count += 1
+
+a = Car("A6")
+b = Car("520d")
+print(a.wheels, b.wheels, Car.wheels)
+print(Car.count)
+a.wheels = 3
+print(a.wheels, b.wheels, Car.wheels)
+print(a.__dict__, b.__dict__)
+```
+
+```text
+4 4 4
+2
+3 4 4
+{'model': 'A6', 'wheels': 3} {'model': '520d'}
+```
+
+- **Lines 2-3:** `wheels` and `count` are class variables, one of each in the `Car` class.
+- **Line 7:** `Car.count` increases by 1 every time the constructor runs, so after two objects are made `Car.count` is 2. To assign to a class variable, write `ClassName.variable`.
+- **Line 11:** When a name is read through an object, as in `a.wheels`, Python first looks among the object's instance variables and, if it is not there, in the class. `a` and `b` have no `wheels`, so the class variable 4 is found.
+- **Lines 13-15:** `a.wheels = 3` does not change the class variable; it creates a new instance variable with the same name in `a`. From then on `a.wheels` finds the instance variable 3, but `b.wheels` and `Car.wheels` are still 4. The `__dict__` (Section 4.3) on the last line shows that only `a` gained `wheels`.
+
+If a class variable is a mutable object such as a list, its contents are changed by methods rather than by assignment, so every object changes the same list. This is a common mistake that mixes up contents meant to be recorded separately for each object [3].
+
+```python
+class Club:
+    members = []               # a list shared by every Club object
+
+    def __init__(self, name):
+        self.name = name
+
+    def join(self, person):
+        self.members.append(person)
+
+a = Club("soccer")
+b = Club("baseball")
+a.join("Minsu")
+b.join("Jiyoung")
+print(a.members)
+print(b.members is a.members)
+```
+
+```text
+['Minsu', 'Jiyoung']
+True
+```
+
+`self.members.append(person)` reads `self.members` and adds an element to that list; it does not assign to `self.members`. `a` and `b` have no instance variable `members`, so both find the single list that is the class variable and add to it, and as a result Jiyoung, who joined the baseball club, ended up in the member list of the soccer club. This is the same principle as the mutable default value problem of Lecture 6, Section 6.3. A list that must exist separately for each object must be created in the constructor with `self.members = []` as an instance variable.
+
 ---
 
 <br>
@@ -720,6 +786,128 @@ p = (3, 4)
 - **`__str__()`:** Takes only `self` as a parameter and must return a string. Here `%` formatting ([Lecture 3, Section 4.3](../Lec03_Data-Types/Concepts_Lecture.md#43-string-formatting)) builds `'(3, 4)'`.
 - **When it is called:** `print(p)`, `str(p)`, and `print("p =", p)` all call `__str__()` internally, so the same string is printed. Methods whose names have two underscores on each side, like `__init__()`, are **special methods** that Python calls automatically in particular situations.
 
+### 6.4 `__repr__()` and `__str__()`
+
+There are two special methods that represent an object as a string. `__str__()` returns the readable representation used by `print()` and `str()`, and `__repr__()` returns the official representation used by the built-in function `repr()`. The result of `__repr__()` is recommended to look, if possible, like a Python expression that could recreate an object with the same value, and because it is mainly used for debugging it should be information-rich and unambiguous [4].
+
+```pycon
+>>> class Point:
+...     def __init__(self, x, y):
+...         self.x = x
+...         self.y = y
+...     def __repr__(self):
+...         return f"Point({self.x}, {self.y})"
+...     def __str__(self):
+...         return f"({self.x}, {self.y})"
+...
+>>> p = Point(3, 4)
+>>> p
+Point(3, 4)
+>>> print(p)
+(3, 4)
+>>> [Point(1, 2), Point(3, 4)]
+[Point(1, 2), Point(3, 4)]
+>>> str(p), repr(p)
+('(3, 4)', 'Point(3, 4)')
+>>> f"{p} {p!r}"
+'(3, 4) Point(3, 4)'
+```
+
+- **Line 11:** When the interactive shell shows the value of an expression, it uses `__repr__()`, so the result differs from `print(p)`.
+- **Line 15:** When a list is shown, the list represents its elements with `__repr__()`. If only `__str__()` were defined without `__repr__()`, the objects in the list would appear in the form `<__main__.Point object at 0x...>` of Section 6.3.
+- **Line 19:** A replacement field of an f-string (Lecture 3, Section 4.4) uses `__str__()`, and appending `!r` after the expression uses `__repr__()`.
+
+If a class defines only `__repr__()` and not `__str__()`, the result of `__repr__()` is also used by `print()` and `str()` [4]. So if only one is to be defined, defining `__repr__()` covers both cases. Built-in types also distinguish the two representations, as `str()` of the string `"hi"` is `hi` while `repr()` is `'hi'` with quotes.
+
+### 6.5 Special Methods for Comparison and Length
+
+Comparing two objects of a user-defined class with `==` compares, unless specified otherwise, whether they are the same object, because the default `__eq__()` compares with `is` [4]. To make objects judged equal when their instance variables have equal values, define the special method `__eq__()`. `x == y` calls `x.__eq__(y)` [4].
+
+```pycon
+>>> class P1:
+...     def __init__(self, x):
+...         self.x = x
+...
+>>> P1(1) == P1(1)
+False
+>>> class P2:
+...     def __init__(self, x):
+...         self.x = x
+...     def __eq__(self, other):
+...         return self.x == other.x
+...
+>>> P2(1) == P2(1)
+True
+>>> P2(1) == P2(2)
+False
+>>> P2(1) != P2(2)
+True
+```
+
+`P1(1) == P1(1)` is `False` because, even with equal instance variables, they are two different objects (the same result as `a is b` in Lecture 3, Section 1.3). `P2` compares the `x` of the two objects in `__eq__()`, so equal values give `True`. Even with only `__eq__()` defined, `!=` is computed by inverting its result. The problem that arises when objects of a class that defines `__eq__()` are used as set elements or dictionary keys, and the handling of comparisons with values of other types, are covered in Lecture 9, Section 7.
+
+The built-in function `len()` calls the object's `__len__()`. Defining `__len__()` not only allows `len()` to be used but also, unless the special method `__bool__()` that decides truth directly is defined, makes an object of length 0 judged false in a condition (Lecture 4, Section 2.1) [4].
+
+```pycon
+>>> class Bag:
+...     def __init__(self):
+...         self.items = []
+...     def add(self, item):
+...         self.items.append(item)
+...     def __len__(self):
+...         return len(self.items)
+...
+>>> b = Bag()
+>>> len(b), bool(b)
+(0, False)
+>>> b.add("공")
+>>> len(b), bool(b)
+(1, True)
+```
+
+An empty `Bag` has `len(b)` equal to 0, so it is false in `if b:`, and it becomes true once one item (공, a ball) is put in. In this way special methods let objects of user-defined classes work with `print()`, `==`, `len()`, and conditions just like built-in types. Special methods that define operators such as `+` and `<` are covered in Lecture 9, Section 7.
+
+### 6.6 Common Mistakes in Defining Methods
+
+The most common mistakes when first defining methods involve `self`. The following two classes show, respectively, a missing `self` parameter and a missing `self.` in the body.
+
+```pycon
+>>> class Counter:
+...     def __init__(self):
+...         self.count = 0
+...     def increment():
+...         self.count += 1
+...
+>>> c = Counter()
+>>> c.increment()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    c.increment()
+    ~~~~~~~~~~~^^
+TypeError: Counter.increment() takes 0 positional arguments but 1 was given
+>>> class Counter2:
+...     def __init__(self):
+...         self.count = 0
+...     def increment(self):
+...         count += 1
+...
+>>> c2 = Counter2()
+>>> c2.increment()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    c2.increment()
+    ~~~~~~~~~~~~^^
+  File "<stdin>", line 5, in increment
+    count += 1
+    ^^^^^
+UnboundLocalError: cannot access local variable 'count' where it is not associated with a value
+```
+
+- **The first error:** `c.increment()` runs as `Counter.increment(c)` (Section 4.3), passing the object `c` as the first argument, but the definition has no parameters at all. So a `TypeError` says that 1 argument was given to a method that takes 0. No argument is visible in the call, so on seeing this message, first check whether `self` was omitted from the definition.
+- **The second error:** `count += 1` assigns not to the instance variable but to a local variable `count` of the method. The local variable `count` has no value yet, so the same `UnboundLocalError` as in the caution box of Lecture 6, Section 5.4 occurs. Inside methods, instance variables are always referred to with `self.`, as in `self.count`.
+
+The second entry of the traceback, `File "<stdin>", line 5, in increment`, means that the error occurred on line 5 inside the `increment` method. The `AttributeError` that occurs when an instance variable is read before it is created, because there is no constructor, was covered in the caution box of Section 4.4.
+
 ---
 
 <br>
@@ -778,7 +966,7 @@ print(obj.__dict__)
 - **Stored names:** `__dict__` shows that the instance variables are stored under the names `_Student__name` and `_Student__age`. Hence they cannot be found as `obj.__age` but can be read as `obj._Student__age`. Mangling is a device that prevents accidental access; it does not prevent deliberate access by the mangled name.
 - **Assignment outside the class:** `obj.__age = 100` is outside the class definition, so the name is not changed, and a **new instance variable** named `__age` is created in the object. After that `print(obj.__age)` prints 100, but `_Student__age`, which the methods of the class use, is still 0. It looks as if the private variable was changed from outside the class, but in fact a different variable was created.
 
-> **Note:** In Python, the convention of starting a name with a single underscore (`_age`) to mean "do not use this outside the class" is also widely used. A single underscore does not change the name and is purely an agreement among programmers. Two underscores are used mainly to avoid name clashes with subclasses in inheritance [3].
+> **Note:** In Python, the convention of starting a name with a single underscore (`_age`) to mean "do not use this outside the class" is also widely used. A single underscore does not change the name and is purely an agreement among programmers. Two underscores are used mainly to avoid name clashes with subclasses in inheritance (Lecture 9) [3].
 
 ### 7.3 Getters and Setters
 
@@ -846,7 +1034,7 @@ print(s.getAge())
 20
 ```
 
-`s.setAge(-5)` fails the check, prints a message ("Age cannot be negative."), and ends with `return`, so the age remains 20. If the instance variable were public, there would be no way to prevent an invalid assignment such as `s.age = -5`.
+`s.setAge(-5)` fails the check, prints a message ("Age cannot be negative."), and ends with `return`, so the age remains 20. If the instance variable were public, there would be no way to prevent an invalid assignment such as `s.age = -5`. How to report an invalid value to the caller with an exception, instead of printing a message, is covered in Lecture 11.
 
 > **Key Point:** The purpose of information hiding is not hiding values for its own sake but making the state of an object change **only according to the rules set by the class**. A setter is the place where those rules are checked.
 
@@ -916,6 +1104,8 @@ When designing a class for a real-world thing, the state of the thing becomes in
 | An instance variable whose name starts with `__` cannot be accessed from outside the class by any means. | **F.** Its name is merely stored as `_ClassName__variable`, so it can be accessed by the mangled name. |
 | In a program run from a file, writing only `obj.getName()` prints the name on the screen. | **F.** Return values are not printed automatically, so `print()` is needed. |
 | Sorting only one of several parallel lists breaks the correspondence with the other lists. | **T.** The same index must refer to the same person, but only the elements of one list were moved. |
+| Running `a.wheels = 3` changes the class variable `Car.wheels` to 3. | **F.** Assignment through an object only creates a new instance variable of the same name in `a`; the class variable and the `wheels` of other objects are unchanged. |
+| For a class that does not define `__eq__()`, `==` is `True` for two objects whose instance variables all have equal values. | **F.** The default `__eq__()` compares whether they are the same object, so two separately created objects give `False`. |
 
 ---
 
@@ -931,9 +1121,12 @@ When designing a class for a real-world thing, the state of the thing becomes in
 | Object-oriented programming | A style that builds a program out of objects and messages (method calls) between them. |
 | Class and instance | A class is the blueprint of objects, each object made from a class is an instance, and one class creates many objects with independent state. |
 | Instance variable | Created inside a method with `self.name = value`, and exists separately in each object. |
+| Class variables | Variables assigned in the body of the `class` statement outside methods, shared by all objects; assigning through an object creates a new instance variable of the same name. |
 | `self` | The first parameter, which receives the object on which the method was called; `a.m()` is the same as `ClassName.m(a)`. |
 | Constructor | `__init__()` is called automatically when an object is created, initializes the instance variables, and receives initial values through the parameters after `self`. |
 | `__str__()` | A special method that returns the string representation of an object used by `print()` and `str()`. |
+| `__repr__()` | The official string representation used by `repr()`, the interactive shell, and representations inside lists; used by `print()` as well when `__str__()` is absent. |
+| `__eq__()` and `__len__()` | The default behavior of `==` is the same as `is`, `__eq__()` defines comparison by value, and `__len__()` is used by `len()` and truth testing. |
 | Information hiding | An instance variable whose name starts with `__` is renamed to `_ClassName__variable` by name mangling and cannot be accessed by its name from outside the class. |
 | Getters and setters | A getter returns the value of an instance variable, and a setter checks a value before setting it so that the state changes only according to the rules of the class. |
 
@@ -1030,6 +1223,46 @@ When designing a class for a real-world thing, the state of the thing becomes in
    When printing an object, `print()` uses the string returned by `__str__()`, so `print(Point(2, 5))` prints `Point(2, 5)`. `__str__()` must return a string; it does not call `print()` itself inside the method.
 
    </details>
+
+8. **Class variables:** Write the output of the following program.
+
+   ```python
+   class Ticket:
+       issued = 0
+       def __init__(self, seat):
+           self.seat = seat
+           Ticket.issued += 1
+           self.no = Ticket.issued
+
+   t1 = Ticket("A1")
+   t2 = Ticket("B3")
+   print(t1.no, t2.no, Ticket.issued, t1.issued)
+   ```
+
+   <details>
+   <summary>Answer</summary>
+
+   `1 2 2 2` is printed. `issued` is a class variable, so the two constructor calls increase the same variable to 1 and then 2. `self.no` records the value of `issued` at that moment as each object's instance variable, so `t1.no` is 1 and `t2.no` is 2. For `t1.issued`, `t1` has no instance variable `issued`, so the class variable 2 is found.
+
+   </details>
+
+9. **repr and eq:** For the `Point` of Section 6.4 without `__eq__()`, give the results of `Point(1, 2) == Point(1, 2)` and `print([Point(1, 2)])`, and write an `__eq__()` that makes the first result `True`.
+
+   <details>
+   <summary>Answer</summary>
+
+   `Point(1, 2) == Point(1, 2)` is `False` because they are two different objects, and `print([Point(1, 2)])` gives `[Point(1, 2)]` because a list represents its elements with `__repr__()`. Defining `def __eq__(self, other): return self.x == other.x and self.y == other.y` makes the result `True` when the two coordinates are equal.
+
+   </details>
+
+10. **A mistake with self:** What error occurs when `def show(): print("A")` is defined inside `class A:` and `A().show()` is run? Explain the reason in terms of the form `A.show(obj)`.
+
+    <details>
+    <summary>Answer</summary>
+
+    `TypeError: A.show() takes 0 positional arguments but 1 was given` occurs. `A().show()` runs as `A.show(obj)`, passing the new object `obj` as the first argument, but the definition has no parameter `self` to receive it. Fix it as `def show(self):`.
+
+    </details>
 
 ---
 
