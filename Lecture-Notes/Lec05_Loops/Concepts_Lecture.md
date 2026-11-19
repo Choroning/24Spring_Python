@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-19
 
 > **Learning Objectives:**
 > 1. Explain why repetition structures are needed and distinguish count-controlled loops from condition-controlled loops
@@ -10,7 +10,7 @@
 > 3. Write programs that repeat while a condition is true with the `while` statement, and avoid infinite loops
 > 4. Compute sums and products by repetition using accumulator variables
 > 5. Rewrite the same repetition with either the `for` statement or the `while` statement and choose the loop that suits a situation
-> 6. Write nested loops and control the flow of a loop with the `break` and `continue` statements
+> 6. Write nested loops, control the flow of repetition with `break` statements, `continue` statements, and the `else` clause of loops, and trace their execution
 
 ---
 
@@ -27,18 +27,22 @@
   - [3.2 Start, Stop, and Step](#32-start-stop-and-step)
   - [3.3 Decreasing Ranges and Empty Ranges](#33-decreasing-ranges-and-empty-ranges)
   - [3.4 Inspecting the Contents of a range Object](#34-inspecting-the-contents-of-a-range-object)
+  - [3.5 Properties of range Objects and the Loop Variable](#35-properties-of-range-objects-and-the-loop-variable)
 - [4. Traversing Sequences](#4-traversing-sequences)
   - [4.1 Traversing a String](#41-traversing-a-string)
   - [4.2 Traversing a List](#42-traversing-a-list)
   - [4.3 Turtle Graphics and Repetition](#43-turtle-graphics-and-repetition)
+  - [4.4 Iterating over Indices and Elements Together](#44-iterating-over-indices-and-elements-together)
 - [5. The Accumulation Pattern](#5-the-accumulation-pattern)
   - [5.1 Accumulating a Sum](#51-accumulating-a-sum)
   - [5.2 Accumulating a Product and the Factorial](#52-accumulating-a-product-and-the-factorial)
+  - [5.3 Accumulating Counts and Maximums](#53-accumulating-counts-and-maximums)
 - [6. The while Statement](#6-the-while-statement)
   - [6.1 Structure of the while Statement](#61-structure-of-the-while-statement)
   - [6.2 Repeating Until the Input Changes the Condition](#62-repeating-until-the-input-changes-the-condition)
   - [6.3 Counter-Controlled Repetition](#63-counter-controlled-repetition)
   - [6.4 Infinite Loops](#64-infinite-loops)
+  - [6.5 Tracing a Loop with an Unknown Number of Iterations](#65-tracing-a-loop-with-an-unknown-number-of-iterations)
 - [7. Converting Between for and while](#7-converting-between-for-and-while)
   - [7.1 How to Convert](#71-how-to-convert)
   - [7.2 Choosing a Loop](#72-choosing-a-loop)
@@ -47,6 +51,7 @@
   - [9.1 The break Statement](#91-the-break-statement)
   - [9.2 The continue Statement](#92-the-continue-statement)
   - [9.3 The else Clause of a Loop](#93-the-else-clause-of-a-loop)
+  - [9.4 Tracing the else Clause and break](#94-tracing-the-else-clause-and-break)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
 - [References](#references)
@@ -90,7 +95,7 @@ A statement that creates a repetition structure is called a **loop statement** o
 
 ### 1.2 Two Kinds of Loops
 
-Loops are divided into two kinds according to how they decide when to stop. Python provides the `for` statement and the `while` statement for the two kinds.
+Loops are divided into two kinds according to how they decide when to stop. Python provides the `for` statement and the `while` statement for the two kinds. Recursion, in which a function repeats work by calling itself without a loop, and its comparison with iteration are covered in Lecture 12.
 
 | Kind | When the Repetition Stops | Python Statement | Example |
 |:-----|:-----|:-----|:-----|
@@ -359,6 +364,62 @@ range(0, 5)
 5
 ```
 
+### 3.5 Properties of range Objects and the Loop Variable
+
+A range object does not store its elements as a list does, but it is a kind of **sequence**, like strings and lists, so it supports length, indexing, and membership tests [3]. Its elements are computed from the start, stop, and step when needed.
+
+```pycon
+>>> r = range(0, 10, 3)
+>>> list(r)
+[0, 3, 6, 9]
+>>> len(r)
+4
+>>> r[2]
+6
+>>> r[-1]
+9
+>>> 7 in r
+False
+>>> 9 in r
+True
+>>> list(range(10, 0, -3))
+[10, 7, 4, 1]
+>>> len(range(10, 0, -3))
+4
+>>> range(0, 1, 0.5)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    range(0, 1, 0.5)
+    ~~~~~^^^^^^^^^^^
+TypeError: 'float' object cannot be interpreted as an integer
+```
+
+- **Line 4:** The number of elements is the distance from the start to the stop divided by the step and rounded up, $`\lceil (\text{stop} - \text{start}) / \text{step} \rceil`$, and if this value is 0 or less the range is empty. `range(0, 10, 3)` gives $`\lceil 10 / 3 \rceil = 4`$.
+- **Lines 6-9:** The element at index `k` is computed as `start + k * step`. `r[2]` is 0 + 2 × 3 = 6, and the negative index `-1` is the last element, 9.
+- **Lines 10-13:** `in` checks whether a value is an element of the range. 7 is not among 0, 3, 6, and 9, so the result is false.
+- **Lines 14-17:** The same formula holds for decreasing ranges. $`\lceil (0 - 10) / (-3) \rceil = \lceil 3.33\ldots \rceil = 4`$.
+- **Line 18:** All arguments of `range()` must be integers. When numbers increasing by 0.5 are needed, loop over an integer range and compute, as in `i / 2`.
+
+A common misunderstanding about the `for` statement is that changing the loop variable inside the body changes the next iteration. The `for` statement takes the next element from the range object and assigns it anew to the loop variable on every iteration, so a value assigned to the loop variable in the body does not affect the next iteration.
+
+```python
+for i in range(3):
+    print("before:", i)
+    i = i + 10
+    print("after:", i)
+```
+
+```text
+before: 0
+after: 10
+before: 1
+after: 11
+before: 2
+after: 12
+```
+
+The body increased `i` by 10, but `i` in the next iterations is 1 and 2, following exactly the order set by the range object. If the number of iterations must be changed inside the body, use a `while` statement that updates its counter directly (Section 6.3).
+
 ---
 
 <br>
@@ -426,6 +487,29 @@ for count in range(6):
 
 Changing the number of circles to $n$ and the turning angle to `360/n` draws a flower shape made of $n$ circles.
 
+### 4.4 Iterating over Indices and Elements Together
+
+Sometimes the position of an element is needed along with the element itself. One can loop over the indices with `for i in range(len(s)):` and take out the element with `s[i]`, but the built-in function `enumerate()` yields pairs of an index and an element in turn [5]. The two values are split between two loop variables listed with a comma after `for`, like the multiple assignment of Lecture 2, Section 7.4.
+
+```pycon
+>>> for i, ch in enumerate("abc"):
+...     print(i, ch)
+...
+0 a
+1 b
+2 c
+>>> for i, ch in enumerate("abc", start=1):
+...     print(i, ch)
+...
+1 a
+2 b
+3 c
+>>> list(enumerate("abc"))
+[(0, 'a'), (1, 'b'), (2, 'c')]
+```
+
+`enumerate("abc")` yields the pairs `(0, 'a')`, `(1, 'b')`, and `(2, 'c')` in turn, and converting it with `list()`, as on the last line, shows the pairs at a glance. Giving the keyword argument `start=1` makes the numbering start at 1, which is convenient for attaching sequence numbers shown to people. Looping over indices with `range(len(s))` leaves room for an `IndexError` from a mistaken index calculation, but `enumerate()` makes exactly as many pairs as there are elements, so that mistake cannot occur.
+
 ---
 
 <br>
@@ -480,6 +564,56 @@ print(product)
 ```
 
 `product` starts at 1 and changes as $1 \times 1 = 1$, $1 \times 2 = 2$, $2 \times 3 = 6$, $6 \times 4 = 24$, $24 \times 5 = 120$, so $5! = 120$ is printed. A program that computes the factorial of an input integer is covered in [Exercise 2](Exercises.md#exercise-2-computing-a-factorial).
+
+### 5.3 Accumulating Counts and Maximums
+
+Besides sums and products, accumulators are used to remember the number of elements that satisfy a condition or the largest value seen so far. The following program finds both the number of scores of 80 or more and the highest score in a list of scores.
+
+```python
+scores = [72, 95, 88, 61, 95]
+count = 0
+best = scores[0]
+for s in scores:
+    if s >= 80:
+        count = count + 1
+    if s > best:
+        best = s
+print("80점 이상:", count, "최고점:", best)
+```
+
+```text
+80점 이상: 3 최고점: 95
+```
+
+| `s` | `s >= 80` | `count` | `s > best` | `best` |
+|:-----|:-----|:-----|:-----|:-----|
+| (start) | | 0 | | 72 |
+| 72 | False | 0 | False | 72 |
+| 95 | True | 1 | True | 95 |
+| 88 | True | 2 | False | 95 |
+| 61 | False | 2 | False | 95 |
+| 95 | True | 3 | False | 95 |
+
+*Table 5. Accumulating a count and a maximum*
+
+`count`, which counts, starts at 0 like a sum and increases by 1 only when the condition is true. `best`, which remembers the maximum, starts at the first element, 72, and changes only when it meets a larger value. The second 95 equals `best`, so `s > best` is false and it does not change.
+
+Setting the initial value of `best` to 0 is a common mistake. For values of 0 or more, such as scores, the result is the same, but if every element is negative, no element is greater than 0, and 0, which is not in the list, remains as the maximum.
+
+```pycon
+>>> temps = [-5, -2, -9]
+>>> best = 0
+>>> for t in temps:
+...     if t > best:
+...         best = t
+...
+>>> best
+0
+>>> max(temps)
+-2
+```
+
+Maximums and minimums must be initialized with the first element of the list to give correct results for a list of any values. The built-in functions `max()` and `min()` do this in one step (Lecture 7), and finding them directly with a loop is used for jobs that are awkward to do with a single built-in function, such as when the index of the maximum must be remembered as well.
 
 ---
 
@@ -585,7 +719,7 @@ A counter-controlled `while` statement consists of the following three parts.
 | `sum` after the body | 1 | 3 | 6 | 10 | 15 | 21 | 28 | 36 | 45 | 55 |
 | `count` after the body | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
 
-*Table 5. Computing the sum from 1 to 10 with the while statement*
+*Table 6. Computing the sum from 1 to 10 with the while statement*
 
 After the 10th iteration, `count` becomes 11 and the condition `count <= 10` becomes false, so the repetition ends and the `sum` at that point, 55, is printed.
 
@@ -631,6 +765,40 @@ Total: 6
 
 This approach is useful when the value needed to decide whether to stop is read inside the body. Here 0 is the sentinel value.
 
+### 6.5 Tracing a Loop with an Unknown Number of Iterations
+
+A `while` statement suits cases in which the number of iterations cannot be known in advance. Finding the sum of the digits of an integer is an example. Even without knowing how many digits there are, using the facts that the remainder `n % 10` is the units digit and the quotient `n // 10` is the number with the units digit removed (Lecture 2, Section 10), the units digits can be peeled off and added one at a time until the number becomes 0.
+
+```python
+n = 1234
+total = 0
+while n > 0:
+    digit = n % 10
+    total = total + digit
+    n = n // 10
+    print(digit, total, n)
+print("자릿수의 합:", total)
+```
+
+```text
+4 4 123
+3 7 12
+2 9 1
+1 10 0
+자릿수의 합: 10
+```
+
+| Iteration | `n` at the Start | `digit = n % 10` | `total` | `n = n // 10` | Condition `n > 0` |
+|:-----|:-----|:-----|:-----|:-----|:-----|
+| 1 | 1234 | 4 | 4 | 123 | True |
+| 2 | 123 | 3 | 7 | 12 | True |
+| 3 | 12 | 2 | 9 | 1 | True |
+| 4 | 1 | 1 | 10 | 0 | False, the loop ends |
+
+*Table 7. Trace of the while statement that sums the digits*
+
+The last statement of the body, `n = n // 10`, removes one digit each time, so `n` is certain to become 0 at some point, and the loop runs as many times as there are digits, four times here. When using a `while` statement in this way, check that the body changes the variables in the condition in the direction of ending. For example, omitting `n = n // 10` leaves `n` at 1234, causing the infinite loop of Section 6.4. Also, if `n` is 0 from the start, the condition is false and the body never runs, so for 0 the initial value of `total`, 0, is the result as it is.
+
 ---
 
 <br>
@@ -647,7 +815,7 @@ The `for` statement and the `while` statement are fundamentally similar and can 
 | Condition | Repeats while the element is less than the stop `b` | `while i < b:` |
 | Update | The next element is larger by `s` | `i = i + s` at the end of the body |
 
-*Table 6. Correspondence between a for statement over range() and a while statement (for a positive step s)*
+*Table 8. Correspondence between a for statement over range() and a while statement (for a positive step s)*
 
 The following two programs both print 0 to 4. The first, a `for` statement, is the form used when the number of iterations is clearly known, and the second, a `while` statement, is a form that can also be used when the number of iterations is not clear.
 
@@ -684,7 +852,7 @@ The two loops can be converted into each other, but they are used differently. T
 | Checking the characters of a string one by one | `for` statement | It suffices to repeat as many times as the length of the string |
 | Asking again until a valid value is entered | `while` statement | It is unknown after how many attempts the user will enter a valid value |
 
-*Table 7. Choosing a loop according to the situation*
+*Table 9. Choosing a loop according to the situation*
 
 ---
 
@@ -805,6 +973,112 @@ no even number
 
 The list contains no even number, so `break` is never executed and the loop ends, and the `else` clause runs. If the list is changed to `[3, 8, 7]`, the program prints `even number found: 8` at 8 and leaves with `break`, so the `else` clause is not executed. Note that `else` is indented to the same depth as `for`, not as `if`.
 
+### 9.4 Tracing the else Clause and break
+
+The `else` clause of a loop handles separately, in a search problem, the case "searched to the end but found nothing". The following program divides each number `n` by the numbers from 2 to `n - 1`; if one divides evenly, it prints the factorization and leaves with `break`, and if none is found by the end, the `else` clause prints that the number is prime.
+
+```python
+for n in [9, 7]:
+    for d in range(2, n):
+        if n % d == 0:
+            print(n, "=", d, "*", n // d)
+            break
+    else:
+        print(n, "is prime")
+```
+
+```text
+9 = 3 * 3
+7 is prime
+```
+
+`else` is indented at the same depth as the inner `for` statement, so it is the `else` clause of the inner loop. Tracing the execution in the two cases gives the following.
+
+| `n` | `d` | `n % d` | What Happens |
+|:-----|:-----|:-----|:-----|
+| 9 | 2 | 1 | The condition is false, so on to the next `d` |
+| 9 | 3 | 0 | Prints `9 = 3 * 3` and executes `break`; the `else` clause is skipped |
+| 7 | 2 | 1 | On to the next `d` |
+| 7 | 3 | 1 | On to the next `d` |
+| 7 | 4 | 3 | On to the next `d` |
+| 7 | 5 | 2 | On to the next `d` |
+| 7 | 6 | 1 | The range ends; there was no `break`, so the `else` clause prints `7 is prime` |
+
+*Table 10. Execution trace of the prime test program*
+
+The `else` clause of a `while` statement follows the same rule. It runs when the loop ends because the condition becomes false, and does not run when the loop is left with `break` [2]. The following program accepts a password up to three times.
+
+```python
+attempts = 0
+while attempts < 3:
+    pw = input("비밀번호: ")
+    attempts += 1
+    if pw == "1234":
+        print("로그인 성공")
+        break
+else:
+    print("세 번 틀려서 잠깁니다.")
+print("시도 횟수:", attempts)
+```
+
+```text
+비밀번호: aaa
+비밀번호: 1234
+로그인 성공
+시도 횟수: 2
+```
+
+```text
+비밀번호: a
+비밀번호: b
+비밀번호: c
+세 번 틀려서 잠깁니다.
+시도 횟수: 3
+```
+
+In the first run, `break` was executed at the second input, so the `else` clause was skipped. In the second run, all three inputs were wrong, `attempts` became 3, the condition `attempts < 3` became false, and the loop ended normally, so the `else` clause ran and printed that the account is locked. Without the `else` clause, a separate variable remembering whether the login succeeded would be needed to know why the loop ended.
+
+As the caution box of Section 9.2 says, `break` ends only the innermost loop. The following program tries to find two numbers whose product is 6, but the outer loop continues even after finding them.
+
+```python
+target = 6
+for i in range(1, 4):
+    for j in range(1, 4):
+        if i * j == target:
+            print("found", i, j)
+            break
+    print("i =", i, "done")
+```
+
+```text
+i = 1 done
+found 2 3
+i = 2 done
+found 3 2
+i = 3 done
+```
+
+When `i` was 2, `j` found the product 6 at 3 and `break` was executed, but it left only the inner `for` statement, so after printing `i = 2 done` the iteration with `i` equal to 3 continued and found one more pair. To end both loops, record the fact of finding in a variable and check it in the outer loop as well.
+
+```python
+target = 6
+found = False
+for i in range(1, 4):
+    for j in range(1, 4):
+        if i * j == target:
+            found = True
+            break
+    if found:
+        break
+print(i, j, found)
+```
+
+```text
+2 3 True
+```
+
+When the inner loop sets `found` to `True` and leaves, the body of the outer loop checks it and leaves with `break` again. Even after the loops end, the loop variables `i` and `j` keep the last values assigned to them, 2 and 3. A method of signaling a state with a Boolean variable such as `found` in this way is called a flag variable, and another method is to place the loops inside a function and end the function with `return` as soon as the pair is found (Lecture 6).
+
 ---
 
 <br>
@@ -817,6 +1091,7 @@ The list contains no even number, so `break` is never executed and the loop ends
 | Count-controlled and condition-controlled loops | Use the `for` statement to repeat a fixed number of times and the `while` statement to repeat while a condition is true. |
 | `for` statement | Assigns the elements of a sequence or iterable to the loop variable in turn and executes the indented body. |
 | `range()` | `range(start, stop, step)` creates a range of integers that includes the start and excludes the stop, with a default start of 0 and a default step of 1. |
+| Properties of range objects | A sequence that does not store its elements, supporting `len()`, indexing, and `in`; even if the body changes the loop variable, the next iteration's value is set by the range object. |
 | Decreasing and empty ranges | A negative step gives a decreasing range, and if no element satisfies the condition the body is never executed. |
 | Traversal | The `for` statement processes the characters of a string and the elements of a list one at a time from beginning to end. |
 | Accumulator | Starts at 0 for a sum and at 1 for a product, and collects the result by adding or multiplying a value on each iteration. |
@@ -828,6 +1103,7 @@ The list contains no even number, so `break` is never executed and the loop ends
 | Nested loop | Each time the outer loop executes once, the inner loop executes completely from beginning to end. |
 | `break` and `continue` | `break` ends the innermost loop immediately, and `continue` skips the rest of the body and proceeds with the next iteration. |
 | `else` clause of a loop | Executed only when the loop ends normally without `break`. |
+| `break` in nested loops | `break` ends only the innermost loop, so to end the outer loop as well, signal with a flag variable or use `return` in a function. |
 
 ---
 
@@ -923,6 +1199,53 @@ The list contains no even number, so `break` is never executed and the loop ends
 
    </details>
 
+7. **Length and membership of a range:** With `r = range(5, 30, 7)`, find `list(r)`, `len(r)`, `r[3]`, and `26 in r`.
+
+   <details>
+   <summary>Answer</summary>
+
+   The elements are 5, 12, 19, and 26, so `list(r)` is `[5, 12, 19, 26]`. `len(r)` is $`\lceil (30 - 5) / 7 \rceil = \lceil 3.57\ldots \rceil = 4`$, `r[3]` is 5 + 3 × 7 = 26, and `26 in r` is `True`.
+
+   </details>
+
+8. **Tracing the else clause:** Write the output of the following program. How does the output change if `nums` is changed to `[4, 6, 9]`?
+
+   ```python
+   nums = [4, 6, 8]
+   for x in nums:
+       if x % 2 == 1:
+           print("홀수", x)
+           break
+   else:
+       print("모두 짝수")
+   print("끝")
+   ```
+
+   <details>
+   <summary>Answer</summary>
+
+   All three numbers are even, so `break` is never executed, and `모두 짝수` (all even) and `끝` (end) are printed. With `[4, 6, 9]`, `홀수 9` (odd 9) is printed at 9 and the loop is left with `break`, so the `else` clause is skipped and only `끝` is printed next.
+
+   </details>
+
+9. **Nested loops and break:** How many `*` characters does the following program print? Show how many times the inner loop runs in each iteration of the outer loop.
+
+   ```python
+   for i in range(4):
+       for j in range(4):
+           if j > i:
+               break
+           print("*", end="")
+       print()
+   ```
+
+   <details>
+   <summary>Answer</summary>
+
+   When `i` is 0, one is printed at `j = 0`, and at `j = 1` the loop breaks because `1 > 0`. In the same way, 2, 3, and 4 are printed when `i` is 1, 2, and 3, so the lines `*`, `**`, `***`, and `****` are printed, 1 + 2 + 3 + 4 = 10 in all. `break` ends only the inner loop, so the outer loop runs all four times.
+
+   </details>
+
 ---
 
 <br>
@@ -933,3 +1256,4 @@ The list contains no even number, so `break` is never executed and the loop ends
 2. Python Software Foundation, "Compound statements," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/compound_stmts.html
 3. Python Software Foundation, "Built-in Types," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/stdtypes.html
 4. Python Software Foundation, "turtle - Turtle graphics," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/turtle.html
+5. Python Software Foundation, "Built-in Functions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functions.html
