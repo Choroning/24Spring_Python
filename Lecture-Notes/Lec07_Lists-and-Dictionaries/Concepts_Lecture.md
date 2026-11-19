@@ -2,7 +2,7 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-17
+> **Last Updated:** 2026-11-19
 
 > **Learning Objectives:**
 > 1. Create lists and look up, add, change, and remove elements with indexing, slicing, and methods
@@ -32,6 +32,7 @@
   - [4.1 Searching for Elements](#41-searching-for-elements)
   - [4.2 Length, Minimum, and Maximum](#42-length-minimum-and-maximum)
   - [4.3 Sorting](#43-sorting)
+  - [4.4 Sort Keys and Stability](#44-sort-keys-and-stability)
 - [5. List Comprehensions](#5-list-comprehensions)
   - [5.1 Basic Form](#51-basic-form)
   - [5.2 List Comprehensions with a Condition](#52-list-comprehensions-with-a-condition)
@@ -44,6 +45,7 @@
   - [7.2 Immutability of Tuples](#72-immutability-of-tuples)
   - [7.3 Tuple Operations and Functions](#73-tuple-operations-and-functions)
   - [7.4 Tuple Unpacking](#74-tuple-unpacking)
+  - [7.5 Hashable Tuples and Dictionary Keys](#75-hashable-tuples-and-dictionary-keys)
 - [8. Sequence Types](#8-sequence-types)
   - [8.1 Kinds of Sequences](#81-kinds-of-sequences)
   - [8.2 Common Sequence Operations](#82-common-sequence-operations)
@@ -60,11 +62,13 @@
   - [10.2 Membership Tests and Iteration](#102-membership-tests-and-iteration)
   - [10.3 Adding and Removing Elements](#103-adding-and-removing-elements)
   - [10.4 Subsets and Set Operations](#104-subsets-and-set-operations)
+  - [10.5 Set Comprehensions and frozenset](#105-set-comprehensions-and-frozenset)
 - [11. Dictionaries](#11-dictionaries)
   - [11.1 Keys and Values](#111-keys-and-values)
   - [11.2 Looking Up Values](#112-looking-up-values)
   - [11.3 Adding, Changing, and Removing Items](#113-adding-changing-and-removing-items)
   - [11.4 Iterating over Keys, Values, and Items](#114-iterating-over-keys-values-and-items)
+  - [11.5 How Views Behave and Changes During Iteration](#115-how-views-behave-and-changes-during-iteration)
 - [Concept Applications](#concept-applications)
 - [Summary](#summary)
 - [Self-Check Questions](#self-check-questions)
@@ -524,6 +528,44 @@ None [1, 2, 5, 9]
 
 > **Caution:** Writing `nums = nums.sort()` assigns `None`, the return value of `sort()`, to `nums`, and the list is lost. Methods that change a list in place, such as `sort()`, `append()`, `insert()`, and `remove()`, all return `None`.
 
+### 4.4 Sort Keys and Stability
+
+`sort()` and `sorted()` can also sort by some other value instead of comparing the elements themselves. If a function is given as the keyword argument `key`, Python applies that function once to each element and uses the result as the basis of comparison [3]. The elements themselves are not changed; only their order follows that basis.
+
+```pycon
+>>> words = ["banana", "Apple", "cherry", "fig"]
+>>> sorted(words)
+['Apple', 'banana', 'cherry', 'fig']
+>>> sorted(words, key=len)
+['fig', 'Apple', 'banana', 'cherry']
+>>> sorted(words, key=str.lower)
+['Apple', 'banana', 'cherry', 'fig']
+>>> scores = [("철수", 85), ("영희", 92), ("민수", 85), ("지민", 78)]
+>>> sorted(scores, key=lambda p: p[1])
+[('지민', 78), ('철수', 85), ('민수', 85), ('영희', 92)]
+>>> sorted(scores, key=lambda p: p[1], reverse=True)
+[('영희', 92), ('철수', 85), ('민수', 85), ('지민', 78)]
+>>> max(scores, key=lambda p: p[1])
+('영희', 92)
+>>> sorted("python")
+['h', 'n', 'o', 'p', 't', 'y']
+>>> sorted([3, "a", 1])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    sorted([3, "a", 1])
+    ~~~~~~^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'str' and 'int'
+```
+
+- **Line 4:** With `key=len`, the strings are sorted by their lengths 3, 5, 6, and 6. An existing function such as `len` is passed by its name alone, without parentheses.
+- **Line 6:** `str.lower` is the method that converts a string to lowercase (Lecture 3, Section 4.5), and it produces a lexicographic sort that does not distinguish uppercase from lowercase. The basis is the lowercased value, but the result contains the original `'Apple'`.
+- **Line 9:** The lambda function of Lecture 6 takes the second element of each tuple, the score, as the basis.
+- **Line 13:** `max()` and `min()` also accept `key`, so the tuple with the highest score is obtained directly.
+- **Line 15:** `sorted()` accepts any value that can be iterated over, such as a string, tuple, or dictionary, and always returns a list [3]. This differs from `sort()`, a method that exists only for lists.
+- **Line 17:** If the key values cannot be compared in size, a `TypeError` occurs, because integers and strings cannot be compared with `<` (Lecture 4, Section 2.2).
+
+In the results of lines 9 and 11, `('철수', 85)` and `('민수', 85)`, which have the same score, keep their order in the original list, with 철수 first. Python's sorting is guaranteed to be a **stable sort**, which keeps the original order of elements with equal keys [3], and even a descending sort with `reverse=True` keeps elements with equal keys in their original order. Thanks to stability, when sorting by several criteria, sorting first by the less important criterion and then again by the more important one reflects both. For example, sorting by name and then again by score leaves people with equal scores in name order.
+
 ---
 
 <br>
@@ -667,7 +709,7 @@ s = [[7, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 - **`s += [[0]*cols]`:** `[[0]*cols]` is a list whose single element is that row, and `+=` on a list appends the elements of the right-hand list to the end of `s`. Hence each iteration adds one row, with the same result as `s.append([0]*cols)`.
 - **Independence of rows:** `[0]*cols` is evaluated again in every iteration, creating a new row list each time. Therefore `s[0][0] = 7` changes only row 0.
 
-> **Caution:** Building the same shape in one line with `[[0]*cols]*rows` makes all the rows refer to **one and the same list object** [3]. This is because `*` on a list does not duplicate the elements but repeats references to the same elements. In that case changing an element of one row changes every row. When each row needs its own list, use a loop or a list comprehension such as `[[0]*cols for _ in range(rows)]` (`_` is the conventional name for a loop variable whose value is not used).
+> **Caution:** Building the same shape in one line with `[[0]*cols]*rows` makes all the rows refer to **one and the same list object** [4]. This is because `*` on a list does not duplicate the elements but repeats references to the same elements. In that case changing an element of one row changes every row. When each row needs its own list, use a loop or a list comprehension such as `[[0]*cols for _ in range(rows)]` (`_` is the conventional name for a loop variable whose value is not used).
 
 ```python
 t = [[0]*3]*2          # looks like a 2 x 3 table
@@ -848,7 +890,7 @@ True True
 
 Tuples also support indexing and slicing, and the result of slicing is a new tuple. Tuples have only two methods: `index()`, which finds a value, and `count()`, which counts occurrences.
 
-> **Note:** `cmp(t1, t2)` is sometimes introduced as a function that compares two tuples, but it existed only in Python 2 and was removed in Python 3 [4]. Calling `cmp(1, 2)` in Python 3 raises `NameError: name 'cmp' is not defined`. Use comparison operators such as `<`, `==`, and `>` instead. Likewise, because `print` changed from a statement into a function in Python 3, the Python 2 statement `print x,`, which prints without a newline, is written `print(x, end=" ")` in Python 3 [4].
+> **Note:** `cmp(t1, t2)` is sometimes introduced as a function that compares two tuples, but it existed only in Python 2 and was removed in Python 3 [5]. Calling `cmp(1, 2)` in Python 3 raises `NameError: name 'cmp' is not defined`. Use comparison operators such as `<`, `==`, and `>` instead. Likewise, because `print` changed from a statement into a function in Python 3, the Python 2 statement `print x,`, which prints without a newline, is written `print(x, end=" ")` in Python 3 [5].
 
 ### 7.4 Tuple Unpacking
 
@@ -876,6 +918,39 @@ CS
 - **Matching counts:** If the number of variables on the left differs from the number of elements on the right, `ValueError` is raised. For example, `x, y = (1, 2, 3)` gives `ValueError: too many values to unpack (expected 2)`.
 - **Exchanging two values:** `a, b = b, a` first builds the tuple `(2, 1)` on the right and then unpacks it, so the two values are swapped without a temporary variable. This technique is used to exchange two elements of a list in the sorting functions of [Lecture 8](../Lec08_Classes-and-Objects/Concepts_Lecture.md).
 
+### 7.5 Hashable Tuples and Dictionary Keys
+
+The immutability of tuples allows them to be used as dictionary keys and set elements (Sections 10 and 11). To find elements and keys quickly, sets and dictionaries decide where to store each value by its **hash value**, an integer computed from the value, and if the contents changed after storing so that the hash value differed, the value could no longer be found. So only **hashable** objects, whose contents do not change and whose hash values are therefore constant, can be keys and elements [6].
+
+```pycon
+>>> point = (3, 4)
+>>> d = {point: "A 지점", (0, 0): "원점"}
+>>> d[(3, 4)]
+'A 지점'
+>>> {[1, 2]: "x"}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    {[1, 2]: "x"}
+TypeError: unhashable type: 'list'
+>>> t = (1, [2, 3])
+>>> t[1].append(4)
+>>> t
+(1, [2, 3, 4])
+>>> hash((1, 2)) == hash((1, 2))
+True
+>>> {t: "y"}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    {t: "y"}
+TypeError: unhashable type: 'list'
+```
+
+- **Lines 1-4:** The coordinate `(3, 4)` is used as a key to store the name of a point (A 지점), and it is found with a new tuple `(3, 4)` with the same value. Tuples suit keys made of several values, such as two-dimensional coordinates.
+- **Line 5:** A list is mutable, so it is not hashable and cannot be a key.
+- **Lines 10-13:** The tuple itself is immutable, so a slot cannot be changed to another object, as in `t[1] = [9]`, but the list that the slot refers to is mutable, so its contents change. The immutability of a tuple means that which objects it refers to does not change, not that the contents of the objects it refers to do not change [7].
+- **Line 14:** Tuples with equal values also have equal hash values, so the same key can be found with a different tuple object.
+- **Line 16:** A tuple containing a list is not hashable because of that list. A tuple is hashable only when all its elements are hashable.
+
 ---
 
 <br>
@@ -901,7 +976,7 @@ Byte sequences and byte arrays hold binary data handled in files or over network
 
 ### 8.2 Common Sequence Operations
 
-Sequence types support the following operations in common. Therefore the operations learned for lists can be used as they are for strings and tuples. A range object, however, can only represent an arithmetic sequence that follows a fixed rule, so it does not support concatenation (`+`) or repetition (`*`) [5].
+Sequence types support the following operations in common. Therefore the operations learned for lists can be used as they are for strings and tuples. A range object, however, can only represent an arithmetic sequence that follows a fixed rule, so it does not support concatenation (`+`) or repetition (`*`) [8].
 
 | Function or Operator | Description | Example | Result |
 |:-----|:-----|:-----|:-----|
@@ -1044,13 +1119,13 @@ values ──▶ [10, 20, 99, 40, 50]       (new list, only values[2] changed)
 
 *Figure 7. The new list `values` made by `list(scores)` and the original list `scores`*
 
-These methods make a **shallow copy**. A shallow copy creates a new outer list and puts into it **references to the same objects** that the elements of the original list referred to [6]. If the elements are immutable objects such as integers or strings, there is no way to change the elements themselves, so the shallow copy behaves as if it were completely independent of the original. In the example above, `values[2] = 99` makes slot 2 of `values` refer to a different integer object 99, while slot 2 of `scores` still refers to 30.
+These methods make a **shallow copy**. A shallow copy creates a new outer list and puts into it **references to the same objects** that the elements of the original list referred to [9]. If the elements are immutable objects such as integers or strings, there is no way to change the elements themselves, so the shallow copy behaves as if it were completely independent of the original. In the example above, `values[2] = 99` makes slot 2 of `values` refer to a different integer object 99, while slot 2 of `scores` still refers to 30.
 
 > **Note:** A copy made with `list(scores)` is sometimes called a deep copy, but the correct term is shallow copy. The confusion arises because for `scores`, whose elements are all integers, the results of a shallow copy and a deep copy cannot be told apart; when the elements are lists, the two copies give different results, as in [Section 9.4](#94-deep-copy).
 
 ### 9.4 Deep Copy
 
-If the elements are mutable objects such as lists, a shallow copy and the original share the inner objects. To create every inner object anew as well, make a **deep copy** with the `deepcopy()` function of the `copy` module. A deep copy creates a new outer list and recursively inserts copies of the original elements [6].
+If the elements are mutable objects such as lists, a shallow copy and the original share the inner objects. To create every inner object anew as well, make a **deep copy** with the `deepcopy()` function of the `copy` module. A deep copy creates a new outer list and recursively inserts copies of the original elements [9].
 
 ```python
 import copy
@@ -1160,9 +1235,9 @@ inside: 11
 outside: 10
 ```
 
-> **Key Point:** Python passes arguments **by object reference** (call by object reference). What is passed is a reference to an object, and the function uses **the same object** through that reference [7]. Consequently, (1) operations that change the contents of a mutable object (`list_[0] = 99`, `append()`) are visible to the caller, and (2) assigning a different object to a parameter does not change the caller's variable. Immutable objects such as integers, strings, and tuples have no operations that change their contents, so a function cannot change the caller's value.
+> **Key Point:** Python passes arguments **by object reference** (call by object reference). What is passed is a reference to an object, and the function uses **the same object** through that reference [10]. Consequently, (1) operations that change the contents of a mutable object (`list_[0] = 99`, `append()`) are visible to the caller, and (2) assigning a different object to a parameter does not change the caller's variable. Immutable objects such as integers, strings, and tuples have no operations that change their contents, so a function cannot change the caller's value.
 
-> **Note:** The way lists are passed is sometimes called "call by reference." In C++ call by reference, however, assigning to the parameter inside the function changes the caller's variable itself, whereas in Python it does not, as `rebind()` above shows. The official Python tutorial describes the mechanism as call by value where the value is always an object reference, and states that call by object reference would be a better description [7]. The mechanism is also called call by sharing.
+> **Note:** The way lists are passed is sometimes called "call by reference." In C++ call by reference, however, assigning to the parameter inside the function changes the caller's variable itself, whereas in Python it does not, as `rebind()` above shows. The official Python tutorial describes the mechanism as call by value where the value is always an object reference, and states that call by object reference would be a better description [10]. The mechanism is also called call by sharing.
 
 ### 9.6 Global Lists and global
 
@@ -1254,7 +1329,7 @@ print(type({}), type(set()))
 - **Removing duplicates:** `{1, 2, 2, 3, 3, 3}` and `set([3, 1, 3, 2, 1])` both become `{1, 2, 3}`. Converting a list with `set()` is a common way to remove its duplicates.
 - **No order:** That `{2, 1, 3}` prints as `{1, 2, 3}` is because the storage positions inside the set happened to be arranged that way; there is no guarantee that the elements are sorted. For string elements, the output order can differ from run to run ([Section 10.2](#102-membership-tests-and-iteration)).
 - **Empty set:** `{}` is an empty dictionary ([Section 11](#11-dictionaries)). A set with no elements must be created with `set()`.
-- **Requirement on elements:** The elements of a set must be **hashable** objects [5]. Integers, floats, strings, and tuples containing only hashable elements can be elements, but putting in a mutable object such as a list raises `TypeError: unhashable type: 'list'`. `mySet` can hold the tuple `(1, 2, 3)` because a tuple is immutable. Also, values that are equal under `==`, such as `1`, `1.0`, and `True`, are treated as the same element, so `{1, 1.0, True}` becomes `{1}` with a single element.
+- **Requirement on elements:** The elements of a set must be **hashable** objects [8]. Integers, floats, strings, and tuples containing only hashable elements can be elements, but putting in a mutable object such as a list raises `TypeError: unhashable type: 'list'`. `mySet` can hold the tuple `(1, 2, 3)` because a tuple is immutable. Also, values that are equal under `==`, such as `1`, `1.0`, and `True`, are treated as the same element, so `{1, 1.0, True}` becomes `{1}` with a single element.
 
 > **[Data Structures]** Sets and dictionaries are implemented as **hash tables**. A hash table decides the storage position of each element by its **hash value**, an integer computed from the value of the object. Therefore, to find an element, it does not compare elements one by one from the beginning as a list does but goes straight to the position given by the hash value, taking $O(1)$ time on average. If a value changed after being stored, its hash value would change and its storage position could no longer be found, so mutable objects are not used as keys of a hash table.
 
@@ -1276,7 +1351,7 @@ print()
 1 2 3
 ```
 
-The order in which a set is traversed follows the internal storage positions of the set and cannot be determined by the program. In particular, for security reasons the hash values of strings are computed with an unpredictable random value mixed in each time Python starts under the default settings [8], so a set of strings may print in a different order from run to run. When a fixed order is needed, traverse a sorted list made with `sorted(set_name)`.
+The order in which a set is traversed follows the internal storage positions of the set and cannot be determined by the program. In particular, for security reasons the hash values of strings are computed with an unpredictable random value mixed in each time Python starts under the default settings [6], so a set of strings may print in a different order from run to run. When a fixed order is needed, traverse a sorted list made with `sorted(set_name)`.
 
 ### 10.3 Adding and Removing Elements
 
@@ -1381,6 +1456,39 @@ print(A.union(B), A.intersection(B), A.difference(B), A.symmetric_difference(B))
 
 The result of a difference depends on the order: `A - B` is `{1, 2}` and `B - A` is `{4, 5}`. The operators require both operands to be sets, but the methods also accept a sequence such as a list as the argument, as in `A.union([5, 6])`. Finding the people who attended both of two parties from their guest lists is solved by an intersection ([Exercise 2](Exercises.md#exercise-2-guests-at-both-parties)).
 
+### 10.5 Set Comprehensions and frozenset
+
+Replacing the brackets of a list comprehension (Section 5) with braces gives a **set comprehension**, which makes a set from the results of the expression. Because the result is a set, duplicates are kept only once.
+
+```pycon
+>>> nums = [3, 1, 3, 2, 1]
+>>> {n * n for n in nums}
+{9, 4, 1}
+>>> list(dict.fromkeys(nums))
+[3, 1, 2]
+>>> fs = frozenset([1, 2])
+>>> fs | {3}
+frozenset({1, 2, 3})
+>>> {fs: "묶음"}
+{frozenset({1, 2}): '묶음'}
+>>> fs.add(3)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    fs.add(3)
+    ^^^^^^
+AttributeError: 'frozenset' object has no attribute 'add'
+>>> type({})
+<class 'dict'>
+>>> type(set())
+<class 'set'>
+```
+
+- **Line 2:** Of the squares 9, 1, 9, 4, and 1 of the five elements, the three values without duplicates remain. A set has no order, so no meaning should be attached to the printed order `{9, 4, 1}`.
+- **Line 4:** Removing duplicates with a set loses the original order. To remove duplicates while keeping the order of first appearance, make the elements keys of a dictionary, which keeps the insertion order of its keys (Section 11.5), with `dict.fromkeys()`, and convert back to a list.
+- **Lines 6-10:** A **`frozenset`** is a set that cannot be changed after it is created. Set operations can be used as usual and their results are new `frozenset` objects, but it is immutable and hashable, so it can be an element of a set or a key of a dictionary [8].
+- **Line 11:** Because it is immutable, it has no changing methods such as `add()`.
+- **Lines 17-20:** Empty braces `{}` make an empty dictionary, not an empty set. An empty set is made with `set()`.
+
 ---
 
 <br>
@@ -1431,7 +1539,7 @@ print(phone_book)
 - **Requirement on keys:** Keys cannot be duplicated within one dictionary and must be hashable, like set elements. Strings, integers, and tuples can be keys, but lists cannot. If the same key is written twice, the later value remains (`{"k": 1, "k": 2}` is `{'k': 2}`).
 - **Requirement on values:** There is no restriction on values. Lists and other dictionaries can be values, and several keys may have the same value.
 
-> **Note:** Since Python 3.7, the language guarantees that dictionaries preserve the **order in which items were added** [5]. That is why the output above is in insertion order: 홍길동, 강감찬, 이순신. In Python 3.5 and earlier the order was not guaranteed, and the output could differ from the insertion order, as in `{'이순신': ..., '홍길동': ..., '강감찬': ...}`.
+> **Note:** Since Python 3.7, the language guarantees that dictionaries preserve the **order in which items were added** [8]. That is why the output above is in insertion order: 홍길동, 강감찬, 이순신. In Python 3.5 and earlier the order was not guaranteed, and the output could differ from the insertion order, as in `{'이순신': ..., '홍길동': ..., '강감찬': ...}`.
 
 ### 11.2 Looking Up Values
 
@@ -1553,6 +1661,61 @@ dict_items([('홍길동', '010-1234-5678'), ('강감찬', '010-1234-5679'), ('�
 
 *Table 10. Main dictionary operations*
 
+### 11.5 How Views Behave and Changes During Iteration
+
+The view objects of Section 11.4 do not hold a copy of the dictionary's contents; they reflect the dictionary as it is at each moment, so when the dictionary changes, the change shows in views already made [8]. Also, since Python 3.7 dictionaries are guaranteed by the language to keep the order in which keys were added (the note box of Section 11.1) [8], so keys, values, and items are always iterated in the order they were added.
+
+```pycon
+>>> stock = {"pen": 3, "cup": 0}
+>>> ks = stock.keys()
+>>> ks
+dict_keys(['pen', 'cup'])
+>>> stock["ink"] = 5
+>>> ks
+dict_keys(['pen', 'cup', 'ink'])
+>>> "ink" in ks
+True
+```
+
+`"ink"` was added after `ks` was made, yet `'ink'` appeared in `ks`, because a view is a window looking into the dictionary. For the same reason, adding or deleting items while iterating over a dictionary or its view changes the dictionary the iteration is looking into, so a `RuntimeError` may occur or some items may be skipped [8].
+
+```pycon
+>>> stock = {"pen": 3, "cup": 0, "ink": 5}
+>>> for k in stock:
+...     if stock[k] == 0:
+...         del stock[k]
+...
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    for k in stock:
+             ^^^^^
+RuntimeError: dictionary changed size during iteration
+>>> stock
+{'pen': 3, 'ink': 5}
+>>> stock = {"pen": 3, "cup": 0, "ink": 5}
+>>> for k in list(stock):
+...     if stock[k] == 0:
+...         del stock[k]
+...
+>>> stock
+{'pen': 3, 'ink': 5}
+```
+
+The first loop deleted the item `"cup"` because its value was 0, and at the moment it tried to move to the next key it noticed that the size of the dictionary had changed and raised a `RuntimeError`. The item was deleted, but the iteration stopped midway, so any further items to delete would have remained. If the keys are first copied into a list with `list(stock)` and that list is iterated over, as in the second loop, the iteration runs over a list independent of the dictionary, so items can be deleted safely.
+
+Dictionaries are also often used for counting. Giving 0 as the default value of `get()` (Section 11.2) lets a key that appears for the first time be counted in the same way.
+
+```pycon
+>>> count = {}
+>>> for ch in "banana":
+...     count[ch] = count.get(ch, 0) + 1
+...
+>>> count
+{'b': 1, 'a': 3, 'n': 2}
+```
+
+`'b'`, appearing for the first time, has no key, so `count.get('b', 0)` returns 0 and the count becomes 1, while `'a'`, appearing again, adds 1 to its stored value. The keys are stored in the order of first appearance, `b`, `a`, `n`. Writing `count[ch] + 1` instead raises a `KeyError` at the first character that appears.
+
 ---
 
 <br>
@@ -1595,15 +1758,19 @@ Even for the same data, the appropriate data type depends on which operations ar
 | Slicing | `a[start:end:step]` makes a new list of the elements before `end`, and boundaries out of range are clipped. |
 | Adding and removing | Elements are added with `append()`, `insert()`, and `extend()` and removed with `remove()` (by value), `del` (by index), and `pop()` (taking out). |
 | Searching and sorting | `index()` and `in` are sequential searches; `sort()` sorts in place and returns `None`, while `sorted()` returns a new list. |
+| Sort keys and stability | Sorting uses the results of the function given as `key`, is stable so that elements with equal keys keep their original order, and `sorted()` accepts any iterable value and returns a list. |
 | List comprehension | `[expression for variable in sequence if condition]` builds a new list by evaluating the expression for each element that satisfies the condition. |
 | Two-dimensional list | A list of lists accessed with `s[r][c]`; rows are created separately with a loop or a comprehension, not with `[[0]*cols]*rows`. |
 | Tuple | An immutable sequence; a one-element tuple is written `(x,)`, and unpacking assigns its elements to several variables. |
+| Hashability | Numbers, strings, and tuples containing only hashable elements, whose contents do not change, can be dictionary keys and set elements, while lists and tuples containing lists cannot. |
 | Sequence | Strings, bytes, byte arrays, lists, tuples, and ranges all support `len()`, `in`, indexing, and traversal, and all of them except ranges also support `+` and `*`. |
 | Aliasing | `b = a` does not copy but attaches one more name to the same object, and `is` checks whether two names refer to the same object. |
 | Shallow and deep copy | `list(a)`, `a[:]`, and `a.copy()` are shallow copies that share inner objects, while `copy.deepcopy(a)` creates the inner objects anew. |
 | Argument passing | Python passes by object reference, so changes to the contents of a mutable argument are visible to the caller while reassigning a parameter is not. |
 | Set | An unordered collection of hashable elements without duplicates; `\|`, `&`, `-`, `^` and `<=`, `<` compute set operations and inclusion. |
+| Set comprehensions and `frozenset` | `{expression for variable in sequence}` makes a set, a `frozenset` is immutable and so can be a set element or a dictionary key, and an empty set is `set()`. |
 | Dictionary | Stores pairs of hashable keys and values, is handled with `d[k]`, `get()`, `pop()`, `keys()`, `values()`, and `items()`, and preserves insertion order. |
+| Views and changes during iteration | A view reflects changes to the dictionary as they happen, and adding or deleting items during iteration may raise a `RuntimeError` or skip items, so iterate over a copy made with `list(d)`. |
 
 ---
 
@@ -1696,6 +1863,24 @@ Even for the same data, the appropriate data type depends on which operations ar
 
    </details>
 
+9. **Sort keys:** Write the result of sorting `people = [("Kim", 30), ("Lee", 25), ("Park", 30), ("Choi", 25)]` with `sorted(people, key=lambda p: p[1])`, and explain why people of the same age end up in that order.
+
+   <details>
+   <summary>Answer</summary>
+
+   The result is `[('Lee', 25), ('Choi', 25), ('Kim', 30), ('Park', 30)]`. By age, the two people aged 25 come first and the two aged 30 come after. Python's sorting is stable, so people of the same age remain in the order of the original list, Lee before Choi and Kim before Park.
+
+   </details>
+
+10. **Hashability and views:** Choose all of the following that can be dictionary keys: `(1, 2)`, `[1, 2]`, `frozenset({1, 2})`, `(1, [2])`, `"12"`. Also, after running `d = {"a": 1}` and `v = d.values()`, what is `list(v)` after `d["b"] = 2` is run?
+
+    <details>
+    <summary>Answer</summary>
+
+    They are `(1, 2)`, `frozenset({1, 2})`, and `"12"`. `[1, 2]` is a mutable list, and `(1, [2])` contains a mutable list, so neither is hashable. `v` is a view that reflects changes to the dictionary, so `list(v)` is `[1, 2]`, in the order of addition.
+
+    </details>
+
 ---
 
 <br>
@@ -1704,9 +1889,11 @@ Even for the same data, the appropriate data type depends on which operations ar
 
 1. Python Software Foundation, "Expressions: Value comparisons," *The Python Language Reference*, accessed Nov. 4, 2026. https://docs.python.org/3/reference/expressions.html#value-comparisons
 2. The Unicode Consortium, "Conjoining Jamo Behavior," in *The Unicode Standard, Version 16.0.0*, ch. 3, sec. 3.12, 2024. https://www.unicode.org/versions/Unicode16.0.0/
-3. Python Software Foundation, "How do I create a multidimensional list?," *Programming FAQ*, accessed Nov. 4, 2026. https://docs.python.org/3/faq/programming.html#how-do-i-create-a-multidimensional-list
-4. Python Software Foundation, "What's New In Python 3.0," accessed Nov. 4, 2026. https://docs.python.org/3/whatsnew/3.0.html
-5. Python Software Foundation, "Built-in Types," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/stdtypes.html
-6. Python Software Foundation, "copy: Shallow and deep copy operations," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/copy.html
-7. Python Software Foundation, "Defining Functions," *The Python Tutorial*, accessed Nov. 4, 2026. https://docs.python.org/3/tutorial/controlflow.html#defining-functions
-8. Python Software Foundation, "Data model: object.\_\_hash\_\_," *The Python Language Reference*, accessed Nov. 4, 2026. https://docs.python.org/3/reference/datamodel.html#object.__hash__
+3. Python Software Foundation, "Sorting Techniques," *Python HOWTOs*, accessed Nov. 19, 2026. https://docs.python.org/3/howto/sorting.html
+4. Python Software Foundation, "How do I create a multidimensional list?," *Programming FAQ*, accessed Nov. 4, 2026. https://docs.python.org/3/faq/programming.html#how-do-i-create-a-multidimensional-list
+5. Python Software Foundation, "What's New In Python 3.0," accessed Nov. 4, 2026. https://docs.python.org/3/whatsnew/3.0.html
+6. Python Software Foundation, "Data model: object.\_\_hash\_\_," *The Python Language Reference*, accessed Nov. 4, 2026. https://docs.python.org/3/reference/datamodel.html#object.__hash__
+7. Python Software Foundation, "Data model: Objects, values and types," *The Python Language Reference*, accessed Nov. 19, 2026. https://docs.python.org/3/reference/datamodel.html#objects-values-and-types
+8. Python Software Foundation, "Built-in Types," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/stdtypes.html
+9. Python Software Foundation, "copy: Shallow and deep copy operations," *The Python Standard Library*, accessed Nov. 4, 2026. https://docs.python.org/3/library/copy.html
+10. Python Software Foundation, "Defining Functions," *The Python Tutorial*, accessed Nov. 4, 2026. https://docs.python.org/3/tutorial/controlflow.html#defining-functions
