@@ -134,25 +134,15 @@ Windows용 설치 프로그램을 실행하면 다음 창이 나타난다. 그�
 
 *그림 4. Windows용 파이썬 설치 프로그램의 첫 화면*
 
-1. 아래쪽의 **Add Python to PATH**(버전에 따라 Add Python 3.x to PATH, Add python.exe to PATH)를 체크한다. 그러면 명령 프롬프트 같은 터미널에서 어느 폴더에 있든 `python` 명령으로 파이썬을 실행할 수 있다.
-2. **Install launcher for all users (recommended)** 가 체크되어 있는지 확인한다(최근 버전에서는 Use admin privileges when installing py.exe). 런처는 `py` 명령으로 설치된 파이썬을 찾아 실행해 주는 프로그램이다.
+1. 아래쪽의 **Add Python to PATH**를 체크한다. 그러면 명령 프롬프트 같은 터미널에서 어느 폴더에 있든 `python` 명령으로 파이썬을 실행할 수 있다.
+2. **Install launcher for all users (recommended)** 가 체크되어 있는지 확인한다. 런처는 `py` 명령으로 설치된 파이썬을 찾아 실행해 주는 프로그램이다.
 3. **Install Now**를 누른다. 이 항목은 파이썬과 함께 IDLE, pip(외부 라이브러리 설치 도구), 문서를 설치하고, 바로 가기와 `.py` 파일 연결을 만든다.
 
 > **용어 정의:** **PATH**는 운영체제가 명령어 이름에 해당하는 실행 파일을 찾아볼 폴더의 목록을 담은 환경 변수이다. 파이썬이 설치된 폴더가 PATH에 없으면, 터미널에서 `python`을 입력해도 운영체제가 파이썬을 찾지 못한다.
 
-> **참고:** 그림 4와 같은 전통적인 Windows용 설치 프로그램은 파이썬 3.14부터 지원 중단 예정(deprecated)으로 지정되었고, 파이썬 3.16부터는 만들어지지 않는다. 그 대신 파이썬 공식 문서는 python.org/downloads나 Microsoft Store에서 받을 수 있는 **Python install manager**를 쓰도록 권한다. 이 도구를 설치한 뒤 `py install` 명령으로 원하는 버전의 파이썬을 설치하고, `py`나 `python` 명령으로 실행한다 [1].
+> **참고:** 설치 프로그램의 화면과 항목 이름은 버전마다 바뀐다. 그림 4와 같은 Windows용 설치 프로그램은 파이썬 3.16부터 만들어지지 않으며, 파이썬 공식 문서는 그 대신 **Python install manager**를 쓰도록 권한다 [1]. 어느 방법으로 설치하든 터미널에서 명령 이름만으로 파이썬을 실행할 수 있어야 한다.
 
-macOS에서는 python.org의 macOS용 설치 프로그램을 실행하면 응용 프로그램 폴더 안의 Python 3.x 폴더에 IDLE이 설치된다. Linux에는 대개 `python3`이 이미 설치되어 있으며, IDLE이 없으면 배포판의 패키지 관리자로 설치한다(예: Ubuntu에서 `sudo apt install idle3`). 설치가 끝나면 터미널에서 다음 명령으로 버전을 확인할 수 있다. Windows에서는 `python --version`이나 `py --version`을 입력한다.
-
-```bash
-python3 --version
-```
-
-```text
-Python 3.13.7
-```
-
-출력되는 버전 번호는 설치한 버전에 따라 다르다.
+macOS에서는 python.org의 macOS용 설치 프로그램을 쓰고, Linux에는 대개 `python3`이 이미 설치되어 있다. 설치가 끝나면 터미널에서 `python --version`(macOS와 Linux에서는 `python3 --version`)을 입력하여 설치된 버전을 확인한다.
 
 ### 3.2 IDLE과 대화형 모드
 
@@ -279,8 +269,6 @@ print("양양"*10)
 ```
 
 세 문장이 위에서부터 순서대로 실행된다. `"피자"*10`처럼 문자열에 정수를 곱하면 문자열을 그 횟수만큼 반복해 이어 붙인 새 문자열이 된다. 문자열 연산은 3강에서 자세히 다룬다.
-
-> **주의:** Run Module은 편집기 창의 내용을 저장한 파일을 실행한다. 저장하지 않은 새 파일에서 F5를 누르면 IDLE이 먼저 저장하라고 묻는다. 또 셸 창에 입력한 코드는 셸을 닫으면 사라지므로, 프로그램은 처음부터 [File] → [New File]로 연 편집기 창에 작성한다.
 
 ---
 

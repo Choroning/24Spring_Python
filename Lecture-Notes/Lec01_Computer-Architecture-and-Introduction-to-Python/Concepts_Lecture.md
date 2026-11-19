@@ -436,18 +436,7 @@ dis.dis("c = a + b")
               RETURN_CONST             0 (None)
 ```
 
-The number at the far left is the line number in the source code, the middle column is the name of the instruction, and the right column is the value attached to the instruction and its meaning. Each instruction does the following.
-
-- `RESUME`: Marks the point where execution of the code starts and performs no computation.
-- `LOAD_NAME 0 (a)`: Finds the value bound to the name `a` and pushes it onto the top of the stack, the virtual machine's working area.
-- `LOAD_NAME 1 (b)`: In the same way, pushes the value of `b` onto the stack. The stack now holds the value of `a` and the value of `b`, one on top of the other.
-- `BINARY_OP 0 (+)`: Pops the two values at the top of the stack, adds them, and pushes the result back onto the stack.
-- `STORE_NAME 2 (c)`: Pops the value at the top of the stack and binds it to the name `c`.
-- `RETURN_CONST 0 (None)`: Marks the end of the code.
-
-Compared with Table 3, the two `LOAD_NAME` instructions correspond to fetching the data to compute with, `BINARY_OP` to execution by the arithmetic logic unit, and `STORE_NAME` to storing the result. The Python virtual machine fetches, decodes, and executes these instructions in order from the top.
-
-> **Note:** Bytecode is an implementation detail of CPython, so instructions may be added or changed from one Python version to another [6]. The output above is from Python 3.13, and `BINARY_OP` and `RESUME` were added in Python 3.11, so disassembling the same code in Python 3.7 shows different instruction names.
+The two `LOAD_NAME` instructions push the values of `a` and `b` in turn onto the stack, the virtual machine's working area; `BINARY_OP` pops the two values at the top of the stack and pushes their sum back; and `STORE_NAME` binds that value to the name `c`. Compared with Table 3, the two `LOAD_NAME` instructions correspond to fetching the data to compute with, `BINARY_OP` to execution by the arithmetic logic unit, and `STORE_NAME` to storing the result. The kinds and names of the instructions, including `RESUME` and `RETURN_CONST`, which perform no computation, are an implementation detail of CPython and differ from one Python version to another [6].
 
 The fact that there are two stages shows in when errors are found. The following two files are wrong only in their second lines.
 

@@ -342,8 +342,6 @@ TypeError: Person.__init__() takes 3 positional arguments but 4 were given
 
 `Student("Lee", 20)`은 물려받은 `Person.__init__()`으로 초기화되어 잘 동작한다. 학번까지 넘긴 두 번째 호출은 `Person.__init__()`이 `self`, `name`, `age`의 세 인수만 받으므로 실패한다. 오류 메시지가 `Student`가 아니라 `Person.__init__()`을 가리키는 점에서, 실제로 실행된 생성자가 상위 클래스의 것임을 알 수 있다.
 
-> **참고:** 이 단원의 실행 결과는 파이썬 3.13에서 얻은 것이다. 트레이스백에서 오류가 난 식 아래에 `^`와 `~`로 위치를 표시하는 줄은 파이썬 3.11에서 추가되었으므로 [3], 파이썬 3.7에서는 이 표시 줄 없이 파일 이름, 줄 번호, 소스 코드 줄, 오류 메시지만 나온다. 오류 메시지의 문구도 버전마다 조금씩 다르다. 예를 들어 파이썬 3.9에서는 위의 `TypeError`가 클래스 이름 없이 `__init__() takes 3 positional arguments but 4 were given`으로 나오므로, 메시지만으로는 어느 클래스의 생성자가 실행되었는지 알 수 없다. 트레이스백을 읽는 방법은 11강에서 다룬다.
-
 ### 2.4 동적 디스패치의 추적
 
 상위 클래스의 메서드 안에서 `self.메서드()`를 호출하면, 어느 클래스의 메서드가 실행될지는 그 코드를 쓴 클래스가 아니라 **`self`가 실제로 가리키는 객체의 클래스**로 정해진다.
@@ -495,7 +493,7 @@ print(len("hello"), len([1, 2, 3]), len({"a": 1}), len(range(10)))
 
 3.1절의 세 도형은 모두 `Shape`를 상속했다. 하지만 파이썬에서 `s.area()`가 동작하는 데 필요한 조건은 `s`에 `area`라는 메서드가 있다는 것뿐이다. 상속 관계가 없어도 같은 이름의 메서드를 가진 객체는 같은 코드로 다룰 수 있다.
 
-> **용어 정의:** **덕 타이핑(duck typing)** 은 객체의 자료형을 검사하지 않고 필요한 메서드나 속성을 가지고 있는지만으로 그 객체를 사용하는 프로그래밍 방식이다 [4].
+> **용어 정의:** **덕 타이핑(duck typing)** 은 객체의 자료형을 검사하지 않고 필요한 메서드나 속성을 가지고 있는지만으로 그 객체를 사용하는 프로그래밍 방식이다 [3].
 
 이름은 "오리처럼 걷고 오리처럼 꽥꽥거리면 오리이다"라는 표현에서 왔다. 다음 `duck.py`의 세 클래스는 서로 상속 관계가 없다.
 
@@ -631,7 +629,7 @@ print(Duck.__mro__)
 
 ### 4.2 다이아몬드 상속과 MRO
 
-> **용어 정의:** **메서드 결정 순서(method resolution order, MRO)** 는 속성을 찾을 때 상위 클래스들을 살펴보는 순서이다 [4].
+> **용어 정의:** **메서드 결정 순서(method resolution order, MRO)** 는 속성을 찾을 때 상위 클래스들을 살펴보는 순서이다 [3].
 
 다음과 같이 `B`와 `C`가 모두 `A`를 상속하고, `D`가 `B`와 `C`를 상속하면 상속 관계가 마름모 모양이 된다. 이런 구조를 **다이아몬드 상속(diamond inheritance)** 이라고 한다.
 
@@ -675,7 +673,7 @@ flowchart BT
 
 `D`에서 `A`로 가는 길은 `B`를 거치는 길과 `C`를 거치는 길 두 가지이다. 단순히 왼쪽 상위 클래스를 끝까지 먼저 찾는 방식(D, B, A, C, A)이라면 `A`를 `C`보다 먼저 보게 되어 `C`가 재정의한 메서드가 `A`에 가려지고, `A`를 두 번 보게 된다. 파이썬의 MRO는 D, B, C, A, object로, 각 클래스를 한 번만 넣으며 **하위 클래스를 항상 그 상위 클래스보다 앞에** 둔다. `__mro__`는 그 순서를 튜플로, `mro()` 메서드는 같은 순서를 리스트로 돌려준다.
 
-파이썬은 2.3 버전부터 C3 선형화(C3 linearization)라는 알고리즘으로 MRO를 만든다 [5]. 클래스 `X`의 MRO를 `L[X]`라 하자. `object`의 MRO는 `[object]`이고, 상위 클래스가 `P1, P2, ...`인 클래스 `X`의 MRO는 다음과 같다.
+파이썬은 2.3 버전부터 C3 선형화(C3 linearization)라는 알고리즘으로 MRO를 만든다 [4]. 클래스 `X`의 MRO를 `L[X]`라 하자. `object`의 MRO는 `[object]`이고, 상위 클래스가 `P1, P2, ...`인 클래스 `X`의 MRO는 다음과 같다.
 
 ```math
 L[X] = X + \mathrm{merge}(L[P_1], L[P_2], \ldots, [P_1, P_2, \ldots])
@@ -692,7 +690,7 @@ L[X] = X + \mathrm{merge}(L[P_1], L[P_2], \ldots, [P_1, P_2, \ldots])
 
 *표 2. C3 선형화로 D의 MRO를 계산하는 과정*
 
-2단계에서 `A`를 건너뛰는 것이 핵심이다. `A`는 `C`의 MRO에서 `C`보다 뒤에 있어야 하므로, `C`를 넣기 전에는 넣을 수 없다. 그 결과 C3 선형화는 다음 두 성질을 지킨다 [5].
+2단계에서 `A`를 건너뛰는 것이 핵심이다. `A`는 `C`의 MRO에서 `C`보다 뒤에 있어야 하므로, `C`를 넣기 전에는 넣을 수 없다. 그 결과 C3 선형화는 다음 두 성질을 지킨다 [4].
 
 - **지역 우선순위:** 클래스 정의의 괄호에 쓴 상위 클래스의 순서(`B`가 `C`보다 앞)를 유지한다.
 - **단조성:** 어떤 클래스의 MRO에서 `X`가 `Y`보다 앞이면, 그 클래스의 모든 하위 클래스의 MRO에서도 `X`가 `Y`보다 앞이다. 새 하위 클래스를 만든다고 해서 기존 클래스들 사이의 탐색 순서가 바뀌지 않는다.
@@ -812,7 +810,7 @@ Traceback (most recent call last):
 TypeError: Cannot create a consistent method resolution order (MRO) for bases X, Y
 ```
 
-`C`의 MRO는 `A`의 MRO를 지키려면 `X`를 `Y`보다 앞에, `B`의 MRO를 지키려면 `Y`를 `X`보다 앞에 두어야 한다. 두 요구를 함께 만족하는 순서는 없으므로, merge 과정에서 고를 수 있는 후보가 없어진다. 파이썬은 이런 클래스를 만들지 않고 클래스를 정의하는 순간 `TypeError`를 낸다 [5]. 오류는 객체를 만들 때가 아니라 `class C(A, B):` 문을 실행할 때 난다.
+`C`의 MRO는 `A`의 MRO를 지키려면 `X`를 `Y`보다 앞에, `B`의 MRO를 지키려면 `Y`를 `X`보다 앞에 두어야 한다. 두 요구를 함께 만족하는 순서는 없으므로, merge 과정에서 고를 수 있는 후보가 없어진다. 파이썬은 이런 클래스를 만들지 않고 클래스를 정의하는 순간 `TypeError`를 낸다 [4]. 오류는 객체를 만들 때가 아니라 `class C(A, B):` 문을 실행할 때 난다.
 
 ---
 
@@ -858,7 +856,7 @@ NotImplementedError: 하위 클래스가 area()를 정의해야 한다
 
 > **용어 정의:** **추상 기반 클래스(abstract base class, ABC)** 는 하위 클래스가 반드시 정의해야 할 메서드를 추상 메서드로 선언하여, 그 메서드를 모두 정의하지 않은 클래스로는 객체를 만들 수 없게 하는 클래스이다.
 
-표준 모듈 `abc`의 `ABC` 클래스를 상속하고, 하위 클래스가 반드시 정의해야 할 메서드 앞에 `@abstractmethod`를 붙인다 [6]. `def` 위의 `@이름` 줄을 **데코레이터(decorator)** 라고 하며, 바로 아래에 정의한 함수에 정해진 처리를 덧씌운다. `@abstractmethod`는 그 메서드를 **추상 메서드(abstract method)** 로 표시한다.
+표준 모듈 `abc`의 `ABC` 클래스를 상속하고, 하위 클래스가 반드시 정의해야 할 메서드 앞에 `@abstractmethod`를 붙인다 [5]. `def` 위의 `@이름` 줄을 **데코레이터(decorator)** 라고 하며, 바로 아래에 정의한 함수에 정해진 처리를 덧씌운다. `@abstractmethod`는 그 메서드를 **추상 메서드(abstract method)** 로 표시한다.
 
 ```python
 from abc import ABC, abstractmethod
@@ -928,7 +926,7 @@ TypeError: Can't instantiate abstract class BadSquare without an implementation 
 
 `BadSquare`는 `area()`를 정의하지 않았으므로 물려받은 추상 메서드가 그대로 남아 있고, 그래서 추상 클래스로 취급된다. 오류가 `area()`를 호출할 때가 아니라 객체를 만들 때 나므로 잘못이 훨씬 일찍 드러난다.
 
-> **참고:** 추상 메서드에도 본체를 쓸 수 있으며, 하위 클래스는 재정의한 메서드 안에서 `super().area()`처럼 그 본체를 호출할 수 있다 [6]. 이 점에서 본체를 가질 수 없는 Java의 추상 메서드와 다르다. 또 `Shape.register(어떤클래스)`로 상속하지 않은 클래스를 가상 하위 클래스(virtual subclass)로 등록하면 `isinstance()`와 `issubclass()`가 참이 되는데, 이때는 추상 메서드의 구현 여부를 검사하지 않는다 [6].
+> **참고:** 추상 메서드에도 본체를 쓸 수 있으며, 하위 클래스는 재정의한 메서드 안에서 `super().area()`처럼 그 본체를 호출할 수 있다 [5]. 이 점에서 본체를 가질 수 없는 Java의 추상 메서드와 다르다. 또 `Shape.register(어떤클래스)`로 상속하지 않은 클래스를 가상 하위 클래스(virtual subclass)로 등록하면 `isinstance()`와 `issubclass()`가 참이 되는데, 이때는 추상 메서드의 구현 여부를 검사하지 않는다 [5].
 
 ---
 
@@ -1076,7 +1074,7 @@ AttributeError: 'Stack' object has no attribute 'insert'
 
 ### 7.1 산술 연산자의 정의
 
-[8강 6.3절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#63-문자열-표현-메서드)의 `__str__()`처럼 이름 앞뒤에 밑줄이 두 개 있는 특수 메서드는 파이썬이 정해진 상황에서 자동으로 호출한다. 연산자도 마찬가지이다. `x + y`를 계산할 때 파이썬은 `x.__add__(y)`를 호출한다 [7].
+[8강 6.3절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#63-문자열-표현-메서드)의 `__str__()`처럼 이름 앞뒤에 밑줄이 두 개 있는 특수 메서드는 파이썬이 정해진 상황에서 자동으로 호출한다. 연산자도 마찬가지이다. `x + y`를 계산할 때 파이썬은 `x.__add__(y)`를 호출한다 [6].
 
 > **용어 정의:** **연산자 오버로딩(operator overloading)** 은 사용자가 정의한 클래스에 연산자에 대응하는 특수 메서드를 정의하여, 그 클래스의 객체에도 `+`, `-`, `*`, `==` 같은 연산자를 쓸 수 있게 하는 것이다.
 
@@ -1144,7 +1142,7 @@ Vector(4, 6)
 
 ### 7.2 비교 연산자의 정의
 
-[8강 6.5절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#65-비교와-길이를-정하는-특수-메서드)에서 본 것처럼 `==`의 기본 동작은 `object`에서 물려받아 두 피연산자가 **같은 객체일 때만** 참이고, `__eq__()`를 정의하면 값으로 비교하게 할 수 있다 [7]. 이 절에서는 `__eq__()`를 정의할 때 함께 생기는 해시의 변화와, `<` 같은 크기 비교의 정의를 다룬다.
+[8강 6.5절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#65-비교와-길이를-정하는-특수-메서드)에서 본 것처럼 `==`의 기본 동작은 `object`에서 물려받아 두 피연산자가 **같은 객체일 때만** 참이고, `__eq__()`를 정의하면 값으로 비교하게 할 수 있다 [6]. 이 절에서는 `__eq__()`를 정의할 때 함께 생기는 해시의 변화와, `<` 같은 크기 비교의 정의를 다룬다.
 
 ```python
 class Vector:
@@ -1182,8 +1180,8 @@ TypeError: unhashable type: 'Vector2'
 ```
 
 - **`a == b`와 `c == d`:** 기본 `==`는 `a is b`와 같은 판정이므로 `a == b`는 거짓이고, 성분을 비교하는 `__eq__()`를 정의한 `Vector2`에서는 `c == d`가 참이다. 같은 값을 가졌다는 것과 같은 객체라는 것은 다르므로 `c is d`는 여전히 거짓이다.
-- **`!=`의 처리:** `__ne__()`을 따로 정의하지 않으면 `object`에서 물려받은 기본 `__ne__()`이 `__eq__()`를 호출하여 그 결과를 뒤집는다. 단, `__eq__()`가 `NotImplemented`(7.4절)를 반환하면 뒤집지 않고 그대로 돌려준다 [7].
-- **해시:** `__eq__()`만 정의하고 `__hash__()`를 정의하지 않은 클래스는 `__hash__`가 `None`이 되어, 그 객체를 세트의 요소나 딕셔너리의 키로 쓸 수 없다 [7]. 같다고 판정되는 두 객체는 해시값도 같아야 하는데, 기본 해시는 객체마다 다르기 때문이다. 세트와 딕셔너리의 키에 대해서는 [7강 10절](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md#10-세트)과 [11절](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md#11-딕셔너리)을 참고한다.
+- **`!=`의 처리:** `__ne__()`을 따로 정의하지 않으면 `object`에서 물려받은 기본 `__ne__()`이 `__eq__()`를 호출하여 그 결과를 뒤집는다. 단, `__eq__()`가 `NotImplemented`(7.4절)를 반환하면 뒤집지 않고 그대로 돌려준다 [6].
+- **해시:** `__eq__()`만 정의하고 `__hash__()`를 정의하지 않은 클래스는 `__hash__`가 `None`이 되어, 그 객체를 세트의 요소나 딕셔너리의 키로 쓸 수 없다 [6]. 같다고 판정되는 두 객체는 해시값도 같아야 하는데, 기본 해시는 객체마다 다르기 때문이다. 세트와 딕셔너리의 키에 대해서는 [7강 10절](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md#10-세트)과 [11절](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md#11-딕셔너리)을 참고한다.
 
 크기 비교를 정의하면 `sorted()`, `min()`, `max()`도 그 객체에 쓸 수 있다. 다음 `Version`은 `"3.13"` 같은 버전 문자열을 두 정수로 나누어 비교한다.
 
@@ -1227,17 +1225,17 @@ TypeError: '<=' not supported between instances of 'Version' and 'Version'
 
 - **문자열 비교의 함정:** 문자열은 문자 단위로 사전 순 비교를 하므로 `"3.7"`과 `"3.13"`은 세 번째 문자 `'7'`과 `'1'`에서 판정되어 `"3.7"`이 더 크다고 나온다.
 - **튜플 비교:** `__lt__()`는 `(3, 7) < (3, 13)`처럼 튜플을 비교한다. 튜플은 첫 요소부터 비교하여 처음 다른 요소에서 판정하므로([7강 8.3절](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md#83-접합-반복-비교)), 주 버전이 같으면 부 버전 7과 13을 정수로 비교한다.
-- **`>`의 처리:** `__gt__()`를 정의하지 않았는데 `Version("3.13") > Version("3.7")`이 동작한다. `x > y`에서 `x`의 `__gt__()`는 `object`에서 물려받은 기본 메서드여서 `NotImplemented`를 반환하고, 그러면 파이썬은 `y.__lt__(x)`를 시도하기 때문이다. `__lt__()`와 `__gt__()`는 서로의 반사(reflection) 관계이다 [7]. 이 예처럼 비교 연산의 반사는 두 피연산자의 자료형이 같아도 시도된다는 점에서 7.4절의 산술 연산과 다르다.
+- **`>`의 처리:** `__gt__()`를 정의하지 않았는데 `Version("3.13") > Version("3.7")`이 동작한다. `x > y`에서 `x`의 `__gt__()`는 `object`에서 물려받은 기본 메서드여서 `NotImplemented`를 반환하고, 그러면 파이썬은 `y.__lt__(x)`를 시도하기 때문이다. `__lt__()`와 `__gt__()`는 서로의 반사(reflection) 관계이다 [6]. 이 예처럼 비교 연산의 반사는 두 피연산자의 자료형이 같아도 시도된다는 점에서 7.4절의 산술 연산과 다르다.
 - **`sorted()`와 `max()`:** 두 함수는 내부에서 `<`로 비교하므로 `__lt__()`만으로 동작한다.
 - **`<=`의 실패:** `__le__()`도 그 반사인 `__ge__()`도 없으므로 `TypeError`이다. `==`와 `<`가 있다고 `<=`가 저절로 생기지는 않는다.
 
-> **참고:** 여섯 비교 연산을 모두 쓰려면 각각 정의해도 되지만, 표준 모듈 `functools`의 `total_ordering` 데코레이터를 클래스 위에 붙이면 `__eq__()`와 `__lt__()` 같은 두 메서드로부터 나머지 비교 메서드를 만들어 준다. 비교가 프로그램의 성능에 중요한 곳에서는 데코레이터가 만든 메서드가 직접 정의한 것보다 느릴 수 있다 [8].
+> **참고:** 여섯 비교 연산을 모두 쓰려면 각각 정의해도 되지만, 표준 모듈 `functools`의 `total_ordering` 데코레이터를 클래스 위에 붙이면 `__eq__()`와 `__lt__()` 같은 두 메서드로부터 나머지 비교 메서드를 만들어 준다. 비교가 프로그램의 성능에 중요한 곳에서는 데코레이터가 만든 메서드가 직접 정의한 것보다 느릴 수 있다 [7].
 
 ### 7.3 문자열 표현과 길이
 
 [8강 6.4절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#64-__repr__와-__str__)과 [6.5절](../Lec08_Classes-and-Objects/Concepts_Lecture.ko.md#65-비교와-길이를-정하는-특수-메서드)에서 `__str__()`과 `__repr__()`의 구분, `__len__()`과 진릿값의 관계를 보았다. 이 절에서는 세 메서드를 한 클래스에 함께 정의하여 한 특수 메서드가 다른 특수 메서드를 부르는 모습을 확인하고, 진릿값을 정하는 규칙을 `__bool__()`까지 넓혀 정리한다.
 
-객체의 진릿값은 다음 순서로 정해진다 [7]. 클래스에 `__bool__()`이 있으면 그 반환값을 쓰고, 없으면 `__len__()`의 결과가 0이 아닌지를 보며, 둘 다 없으면 모든 객체가 참이다. 8강 6.5절의 `Bag`은 두 번째 경우였다.
+객체의 진릿값은 다음 순서로 정해진다 [6]. 클래스에 `__bool__()`이 있으면 그 반환값을 쓰고, 없으면 `__len__()`의 결과가 0이 아닌지를 보며, 둘 다 없으면 모든 객체가 참이다. 8강 6.5절의 `Bag`은 두 번째 경우였다.
 
 ```python
 class Playlist:
@@ -1308,11 +1306,11 @@ print(bool(Plain()))
 True
 ```
 
-`w`는 거래 기록이 두 건이어서 `len(w)`는 2이지만, `__bool__()`이 잔액 0을 보고 거짓을 반환하므로 `bool(w)`는 `False`이다. `__bool__()`은 `True`나 `False`를 반환해야 한다 [7]. 두 메서드를 모두 정의하지 않은 `Plain`의 객체는 항상 참이다.
+`w`는 거래 기록이 두 건이어서 `len(w)`는 2이지만, `__bool__()`이 잔액 0을 보고 거짓을 반환하므로 `bool(w)`는 `False`이다. `__bool__()`은 `True`나 `False`를 반환해야 한다 [6]. 두 메서드를 모두 정의하지 않은 `Plain`의 객체는 항상 참이다.
 
 ### 7.4 NotImplemented와 반사 연산
 
-7.1절의 `__add__()`는 `other`가 벡터라고 가정했다. 벡터에 정수를 더하면 `other.x`에서 `AttributeError`가 나는데, 이 메시지로는 무엇이 잘못인지 알기 어렵다. 지원하지 않는 피연산자를 받은 연산 메서드는 특수한 값 `NotImplemented`를 반환하여 "이 연산을 할 줄 모른다"고 알리는 것이 규칙이다 [7].
+7.1절의 `__add__()`는 `other`가 벡터라고 가정했다. 벡터에 정수를 더하면 `other.x`에서 `AttributeError`가 나는데, 이 메시지로는 무엇이 잘못인지 알기 어렵다. 지원하지 않는 피연산자를 받은 연산 메서드는 특수한 값 `NotImplemented`를 반환하여 "이 연산을 할 줄 모른다"고 알리는 것이 규칙이다 [6].
 
 ```python
 class Vector:
@@ -1341,7 +1339,7 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'Vector' and 'int'
 ```
 
-`NotImplemented`를 받은 파이썬은 곧바로 오류를 내지 않고 다음 순서를 따른다 [7].
+`NotImplemented`를 받은 파이썬은 곧바로 오류를 내지 않고 다음 순서를 따른다 [6].
 
 1. `x + y`에서 먼저 `x.__add__(y)`를 호출한다.
 2. 그 결과가 `NotImplemented`이거나 `x`에 `__add__()`가 없고, `x`와 `y`의 자료형이 다르면, 오른쪽 피연산자의 **반사 메서드** `y.__radd__(x)`를 호출한다.
@@ -1357,7 +1355,7 @@ TypeError: unsupported operand type(s) for +: 'Vector' and 'int'
 
 *표 6. 반사 연산을 포함한 이항 연산의 처리 과정*
 
-반사 메서드는 `__radd__()`, `__rsub__()`, `__rmul__()`처럼 원래 이름 앞에 `r`을 붙인다. 뺄셈과 나눗셈은 교환 법칙이 성립하지 않으므로 `y.__rsub__(x)`는 $y - x$가 아니라 $x - y$를 계산해야 한다는 점에 주의해야 한다. 두 피연산자의 자료형이 같으면 반사 메서드는 호출되지 않는다. 같은 자료형의 `__add__()`가 실패했다면 그 연산은 지원되지 않는 것으로 보기 때문이다 [7]. 7.2절의 비교 연산은 이와 달리 같은 자료형 사이에서도 반사를 시도한다. 또 오른쪽 피연산자의 자료형이 왼쪽 피연산자 자료형의 하위 클래스이고 반사 메서드를 다르게 정의했으면, 1단계보다 앞서 오른쪽 피연산자의 반사 메서드가 먼저 호출된다 [7]. 하위 클래스가 상위 클래스와의 연산 결과를 정할 수 있게 하려는 규칙이다.
+반사 메서드는 `__radd__()`, `__rsub__()`, `__rmul__()`처럼 원래 이름 앞에 `r`을 붙인다. 뺄셈과 나눗셈은 교환 법칙이 성립하지 않으므로 `y.__rsub__(x)`는 $y - x$가 아니라 $x - y$를 계산해야 한다는 점에 주의해야 한다. 두 피연산자의 자료형이 같으면 반사 메서드는 호출되지 않는다. 같은 자료형의 `__add__()`가 실패했다면 그 연산은 지원되지 않는 것으로 보기 때문이다 [6]. 7.2절의 비교 연산은 이와 달리 같은 자료형 사이에서도 반사를 시도한다. 또 오른쪽 피연산자의 자료형이 왼쪽 피연산자 자료형의 하위 클래스이고 반사 메서드를 다르게 정의했으면, 1단계보다 앞서 오른쪽 피연산자의 반사 메서드가 먼저 호출된다 [6]. 하위 클래스가 상위 클래스와의 연산 결과를 정할 수 있게 하려는 규칙이다.
 
 > **주의:** 지원하지 않는 경우에 `NotImplemented` 대신 `NotImplementedError` 예외를 일으키면 2단계의 반사 메서드가 시도되지 않는다. `NotImplemented`는 "다른 쪽에 물어보라"는 반환값이고, `NotImplementedError`(5.1절)는 "아직 구현되지 않았다"는 예외이므로 쓰임이 다르다.
 
@@ -1540,9 +1538,8 @@ TypeError: unsupported operand type(s) for +: 'Vector' and 'int'
 
 1. Python Software Foundation, "Classes," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/classes.html
 2. Python Software Foundation, "Built-in Functions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functions.html
-3. Python Software Foundation, "What's New In Python 3.11," *Python 3.13 Documentation*. https://docs.python.org/3.13/whatsnew/3.11.html
-4. Python Software Foundation, "Glossary," *Python 3.13 Documentation*. https://docs.python.org/3.13/glossary.html
-5. M. Simionato, "The Python 2.3 Method Resolution Order," *Python HOWTOs*, Python 3.13. https://docs.python.org/3.13/howto/mro.html
-6. Python Software Foundation, "abc - Abstract Base Classes," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/abc.html
-7. Python Software Foundation, "Data model," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/datamodel.html
-8. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html
+3. Python Software Foundation, "Glossary," *Python 3.13 Documentation*. https://docs.python.org/3.13/glossary.html
+4. M. Simionato, "The Python 2.3 Method Resolution Order," *Python HOWTOs*, Python 3.13. https://docs.python.org/3.13/howto/mro.html
+5. Python Software Foundation, "abc - Abstract Base Classes," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/abc.html
+6. Python Software Foundation, "Data model," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/datamodel.html
+7. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html

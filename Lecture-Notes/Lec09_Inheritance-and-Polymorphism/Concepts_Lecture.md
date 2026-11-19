@@ -342,8 +342,6 @@ TypeError: Person.__init__() takes 3 positional arguments but 4 were given
 
 `Student("Lee", 20)` works because it is initialized by the inherited `Person.__init__()`. The second call, which also passes a student ID, fails because `Person.__init__()` accepts only three arguments: `self`, `name`, and `age`. The error message names `Person.__init__()` rather than `Student`, which shows that the constructor actually run is the superclass's.
 
-> **Note:** The outputs in this unit were obtained with Python 3.13. The lines in a traceback that mark the failing expression with `^` and `~` were added in Python 3.11 [3], so Python 3.7 prints only the file name, line number, source line, and error message without these marker lines. The wording of error messages also differs slightly between versions. For example, Python 3.9 prints the `TypeError` above without the class name, as `__init__() takes 3 positional arguments but 4 were given`, so the message alone does not tell which class's constructor ran. How to read a traceback is covered in Lecture 11.
-
 ### 2.4 Tracing Dynamic Dispatch
 
 When a superclass method calls `self.method()`, which class's method runs is decided not by the class in which that code was written but by **the class of the object that `self` actually refers to**.
@@ -495,7 +493,7 @@ print(len("hello"), len([1, 2, 3]), len({"a": 1}), len(range(10)))
 
 The three shapes of Section 3.1 all inherit from `Shape`. In Python, however, the only condition for `s.area()` to work is that `s` has a method named `area`. Even without an inheritance relationship, objects that have methods of the same name can be handled by the same code.
 
-> **Definition:** **Duck typing** is a programming style that uses an object based only on whether it has the required methods or attributes, without checking its data type [4].
+> **Definition:** **Duck typing** is a programming style that uses an object based only on whether it has the required methods or attributes, without checking its data type [3].
 
 The name comes from the saying "if it walks like a duck and quacks like a duck, it must be a duck." The three classes in the following `duck.py` have no inheritance relationship with one another.
 
@@ -631,7 +629,7 @@ A small class such as `Flyer` or `Swimmer`, written to mix one feature into anot
 
 ### 4.2 Diamond Inheritance and the MRO
 
-> **Definition:** The **method resolution order (MRO)** is the order in which base classes are searched when an attribute is looked up [4].
+> **Definition:** The **method resolution order (MRO)** is the order in which base classes are searched when an attribute is looked up [3].
 
 If `B` and `C` both inherit from `A`, and `D` inherits from `B` and `C`, as below, the inheritance relationships form a rhombus. Such a structure is called **diamond inheritance**.
 
@@ -675,7 +673,7 @@ flowchart BT
 
 There are two paths from `D` to `A`: one through `B` and one through `C`. A naive scheme that searches the left superclass all the way first (D, B, A, C, A) would examine `A` before `C`, so a method overridden by `C` would be hidden by `A`, and `A` would be examined twice. Python's MRO is D, B, C, A, object: it includes each class once and always places **a subclass before its superclasses**. `__mro__` returns this order as a tuple, and the `mro()` method returns the same order as a list.
 
-Since version 2.3, Python has built the MRO with an algorithm called C3 linearization [5]. Let `L[X]` be the MRO of class `X`. The MRO of `object` is `[object]`, and the MRO of a class `X` with superclasses `P1, P2, ...` is as follows.
+Since version 2.3, Python has built the MRO with an algorithm called C3 linearization [4]. Let `L[X]` be the MRO of class `X`. The MRO of `object` is `[object]`, and the MRO of a class `X` with superclasses `P1, P2, ...` is as follows.
 
 ```math
 L[X] = X + \mathrm{merge}(L[P_1], L[P_2], \ldots, [P_1, P_2, \ldots])
@@ -692,7 +690,7 @@ L[X] = X + \mathrm{merge}(L[P_1], L[P_2], \ldots, [P_1, P_2, \ldots])
 
 *Table 2. Computing the MRO of D by C3 linearization*
 
-Skipping `A` in step 2 is the key. `A` must come after `C` in the MRO of `C`, so it cannot be added before `C`. As a result, C3 linearization keeps the following two properties [5].
+Skipping `A` in step 2 is the key. `A` must come after `C` in the MRO of `C`, so it cannot be added before `C`. As a result, C3 linearization keeps the following two properties [4].
 
 - **Local precedence order:** It keeps the order of the superclasses written in the parentheses of the class definition (`B` before `C`).
 - **Monotonicity:** If `X` precedes `Y` in the MRO of some class, then `X` precedes `Y` in the MRO of every subclass of that class. Creating a new subclass does not change the search order among existing classes.
@@ -812,7 +810,7 @@ Traceback (most recent call last):
 TypeError: Cannot create a consistent method resolution order (MRO) for bases X, Y
 ```
 
-To respect the MRO of `A`, the MRO of `C` must put `X` before `Y`; to respect the MRO of `B`, it must put `Y` before `X`. No order satisfies both requirements, so the merge runs out of candidates. Python refuses to create such a class and raises a `TypeError` at the moment the class is defined [5]. The error occurs not when an object is created but when the `class C(A, B):` statement runs.
+To respect the MRO of `A`, the MRO of `C` must put `X` before `Y`; to respect the MRO of `B`, it must put `Y` before `X`. No order satisfies both requirements, so the merge runs out of candidates. Python refuses to create such a class and raises a `TypeError` at the moment the class is defined [4]. The error occurs not when an object is created but when the `class C(A, B):` statement runs.
 
 ---
 
@@ -858,7 +856,7 @@ The `raise` statement raises an exception and is covered in Lecture 11. This app
 
 > **Definition:** An **abstract base class (ABC)** is a class that declares, as abstract methods, the methods its subclasses must define, so that no object can be created from a class that does not define all of them.
 
-Inherit from the `ABC` class of the standard module `abc`, and put `@abstractmethod` in front of each method that subclasses must define [6]. A line `@name` above a `def` is called a **decorator**, and it wraps the function defined directly below it with a fixed treatment. `@abstractmethod` marks the method as an **abstract method**.
+Inherit from the `ABC` class of the standard module `abc`, and put `@abstractmethod` in front of each method that subclasses must define [5]. A line `@name` above a `def` is called a **decorator**, and it wraps the function defined directly below it with a fixed treatment. `@abstractmethod` marks the method as an **abstract method**.
 
 ```python
 from abc import ABC, abstractmethod
@@ -928,7 +926,7 @@ TypeError: Can't instantiate abstract class BadSquare without an implementation 
 
 `BadSquare` does not define `area()`, so the inherited abstract method remains, and it is therefore treated as an abstract class. The error occurs when the object is created rather than when `area()` is called, so the mistake surfaces much earlier.
 
-> **Note:** An abstract method may also have a body, and a subclass can call that body from its overriding method with `super().area()` [6]. In this respect it differs from an abstract method in Java, which cannot have a body. Also, registering a class that does not inherit from the ABC as a virtual subclass with `Shape.register(SomeClass)` makes `isinstance()` and `issubclass()` true, but in this case whether the abstract methods are implemented is not checked [6].
+> **Note:** An abstract method may also have a body, and a subclass can call that body from its overriding method with `super().area()` [5]. In this respect it differs from an abstract method in Java, which cannot have a body. Also, registering a class that does not inherit from the ABC as a virtual subclass with `Shape.register(SomeClass)` makes `isinstance()` and `issubclass()` true, but in this case whether the abstract methods are implemented is not checked [5].
 
 ---
 
@@ -1076,7 +1074,7 @@ The third criterion is the most important. An object of a subclass can be passed
 
 ### 7.1 Defining Arithmetic Operators
 
-Like `__str__()` in [Lecture 8, Section 6.3](../Lec08_Classes-and-Objects/Concepts_Lecture.md#63-the-string-representation-method), special methods whose names begin and end with two underscores are called automatically by Python in fixed situations. Operators are no different. When computing `x + y`, Python calls `x.__add__(y)` [7].
+Like `__str__()` in [Lecture 8, Section 6.3](../Lec08_Classes-and-Objects/Concepts_Lecture.md#63-the-string-representation-method), special methods whose names begin and end with two underscores are called automatically by Python in fixed situations. Operators are no different. When computing `x + y`, Python calls `x.__add__(y)` [6].
 
 > **Definition:** **Operator overloading** is defining, in a user-defined class, the special methods that correspond to operators so that operators such as `+`, `-`, `*`, and `==` can be used on objects of that class.
 
@@ -1144,7 +1142,7 @@ When defining an operator, keep the meaning the operator originally has. `+` com
 
 ### 7.2 Defining Comparison Operators
 
-As seen in [Lecture 8, Section 6.5](../Lec08_Classes-and-Objects/Concepts_Lecture.md#65-special-methods-for-comparison-and-length), the default behavior of `==` is inherited from `object` and is true **only when the two operands are the same object**, and defining `__eq__()` makes the comparison use values [7]. This section covers the change in hashing that comes with defining `__eq__()` and the definition of ordering comparisons such as `<`.
+As seen in [Lecture 8, Section 6.5](../Lec08_Classes-and-Objects/Concepts_Lecture.md#65-special-methods-for-comparison-and-length), the default behavior of `==` is inherited from `object` and is true **only when the two operands are the same object**, and defining `__eq__()` makes the comparison use values [6]. This section covers the change in hashing that comes with defining `__eq__()` and the definition of ordering comparisons such as `<`.
 
 ```python
 class Vector:
@@ -1182,8 +1180,8 @@ TypeError: unhashable type: 'Vector2'
 ```
 
 - **`a == b` and `c == d`:** The default `==` is decided the same way as `is`, so `a == b` is false, while in `Vector2`, which defines an `__eq__()` that compares components, `c == d` is true. Having the same value differs from being the same object, so `c is d` is still false.
-- **Handling of `!=`:** Without a separate `__ne__()`, the default `__ne__()` inherited from `object` calls `__eq__()` and inverts the result. If `__eq__()` returns `NotImplemented` (Section 7.4), however, it passes that value on without inverting it [7].
-- **Hashing:** A class that defines `__eq__()` but not `__hash__()` has its `__hash__` set to `None`, so its objects cannot be elements of a set or keys of a dictionary [7]. Two objects judged equal must have the same hash value, but the default hash differs from object to object. For sets and dictionary keys, see [Lecture 7, Section 10](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#10-sets) and [Section 11](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#11-dictionaries).
+- **Handling of `!=`:** Without a separate `__ne__()`, the default `__ne__()` inherited from `object` calls `__eq__()` and inverts the result. If `__eq__()` returns `NotImplemented` (Section 7.4), however, it passes that value on without inverting it [6].
+- **Hashing:** A class that defines `__eq__()` but not `__hash__()` has its `__hash__` set to `None`, so its objects cannot be elements of a set or keys of a dictionary [6]. Two objects judged equal must have the same hash value, but the default hash differs from object to object. For sets and dictionary keys, see [Lecture 7, Section 10](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#10-sets) and [Section 11](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#11-dictionaries).
 
 Once ordering comparisons are defined, `sorted()`, `min()`, and `max()` can also be used on the objects. The following `Version` splits a version string such as `"3.13"` into two integers and compares them.
 
@@ -1227,17 +1225,17 @@ TypeError: '<=' not supported between instances of 'Version' and 'Version'
 
 - **The pitfall of string comparison:** Strings are compared character by character in lexicographic order, so `"3.7"` and `"3.13"` are decided at their third characters, `'7'` and `'1'`, and `"3.7"` comes out larger.
 - **Tuple comparison:** `__lt__()` compares tuples, as in `(3, 7) < (3, 13)`. Tuples are compared from the first element and decided at the first element that differs ([Lecture 7, Section 8.3](../Lec07_Lists-and-Dictionaries/Concepts_Lecture.md#83-concatenation-repetition-and-comparison)), so when the major versions are equal, the minor versions 7 and 13 are compared as integers.
-- **Handling of `>`:** `__gt__()` is not defined, yet `Version("3.13") > Version("3.7")` works. In `x > y`, the `__gt__()` of `x` is the default method inherited from `object`, which returns `NotImplemented`, so Python then tries `y.__lt__(x)`. `__lt__()` and `__gt__()` are each other's reflection [7]. As this example shows, the reflection of a comparison is tried even when both operands have the same type, which differs from the arithmetic operations of Section 7.4.
+- **Handling of `>`:** `__gt__()` is not defined, yet `Version("3.13") > Version("3.7")` works. In `x > y`, the `__gt__()` of `x` is the default method inherited from `object`, which returns `NotImplemented`, so Python then tries `y.__lt__(x)`. `__lt__()` and `__gt__()` are each other's reflection [6]. As this example shows, the reflection of a comparison is tried even when both operands have the same type, which differs from the arithmetic operations of Section 7.4.
 - **`sorted()` and `max()`:** Both functions compare with `<` internally, so `__lt__()` alone suffices.
 - **The failure of `<=`:** Neither `__le__()` nor its reflection `__ge__()` exists, so it is a `TypeError`. Having `==` and `<` does not make `<=` appear by itself.
 
-> **Note:** To use all six comparison operations, each can be defined separately, but putting the `total_ordering` decorator from the standard module `functools` above the class builds the remaining comparison methods from two methods such as `__eq__()` and `__lt__()`. Where comparisons matter for the performance of a program, the methods made by the decorator can be slower than ones defined directly [8].
+> **Note:** To use all six comparison operations, each can be defined separately, but putting the `total_ordering` decorator from the standard module `functools` above the class builds the remaining comparison methods from two methods such as `__eq__()` and `__lt__()`. Where comparisons matter for the performance of a program, the methods made by the decorator can be slower than ones defined directly [7].
 
 ### 7.3 String Representations and Length
 
 [Lecture 8, Sections 6.4](../Lec08_Classes-and-Objects/Concepts_Lecture.md#64-__repr__-and-__str__) and [6.5](../Lec08_Classes-and-Objects/Concepts_Lecture.md#65-special-methods-for-comparison-and-length) showed the distinction between `__str__()` and `__repr__()` and the relation between `__len__()` and truth values. This section defines the three methods together in one class to show one special method calling another, and extends the rule that decides truth values to `__bool__()`.
 
-The truth value of an object is decided in the following order [7]. If the class has `__bool__()`, its return value is used; if not, Python checks whether the result of `__len__()` is nonzero; and if neither exists, every object is true. `Bag` in Lecture 8, Section 6.5 was the second case.
+The truth value of an object is decided in the following order [6]. If the class has `__bool__()`, its return value is used; if not, Python checks whether the result of `__len__()` is nonzero; and if neither exists, every object is true. `Bag` in Lecture 8, Section 6.5 was the second case.
 
 ```python
 class Playlist:
@@ -1308,11 +1306,11 @@ print(bool(Plain()))
 True
 ```
 
-`w` has two transaction records, so `len(w)` is 2, but `__bool__()` sees the balance of 0 and returns false, so `bool(w)` is `False`. `__bool__()` must return `True` or `False` [7]. An object of `Plain`, which defines neither method, is always true.
+`w` has two transaction records, so `len(w)` is 2, but `__bool__()` sees the balance of 0 and returns false, so `bool(w)` is `False`. `__bool__()` must return `True` or `False` [6]. An object of `Plain`, which defines neither method, is always true.
 
 ### 7.4 NotImplemented and Reflected Operations
 
-The `__add__()` of Section 7.1 assumed that `other` is a vector. Adding an integer to a vector causes an `AttributeError` at `other.x`, and that message makes it hard to tell what went wrong. The rule is that an operation method that receives an unsupported operand returns the special value `NotImplemented` to announce "this operation is not known to me" [7].
+The `__add__()` of Section 7.1 assumed that `other` is a vector. Adding an integer to a vector causes an `AttributeError` at `other.x`, and that message makes it hard to tell what went wrong. The rule is that an operation method that receives an unsupported operand returns the special value `NotImplemented` to announce "this operation is not known to me" [6].
 
 ```python
 class Vector:
@@ -1341,7 +1339,7 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'Vector' and 'int'
 ```
 
-On receiving `NotImplemented`, Python does not raise an error at once but follows these steps [7].
+On receiving `NotImplemented`, Python does not raise an error at once but follows these steps [6].
 
 1. For `x + y`, it first calls `x.__add__(y)`.
 2. If the result is `NotImplemented` or `x` has no `__add__()`, and the types of `x` and `y` differ, it calls the right operand's **reflected method** `y.__radd__(x)`.
@@ -1357,7 +1355,7 @@ In `Vector(1, 2) + 5`, `Vector.__add__()` returned `NotImplemented` and integers
 
 *Table 6. Processing of binary operations including reflected operations*
 
-Reflected methods put `r` in front of the original name, as in `__radd__()`, `__rsub__()`, and `__rmul__()`. Subtraction and division are not commutative, so note that `y.__rsub__(x)` must compute $x - y$, not $y - x$. If both operands have the same type, the reflected method is not called, because if `__add__()` of that type failed, the operation is regarded as unsupported [7]. The comparison operations of Section 7.2, by contrast, try the reflection even between operands of the same type. Also, if the right operand's type is a subclass of the left operand's type and defines the reflected method differently, the right operand's reflected method is called first, before step 1 [7]. This rule lets a subclass decide the result of operations with its superclass.
+Reflected methods put `r` in front of the original name, as in `__radd__()`, `__rsub__()`, and `__rmul__()`. Subtraction and division are not commutative, so note that `y.__rsub__(x)` must compute $x - y$, not $y - x$. If both operands have the same type, the reflected method is not called, because if `__add__()` of that type failed, the operation is regarded as unsupported [6]. The comparison operations of Section 7.2, by contrast, try the reflection even between operands of the same type. Also, if the right operand's type is a subclass of the left operand's type and defines the reflected method differently, the right operand's reflected method is called first, before step 1 [6]. This rule lets a subclass decide the result of operations with its superclass.
 
 > **Caution:** Raising a `NotImplementedError` exception instead of returning `NotImplemented` in the unsupported case prevents the reflected method of step 2 from being tried. `NotImplemented` is a return value meaning "ask the other operand," while `NotImplementedError` (Section 5.1) is an exception meaning "not implemented yet," so they serve different purposes.
 
@@ -1540,9 +1538,8 @@ When designing a new class, first decide its relationships with other classes an
 
 1. Python Software Foundation, "Classes," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/classes.html
 2. Python Software Foundation, "Built-in Functions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functions.html
-3. Python Software Foundation, "What's New In Python 3.11," *Python 3.13 Documentation*. https://docs.python.org/3.13/whatsnew/3.11.html
-4. Python Software Foundation, "Glossary," *Python 3.13 Documentation*. https://docs.python.org/3.13/glossary.html
-5. M. Simionato, "The Python 2.3 Method Resolution Order," *Python HOWTOs*, Python 3.13. https://docs.python.org/3.13/howto/mro.html
-6. Python Software Foundation, "abc - Abstract Base Classes," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/abc.html
-7. Python Software Foundation, "Data model," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/datamodel.html
-8. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html
+3. Python Software Foundation, "Glossary," *Python 3.13 Documentation*. https://docs.python.org/3.13/glossary.html
+4. M. Simionato, "The Python 2.3 Method Resolution Order," *Python HOWTOs*, Python 3.13. https://docs.python.org/3.13/howto/mro.html
+5. Python Software Foundation, "abc - Abstract Base Classes," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/abc.html
+6. Python Software Foundation, "Data model," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/datamodel.html
+7. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html

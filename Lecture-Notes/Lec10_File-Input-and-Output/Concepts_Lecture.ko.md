@@ -197,8 +197,6 @@ macOS에서 `encoding` 없이 저장한 파일을 한국어 Windows에서 `encod
 
 > **주의:** 한국어 Windows에서 만든 오래된 텍스트 파일이나 일부 프로그램이 내보낸 CSV 파일은 cp949로 저장되어 있을 수 있다. 그런 파일은 `encoding="cp949"`로 읽어야 하며, 어떤 인코딩인지 모르면 바이트를 읽어 보고 판단해야 한다. 인코딩은 파일의 내용에서 확실하게 알아낼 수 없으므로, 파일을 주고받는 쪽이 인코딩을 약속하는 것이 가장 확실하다.
 
-> **참고:** 기본 인코딩을 다루는 기능은 파이썬 버전에 따라 다르다. `encoding="locale"`(로캘 인코딩을 명시적으로 쓰기)과 기본 인코딩이 쓰일 때 경고를 내는 `EncodingWarning`은 파이썬 3.10에서 [6], 로캘 인코딩을 알려 주는 `locale.getencoding()`은 3.11에서 추가되었으므로 [7] 파이썬 3.7에서는 쓸 수 없다. 또 파이썬 3.15부터는 UTF-8 모드가 기본값이 되어 `encoding`을 생략해도 UTF-8을 쓴다 [8]. 어느 버전에서나 같은 결과를 얻으려면 `encoding`을 직접 쓴다.
-
 ---
 
 <br>
@@ -654,7 +652,7 @@ f.close()
 
 ### 5.1 바이트의 읽기와 쓰기
 
-모드에 `b`를 붙이면 이진 모드로 열린다. 이진 모드에서는 인코딩과 줄바꿈 변환이 없고, `read()`는 `bytes`를 반환하며, `write()`는 `bytes`를 받는다 [5]. 다음 프로그램은 PNG 그림 파일의 시작 부분을 흉내 낸 파일을 만들어 읽는다. 모든 PNG 파일은 정해진 8바이트 `89 50 4E 47 0D 0A 1A 0A`로 시작하며, 프로그램은 이 서명(signature)을 보고 파일이 PNG인지 판단한다 [9].
+모드에 `b`를 붙이면 이진 모드로 열린다. 이진 모드에서는 인코딩과 줄바꿈 변환이 없고, `read()`는 `bytes`를 반환하며, `write()`는 `bytes`를 받는다 [5]. 다음 프로그램은 PNG 그림 파일의 시작 부분을 흉내 낸 파일을 만들어 읽는다. 모든 PNG 파일은 정해진 8바이트 `89 50 4E 47 0D 0A 1A 0A`로 시작하며, 프로그램은 이 서명(signature)을 보고 파일이 PNG인지 판단한다 [7].
 
 ```python
 header = b"\x89PNG\r\n\x1a\n"
@@ -763,7 +761,7 @@ True
 
 ### 6.1 Path 객체
 
-경로를 `"data" + "/" + "scores.txt"`처럼 문자열로 이어 붙이면 운영체제마다 다른 구분자(`/`와 `\`)와 중복된 구분자를 직접 신경 써야 한다. 표준 모듈 `pathlib`의 `Path`는 경로를 객체로 다룬다 [10]. `Path`끼리 또는 `Path`와 문자열을 `/` 연산자로 이으면 하위 경로가 만들어진다. 이 `/`는 9강에서 다룬 연산자 오버로딩의 한 예이다.
+경로를 `"data" + "/" + "scores.txt"`처럼 문자열로 이어 붙이면 운영체제마다 다른 구분자(`/`와 `\`)와 중복된 구분자를 직접 신경 써야 한다. 표준 모듈 `pathlib`의 `Path`는 경로를 객체로 다룬다 [8]. `Path`끼리 또는 `Path`와 문자열을 `/` 연산자로 이으면 하위 경로가 만들어진다. 이 `/`는 9강에서 다룬 연산자 오버로딩의 한 예이다.
 
 ```python
 from pathlib import Path
@@ -826,7 +824,7 @@ True
 
 ### 6.2 파일과 폴더의 조작
 
-`Path`는 폴더를 만들고, 폴더 안을 살피고, 파일을 읽고 쓰고 지우는 메서드를 가진다 [10].
+`Path`는 폴더를 만들고, 폴더 안을 살피고, 파일을 읽고 쓰고 지우는 메서드를 가진다 [8].
 
 ```python
 from pathlib import Path
@@ -856,9 +854,9 @@ True True
 16
 ```
 
-- **`mkdir(parents=True, exist_ok=True)`:** 폴더를 만든다. `parents=True`는 중간 폴더 `data`가 없으면 함께 만들고, `exist_ok=True`는 폴더가 이미 있어도 오류를 내지 않는다. 두 인수가 없으면 이미 있는 폴더에 대해 `FileExistsError`가, 중간 폴더가 없으면 `FileNotFoundError`가 난다 [10].
+- **`mkdir(parents=True, exist_ok=True)`:** 폴더를 만든다. `parents=True`는 중간 폴더 `data`가 없으면 함께 만들고, `exist_ok=True`는 폴더가 이미 있어도 오류를 내지 않는다. 두 인수가 없으면 이미 있는 폴더에 대해 `FileExistsError`가, 중간 폴더가 없으면 `FileNotFoundError`가 난다 [8].
 - **`write_text()`와 `read_text()`:** 파일을 열고, 쓰거나 읽고, 닫는 일을 한 번에 한다. 짧은 파일에 알맞으며 `encoding`을 밝혀 쓰는 것은 `open()`과 같다.
-- **`iterdir()`와 `glob()`:** `iterdir()`는 폴더 안의 모든 항목을, `glob("*.txt")`는 이름이 패턴에 맞는 항목만 `Path`로 하나씩 준다. `*`는 아무 글자들과 맞는다. 순서가 정해져 있지 않으므로 `sorted()`로 정렬하여 출력했다 [10].
+- **`iterdir()`와 `glob()`:** `iterdir()`는 폴더 안의 모든 항목을, `glob("*.txt")`는 이름이 패턴에 맞는 항목만 `Path`로 하나씩 준다. `*`는 아무 글자들과 맞는다. 순서가 정해져 있지 않으므로 `sorted()`로 정렬하여 출력했다 [8].
 - **`unlink()`:** 파일을 지운다. 지운 파일은 휴지통을 거치지 않으므로 되살릴 수 없다.
 - **`stat().st_size`:** 파일의 크기를 바이트로 알려 준다. `"a.txt의 내용\n"`은 ASCII 6자, 한글 3자, 줄바꿈 1자이므로 $6 + 3 \times 3 + 1 = 16$바이트이다.
 
@@ -872,7 +870,7 @@ True True
 
 > **용어 정의:** **CSV(comma-separated values)** 는 표의 한 행을 한 줄에, 행 안의 값을 쉼표로 구분하여 쓰는 텍스트 파일 형식이다.
 
-스프레드시트 프로그램과 데이터 분석 도구가 표를 주고받을 때 가장 흔히 쓰는 형식이다. 값 안에 쉼표, 큰따옴표, 줄바꿈이 있으면 그 값을 큰따옴표로 감싸고, 값 안의 큰따옴표는 두 번 겹쳐 쓴다. 이 규칙 때문에 CSV를 `split(",")`으로 직접 나누면 틀린다. 표준 모듈 `csv`가 규칙을 대신 처리한다 [11].
+스프레드시트 프로그램과 데이터 분석 도구가 표를 주고받을 때 가장 흔히 쓰는 형식이다. 값 안에 쉼표, 큰따옴표, 줄바꿈이 있으면 그 값을 큰따옴표로 감싸고, 값 안의 큰따옴표는 두 번 겹쳐 쓴다. 이 규칙 때문에 CSV를 `split(",")`으로 직접 나누면 틀린다. 표준 모듈 `csv`가 규칙을 대신 처리한다 [9].
 
 ### 7.2 csv.writer와 csv.reader
 
@@ -899,8 +897,8 @@ with open("scores.csv", encoding="utf-8", newline="") as f:
 
 - **`csv.writer(f)`:** 파일 객체를 받아 CSV를 쓰는 객체를 만든다. `writerow(리스트)`는 한 행을, `writerows(리스트의 리스트)`는 여러 행을 쓴다. 숫자 85는 자동으로 문자열 `85`로 쓰인다.
 - **따옴표 처리:** 쉼표가 든 `Lee, Jr.`와 큰따옴표가 든 값, 줄바꿈이 든 값은 큰따옴표로 감싸이고, 값 안의 `"`는 `""`로 쓰였다.
-- **행의 끝:** `csv` 모듈은 행 끝에 기본으로 `\r\n`을 쓴다 [11].
-- **`newline=""`:** `csv` 모듈은 줄바꿈을 스스로 처리하므로 파일은 줄바꿈 변환 없이 열어야 한다. 이 인수가 없으면 따옴표 안의 줄바꿈이 잘못 해석되고, Windows에서는 쓸 때 `\r`이 하나 더 붙는다 [11].
+- **행의 끝:** `csv` 모듈은 행 끝에 기본으로 `\r\n`을 쓴다 [9].
+- **`newline=""`:** `csv` 모듈은 줄바꿈을 스스로 처리하므로 파일은 줄바꿈 변환 없이 열어야 한다. 이 인수가 없으면 따옴표 안의 줄바꿈이 잘못 해석되고, Windows에서는 쓸 때 `\r`이 하나 더 붙는다 [9].
 
 ```python
 import csv
@@ -927,7 +925,7 @@ print(lines[2].split(","))
 
 - **`csv.reader(f)`:** 반복할 때마다 한 행을 문자열의 리스트로 준다. 따옴표로 감싼 값의 쉼표와 줄바꿈이 원래대로 돌아왔다.
 - **`next(reader)`:** 다음 행 하나를 꺼내는 내장 함수이다. 머리글 행을 먼저 꺼내 두면 `for`문은 데이터 행만 돈다.
-- **모든 값은 문자열:** 점수도 `'85'`로 읽히므로 계산하려면 `int()`로 바꾼다 [11].
+- **모든 값은 문자열:** 점수도 `'85'`로 읽히므로 계산하려면 `int()`로 바꾼다 [9].
 - **직접 나누기의 실패:** 마지막 줄처럼 줄과 쉼표를 직접 나누면 `Lee, Jr.`가 두 조각으로 갈라지고, 따옴표와 `\r`이 값에 섞인다.
 
 ### 7.3 DictWriter와 DictReader
@@ -962,7 +960,7 @@ print(total)
 255
 ```
 
-- **`DictWriter`:** `fieldnames`로 열의 이름과 순서를 정해야 한다. `writeheader()`가 첫 줄에 열 이름을 쓰고, `writerows()`가 각 딕셔너리의 값을 그 순서대로 쓴다. `fieldnames`에 없는 키가 딕셔너리에 있으면 기본으로 `ValueError`가 난다 [11].
+- **`DictWriter`:** `fieldnames`로 열의 이름과 순서를 정해야 한다. `writeheader()`가 첫 줄에 열 이름을 쓰고, `writerows()`가 각 딕셔너리의 값을 그 순서대로 쓴다. `fieldnames`에 없는 키가 딕셔너리에 있으면 기본으로 `ValueError`가 난다 [9].
 - **`DictReader`:** 첫 행을 열 이름으로 쓰고, 나머지 행을 `{열 이름: 값}` 딕셔너리로 준다. 값은 여전히 문자열이다.
 - **합계:** $85 + 92 + 78 = 255$이다.
 
@@ -978,7 +976,7 @@ print(total)
 
 > **용어 정의:** **JSON(JavaScript Object Notation)** 은 객체(이름과 값의 쌍들), 배열, 문자열, 수, 참과 거짓, null을 중첩하여 구조를 가진 데이터를 나타내는 텍스트 형식이다.
 
-CSV가 모든 행의 열이 같은 표에 알맞다면, JSON은 리스트 안에 딕셔너리가 있고 그 안에 다시 리스트가 있는 것처럼 중첩된 데이터에 알맞다. 웹 서비스가 데이터를 주고받는 형식으로 널리 쓰이고, 설정 파일에도 쓰인다. 표준 모듈 `json`은 파이썬 값과 JSON 텍스트를 다음과 같이 대응시킨다 [12].
+CSV가 모든 행의 열이 같은 표에 알맞다면, JSON은 리스트 안에 딕셔너리가 있고 그 안에 다시 리스트가 있는 것처럼 중첩된 데이터에 알맞다. 웹 서비스가 데이터를 주고받는 형식으로 널리 쓰이고, 설정 파일에도 쓰인다. 표준 모듈 `json`은 파이썬 값과 JSON 텍스트를 다음과 같이 대응시킨다 [10].
 
 | 파이썬 | JSON | 예 |
 |:-----|:-----|:-----|
@@ -1037,8 +1035,8 @@ print(loaded == profile, type(loaded["scores"]))
 True <class 'list'>
 ```
 
-- **`ensure_ascii`:** 기본값 `True`에서는 ASCII가 아닌 문자를 `\ud64d` 같은 이스케이프로 바꾼다. 의미는 같지만 사람이 읽을 수 없으므로, 한글이 든 JSON은 `ensure_ascii=False`로 쓴다 [12].
-- **`indent=2`:** 중첩된 구조를 한 단계마다 두 칸씩 들여 써서 사람이 읽기 좋게 한다. 생략하면 한 줄로 쓴다 [12].
+- **`ensure_ascii`:** 기본값 `True`에서는 ASCII가 아닌 문자를 `\ud64d` 같은 이스케이프로 바꾼다. 의미는 같지만 사람이 읽을 수 없으므로, 한글이 든 JSON은 `ensure_ascii=False`로 쓴다 [10].
+- **`indent=2`:** 중첩된 구조를 한 단계마다 두 칸씩 들여 써서 사람이 읽기 좋게 한다. 생략하면 한 줄로 쓴다 [10].
 - **값의 대응:** `False`는 `false`로, `None`은 `null`로 쓰였고, 읽을 때는 다시 `False`와 `None`이 된다.
 - **되돌리기:** 다시 읽은 `loaded`는 원래 딕셔너리와 같다.
 
@@ -1061,7 +1059,7 @@ print(back == data)
 False
 ```
 
-- **키는 항상 문자열:** JSON 객체의 키는 문자열뿐이므로 정수 키 1이 `"1"`로 바뀌고, 읽으면 문자열 `'1'`로 돌아온다 [12].
+- **키는 항상 문자열:** JSON 객체의 키는 문자열뿐이므로 정수 키 1이 `"1"`로 바뀌고, 읽으면 문자열 `'1'`로 돌아온다 [10].
 - **튜플은 리스트로:** JSON에는 튜플이 없어 배열로 쓰이고, 읽으면 리스트가 된다.
 - **표현할 수 없는 값:** 세트나 직접 정의한 클래스의 객체는 대응하는 JSON 형식이 없다. `json.dumps({"s": {1, 2}})`는 `TypeError: Object of type set is not JSON serializable`이 나므로, 리스트나 딕셔너리로 바꾸어 저장한다.
 
@@ -1224,9 +1222,7 @@ False
 4. F. Yergeau, "UTF-8, a transformation format of ISO 10646," RFC 3629, Nov. 2003. https://www.rfc-editor.org/rfc/rfc3629
 5. Python Software Foundation, "Input and Output," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/inputoutput.html
 6. Python Software Foundation, "io - Core tools for working with streams," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/io.html
-7. Python Software Foundation, "locale - Internationalization services," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/locale.html
-8. N. Inada, "PEP 686 - Make UTF-8 mode default," *Python Enhancement Proposals*, 2022. https://peps.python.org/pep-0686/
-9. W3C, "Portable Network Graphics (PNG) Specification (Third Edition)," W3C Recommendation, 2025. https://www.w3.org/TR/png-3/
-10. Python Software Foundation, "pathlib - Object-oriented filesystem paths," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/pathlib.html
-11. Python Software Foundation, "csv - CSV File Reading and Writing," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/csv.html
-12. Python Software Foundation, "json - JSON encoder and decoder," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/json.html
+7. W3C, "Portable Network Graphics (PNG) Specification (Third Edition)," W3C Recommendation, 2025. https://www.w3.org/TR/png-3/
+8. Python Software Foundation, "pathlib - Object-oriented filesystem paths," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/pathlib.html
+9. Python Software Foundation, "csv - CSV File Reading and Writing," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/csv.html
+10. Python Software Foundation, "json - JSON encoder and decoder," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/json.html

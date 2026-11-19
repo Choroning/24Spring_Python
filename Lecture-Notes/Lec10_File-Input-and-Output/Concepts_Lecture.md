@@ -197,8 +197,6 @@ A file saved without `encoding` on macOS and read without `encoding` on Korean W
 
 > **Caution:** Old text files made on Korean Windows and CSV files exported by some programs may be stored in cp949. Such files must be read with `encoding="cp949"`, and if the encoding is unknown, the bytes must be read and examined to decide. Because the encoding cannot be determined with certainty from a file's contents, the surest approach is for the parties exchanging files to agree on the encoding.
 
-> **Note:** The features for handling the default encoding differ across Python versions. `encoding="locale"` (explicitly using the locale encoding) and `EncodingWarning`, which warns when the default encoding is used, were added in Python 3.10 [6], and `locale.getencoding()`, which reports the locale encoding, was added in 3.11 [7], so none of them is available in Python 3.7. Also, from Python 3.15 UTF-8 mode becomes the default, so UTF-8 is used even when `encoding` is omitted [8]. To get the same result in every version, write `encoding` explicitly.
-
 ---
 
 <br>
@@ -654,7 +652,7 @@ Even after `write()` has finished, reading through another file object finds the
 
 ### 5.1 Reading and Writing Bytes
 
-Adding `b` to the mode opens a file in binary mode. In binary mode there is no encoding and no newline translation; `read()` returns `bytes` and `write()` accepts `bytes` [5]. The following program creates and reads a file that imitates the beginning of a PNG image file. Every PNG file begins with the fixed 8 bytes `89 50 4E 47 0D 0A 1A 0A`, and programs check this signature to decide whether a file is a PNG [9].
+Adding `b` to the mode opens a file in binary mode. In binary mode there is no encoding and no newline translation; `read()` returns `bytes` and `write()` accepts `bytes` [5]. The following program creates and reads a file that imitates the beginning of a PNG image file. Every PNG file begins with the fixed 8 bytes `89 50 4E 47 0D 0A 1A 0A`, and programs check this signature to decide whether a file is a PNG [7].
 
 ```python
 header = b"\x89PNG\r\n\x1a\n"
@@ -763,7 +761,7 @@ True
 
 ### 6.1 Path Objects
 
-Joining paths as strings, as in `"data" + "/" + "scores.txt"`, requires dealing directly with separators that differ by operating system (`/` and `\`) and with duplicated separators. `Path` from the standard module `pathlib` handles paths as objects [10]. Joining `Path` objects, or a `Path` and a string, with the `/` operator creates a child path. This `/` is an instance of the operator overloading covered in Lecture 9.
+Joining paths as strings, as in `"data" + "/" + "scores.txt"`, requires dealing directly with separators that differ by operating system (`/` and `\`) and with duplicated separators. `Path` from the standard module `pathlib` handles paths as objects [8]. Joining `Path` objects, or a `Path` and a string, with the `/` operator creates a child path. This `/` is an instance of the operator overloading covered in Lecture 9.
 
 ```python
 from pathlib import Path
@@ -826,7 +824,7 @@ Both times, `settings.txt` is created in the same `proj` folder as `script_dir.p
 
 ### 6.2 Working with Files and Folders
 
-`Path` has methods that create folders, look inside folders, and read, write, and delete files [10].
+`Path` has methods that create folders, look inside folders, and read, write, and delete files [8].
 
 ```python
 from pathlib import Path
@@ -856,9 +854,9 @@ True True
 16
 ```
 
-- **`mkdir(parents=True, exist_ok=True)`:** Creates a folder. `parents=True` also creates the intermediate folder `data` if it is missing, and `exist_ok=True` raises no error if the folder already exists. Without these two arguments, an existing folder causes a `FileExistsError` and a missing intermediate folder causes a `FileNotFoundError` [10].
+- **`mkdir(parents=True, exist_ok=True)`:** Creates a folder. `parents=True` also creates the intermediate folder `data` if it is missing, and `exist_ok=True` raises no error if the folder already exists. Without these two arguments, an existing folder causes a `FileExistsError` and a missing intermediate folder causes a `FileNotFoundError` [8].
 - **`write_text()` and `read_text()`:** Open the file, write or read it, and close it in one call. They suit short files, and `encoding` is stated explicitly just as with `open()`.
-- **`iterdir()` and `glob()`:** `iterdir()` gives every entry in the folder, and `glob("*.txt")` gives only the entries whose names match the pattern, one `Path` at a time. `*` matches any characters. The order is not fixed, so the names were sorted with `sorted()` before printing [10].
+- **`iterdir()` and `glob()`:** `iterdir()` gives every entry in the folder, and `glob("*.txt")` gives only the entries whose names match the pattern, one `Path` at a time. `*` matches any characters. The order is not fixed, so the names were sorted with `sorted()` before printing [8].
 - **`unlink()`:** Deletes a file. A deleted file does not go to the trash and cannot be recovered.
 - **`stat().st_size`:** Reports the size of the file in bytes. `"a.txt의 내용\n"` has 6 ASCII characters, 3 Hangul syllables, and 1 newline, so it is $6 + 3 \times 3 + 1 = 16$ bytes.
 
@@ -872,7 +870,7 @@ True True
 
 > **Definition:** **CSV (comma-separated values)** is a text file format that writes one row of a table per line and separates the values within a row with commas.
 
-It is the format most often used when spreadsheet programs and data analysis tools exchange tables. If a value contains a comma, a double quotation mark, or a newline, the value is enclosed in double quotation marks, and double quotation marks inside the value are doubled. Because of these rules, splitting CSV directly with `split(",")` gives wrong results. The standard module `csv` handles the rules [11].
+It is the format most often used when spreadsheet programs and data analysis tools exchange tables. If a value contains a comma, a double quotation mark, or a newline, the value is enclosed in double quotation marks, and double quotation marks inside the value are doubled. Because of these rules, splitting CSV directly with `split(",")` gives wrong results. The standard module `csv` handles the rules [9].
 
 ### 7.2 csv.writer and csv.reader
 
@@ -899,8 +897,8 @@ with open("scores.csv", encoding="utf-8", newline="") as f:
 
 - **`csv.writer(f)`:** Takes a file object and creates an object that writes CSV. `writerow(list)` writes one row, and `writerows(list of lists)` writes several rows. The number 85 is written automatically as the string `85`.
 - **Quoting:** The value `Lee, Jr.`, which contains a comma, the value containing double quotation marks, and the value containing a newline were enclosed in double quotation marks, and each `"` inside a value was written as `""`.
-- **End of a row:** The `csv` module writes `\r\n` at the end of each row by default [11].
-- **`newline=""`:** The `csv` module handles newlines itself, so the file must be opened without newline translation. Without this argument, newlines inside quoted values are misinterpreted, and on Windows an extra `\r` is added when writing [11].
+- **End of a row:** The `csv` module writes `\r\n` at the end of each row by default [9].
+- **`newline=""`:** The `csv` module handles newlines itself, so the file must be opened without newline translation. Without this argument, newlines inside quoted values are misinterpreted, and on Windows an extra `\r` is added when writing [9].
 
 ```python
 import csv
@@ -927,7 +925,7 @@ print(lines[2].split(","))
 
 - **`csv.reader(f)`:** Gives one row per iteration as a list of strings. The commas and newlines inside quoted values have been restored.
 - **`next(reader)`:** A built-in function that takes out the next row. Taking out the header row first leaves the `for` statement to loop over the data rows only.
-- **Every value is a string:** Even the score is read as `'85'`, so convert it with `int()` before computing [11].
+- **Every value is a string:** Even the score is read as `'85'`, so convert it with `int()` before computing [9].
 - **The failure of splitting directly:** Splitting lines and commas by hand, as in the last line, cuts `Lee, Jr.` into two pieces and mixes quotation marks and `\r` into the values.
 
 ### 7.3 DictWriter and DictReader
@@ -962,7 +960,7 @@ print(total)
 255
 ```
 
-- **`DictWriter`:** The names and order of the columns must be given with `fieldnames`. `writeheader()` writes the column names on the first line, and `writerows()` writes the values of each dictionary in that order. If a dictionary has a key not in `fieldnames`, a `ValueError` occurs by default [11].
+- **`DictWriter`:** The names and order of the columns must be given with `fieldnames`. `writeheader()` writes the column names on the first line, and `writerows()` writes the values of each dictionary in that order. If a dictionary has a key not in `fieldnames`, a `ValueError` occurs by default [9].
 - **`DictReader`:** Uses the first row as the column names and gives the remaining rows as `{column name: value}` dictionaries. The values are still strings.
 - **The total:** $85 + 92 + 78 = 255$.
 
@@ -978,7 +976,7 @@ print(total)
 
 > **Definition:** **JSON (JavaScript Object Notation)** is a text format that represents structured data by nesting objects (sets of name-value pairs), arrays, strings, numbers, true and false, and null.
 
-While CSV suits tables in which every row has the same columns, JSON suits nested data, such as a list containing dictionaries that contain lists in turn. It is widely used as the format in which web services exchange data, and also for configuration files. The standard module `json` maps Python values and JSON text as follows [12].
+While CSV suits tables in which every row has the same columns, JSON suits nested data, such as a list containing dictionaries that contain lists in turn. It is widely used as the format in which web services exchange data, and also for configuration files. The standard module `json` maps Python values and JSON text as follows [10].
 
 | Python | JSON | Example |
 |:-----|:-----|:-----|
@@ -1037,8 +1035,8 @@ print(loaded == profile, type(loaded["scores"]))
 True <class 'list'>
 ```
 
-- **`ensure_ascii`:** With the default `True`, non-ASCII characters are replaced by escapes such as `\ud64d`. The meaning is the same but people cannot read it, so JSON containing Hangul is written with `ensure_ascii=False` [12].
-- **`indent=2`:** Indents nested structures by two spaces per level so that people can read them easily. If omitted, everything is written on one line [12].
+- **`ensure_ascii`:** With the default `True`, non-ASCII characters are replaced by escapes such as `\ud64d`. The meaning is the same but people cannot read it, so JSON containing Hangul is written with `ensure_ascii=False` [10].
+- **`indent=2`:** Indents nested structures by two spaces per level so that people can read them easily. If omitted, everything is written on one line [10].
 - **Value correspondence:** `False` was written as `false` and `None` as `null`, and reading turns them back into `False` and `None`.
 - **Round trip:** The `loaded` value read back equals the original dictionary.
 
@@ -1061,7 +1059,7 @@ print(back == data)
 False
 ```
 
-- **Keys are always strings:** The keys of a JSON object can only be strings, so the integer key 1 becomes `"1"` and comes back as the string `'1'` when read [12].
+- **Keys are always strings:** The keys of a JSON object can only be strings, so the integer key 1 becomes `"1"` and comes back as the string `'1'` when read [10].
 - **Tuples become lists:** JSON has no tuples, so a tuple is written as an array and becomes a list when read.
 - **Values that cannot be represented:** Sets and objects of user-defined classes have no corresponding JSON form. `json.dumps({"s": {1, 2}})` causes `TypeError: Object of type set is not JSON serializable`, so convert such values to lists or dictionaries before saving.
 
@@ -1224,9 +1222,7 @@ When saving data to a file, choose the format and the way of opening the file ac
 4. F. Yergeau, "UTF-8, a transformation format of ISO 10646," RFC 3629, Nov. 2003. https://www.rfc-editor.org/rfc/rfc3629
 5. Python Software Foundation, "Input and Output," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/inputoutput.html
 6. Python Software Foundation, "io - Core tools for working with streams," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/io.html
-7. Python Software Foundation, "locale - Internationalization services," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/locale.html
-8. N. Inada, "PEP 686 - Make UTF-8 mode default," *Python Enhancement Proposals*, 2022. https://peps.python.org/pep-0686/
-9. W3C, "Portable Network Graphics (PNG) Specification (Third Edition)," W3C Recommendation, 2025. https://www.w3.org/TR/png-3/
-10. Python Software Foundation, "pathlib - Object-oriented filesystem paths," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/pathlib.html
-11. Python Software Foundation, "csv - CSV File Reading and Writing," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/csv.html
-12. Python Software Foundation, "json - JSON encoder and decoder," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/json.html
+7. W3C, "Portable Network Graphics (PNG) Specification (Third Edition)," W3C Recommendation, 2025. https://www.w3.org/TR/png-3/
+8. Python Software Foundation, "pathlib - Object-oriented filesystem paths," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/pathlib.html
+9. Python Software Foundation, "csv - CSV File Reading and Writing," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/csv.html
+10. Python Software Foundation, "json - JSON encoder and decoder," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/json.html

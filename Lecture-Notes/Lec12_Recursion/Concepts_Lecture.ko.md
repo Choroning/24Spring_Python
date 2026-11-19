@@ -591,8 +591,6 @@ CacheInfo(hits=0, misses=0, maxsize=None, currsize=0)
 - **저장소의 재사용:** 이어서 `fib(100)`을 호출하면 0\~30의 답은 이미 있으므로 31부터 100까지의 70개만 새로 계산하여 `misses`가 101이 된다.
 - **`cache_clear()`:** 저장소를 비운다.
 
-> **참고:** `functools.cache`는 `lru_cache(maxsize=None)`과 같은 일을 하는 더 짧은 이름이며 파이썬 3.9에서 추가되었다 [1]. 또 괄호 없이 `@lru_cache`만 쓰는 형태는 파이썬 3.8부터 허용된다 [1]. 파이썬 3.7에서는 둘 다 쓸 수 없으므로 위의 예처럼 `@lru_cache(maxsize=None)`으로 쓴다.
-
 > **주의:** 메모이제이션은 같은 인수에 항상 같은 결과를 내는 함수에만 쓴다. 결과가 전역 변수, 파일의 내용, 현재 시각에 따라 달라지는 함수에 쓰면 오래된 결과를 돌려준다. 또 인수가 딕셔너리의 키로 쓰이므로 리스트처럼 해시할 수 없는 인수를 받는 함수에는 `lru_cache`를 쓸 수 없다.
 
 ### 4.5 반복으로 계산하기
@@ -911,8 +909,6 @@ print(depth(5000))
 
 > **주의:** 한도를 높이면 더 깊은 재귀가 가능해지지만, 한도는 실제 메모리가 버틸 수 있는 깊이를 보장하지 않는다. 너무 높이면 `RecursionError` 대신 인터프리터가 비정상적으로 종료될 수 있다 [2]. 재귀 깊이가 입력의 크기에 비례하는 함수라면 한도를 높이기보다 6.3절처럼 반복문으로 바꾸거나 깊이가 $\log n$인 방법(3.2절의 `fast_power`, 5.1절의 이진 탐색)을 쓴다.
 
-> **참고:** 파이썬 3.12부터 재귀 한도는 파이썬 코드의 호출에만 적용되고, 내장 함수의 재귀는 별도의 장치로 보호된다 [4]. 또 파이썬 3.5보다 오래된 버전에서는 같은 상황에 `RecursionError` 대신 `RuntimeError`가 발생했다 [3]. 파이썬 3.7을 포함한 3.5 이후의 버전에서는 이 단원의 예제가 같은 `RecursionError`를 내지만, 메시지의 문구는 버전에 따라 조금 다를 수 있다. 예를 들어 파이썬 3.9에서 6.1절의 `depth(5000)`은 `maximum recursion depth exceeded in comparison`이라는 메시지를 낸다.
-
 ### 6.2 기저 사례가 없거나 닿지 않는 재귀
 
 1.2절의 두 조건 가운데 하나라도 어기면 재귀는 끝나지 않고 6.1절의 한도에 걸린다. 다음 `countdown()`은 기저 사례를 빠뜨렸다.
@@ -1190,4 +1186,3 @@ RecursionError: maximum recursion depth exceeded
 1. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html
 2. Python Software Foundation, "sys - System-specific parameters and functions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/sys.html
 3. Python Software Foundation, "Built-in Exceptions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/exceptions.html
-4. Python Software Foundation, "What's New In Python 3.12," *Python 3.13 Documentation*. https://docs.python.org/3.13/whatsnew/3.12.html

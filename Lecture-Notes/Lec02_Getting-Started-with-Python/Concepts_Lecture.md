@@ -134,25 +134,15 @@ Running the installer for Windows displays the following window. Figure 4 is an 
 
 *Figure 4. The first screen of the Python installer for Windows*
 
-1. Check **Add Python to PATH** at the bottom (Add Python 3.x to PATH or Add python.exe to PATH, depending on the version). This allows Python to be run with the `python` command from any folder in a terminal such as the Command Prompt.
-2. Make sure that **Install launcher for all users (recommended)** is checked (in recent versions, Use admin privileges when installing py.exe). The launcher is a program that finds and runs the installed Python with the `py` command.
+1. Check **Add Python to PATH** at the bottom. This allows Python to be run with the `python` command from any folder in a terminal such as the Command Prompt.
+2. Make sure that **Install launcher for all users (recommended)** is checked. The launcher is a program that finds and runs the installed Python with the `py` command.
 3. Click **Install Now**. This option installs IDLE, pip (a tool for installing external libraries), and the documentation together with Python, and creates shortcuts and file associations for `.py` files.
 
 > **Definition:** **PATH** is an environment variable holding the list of folders in which the operating system looks for the executable file matching a command name. If the folder where Python is installed is not in PATH, the operating system cannot find Python even when `python` is entered in a terminal.
 
-> **Note:** The traditional Windows installer shown in Figure 4 has been deprecated since Python 3.14 and will not be produced for Python 3.16 or later. Instead, the official Python documentation recommends the **Python install manager**, available from python.org/downloads or the Microsoft Store. After installing this tool, install the desired version of Python with the `py install` command and run it with the `py` or `python` command [1].
+> **Note:** The screens and option names of the installer change from version to version. Windows installers like the one in Figure 4 are no longer produced from Python 3.16 on, and the official Python documentation recommends the **Python install manager** instead [1]. Whichever method is used, Python should then be runnable from a terminal by its command name.
 
-On macOS, running the macOS installer from python.org installs IDLE in the Python 3.x folder inside the Applications folder. Linux usually has `python3` installed already, and if IDLE is missing it can be installed with the distribution's package manager (for example, `sudo apt install idle3` on Ubuntu). After installation, the version can be checked with the following command in a terminal. On Windows, enter `python --version` or `py --version`.
-
-```bash
-python3 --version
-```
-
-```text
-Python 3.13.7
-```
-
-The version number printed depends on the version installed.
+On macOS, the macOS installer from python.org is used, and Linux usually has `python3` installed already. After installation, enter `python --version` in a terminal (`python3 --version` on macOS and Linux) to check the installed version.
 
 ### 3.2 IDLE and the Interactive Mode
 
@@ -279,8 +269,6 @@ yumyumyumyumyumyumyumyumyumyum
 ```
 
 The three statements are executed in order from the top. Multiplying a string by an integer, as in `"pizza"*10`, produces a new string in which the string is repeated and joined that many times. String operations are covered in detail in Lecture 3.
-
-> **Caution:** Run Module runs the file in which the content of the editor window has been saved. Pressing F5 in a new, unsaved file makes IDLE ask to save it first. Also, code entered in the shell window disappears when the shell is closed, so write programs from the start in an editor window opened with [File] → [New File].
 
 ---
 

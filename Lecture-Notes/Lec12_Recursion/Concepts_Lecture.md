@@ -591,8 +591,6 @@ CacheInfo(hits=0, misses=0, maxsize=None, currsize=0)
 - **Reusing the store:** Calling `fib(100)` next finds the answers for 0-30 already present, so only the 70 values from 31 to 100 are computed anew, making `misses` 101.
 - **`cache_clear()`:** Empties the store.
 
-> **Note:** `functools.cache` is a shorter name that does the same as `lru_cache(maxsize=None)`, added in Python 3.9 [1]. Also, writing `@lru_cache` alone without parentheses is allowed from Python 3.8 [1]. Neither is available in Python 3.7, so write `@lru_cache(maxsize=None)` as in the example above.
-
 > **Caution:** Use memoization only for functions that always give the same result for the same arguments. Using it on a function whose result depends on global variables, the contents of a file, or the current time returns stale results. Also, the arguments are used as dictionary keys, so `lru_cache` cannot be used for a function that receives unhashable arguments such as lists.
 
 ### 4.5 Computing by Iteration
@@ -911,8 +909,6 @@ print(depth(5000))
 
 > **Caution:** Raising the limit allows deeper recursion, but the limit does not guarantee the depth that actual memory can withstand. Setting it too high can make the interpreter crash instead of raising a `RecursionError` [2]. If a function's recursion depth is proportional to the size of its input, rather than raising the limit, convert it to a loop as in Section 6.3 or use a method of depth $\log n$ (`fast_power` of Section 3.2, the binary search of Section 5.1).
 
-> **Note:** From Python 3.12, the recursion limit applies only to calls of Python code, and recursion in built-in functions is protected by a separate mechanism [4]. Also, versions older than Python 3.5 raised a `RuntimeError` instead of a `RecursionError` in the same situation [3]. In versions from 3.5 on, including Python 3.7, the examples of this unit raise the same `RecursionError`, although the wording of the message can differ slightly between versions. For example, in Python 3.9, `depth(5000)` of Section 6.1 gives the message `maximum recursion depth exceeded in comparison`.
-
 ### 6.2 Recursion without a Base Case or That Never Reaches It
 
 If either of the two conditions of Section 1.2 is violated, the recursion does not terminate and runs into the limit of Section 6.1. The following `countdown()` omits the base case.
@@ -1190,4 +1186,3 @@ When solving with recursion, consider the base case, the way of reducing the pro
 1. Python Software Foundation, "functools - Higher-order functions and operations on callable objects," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/functools.html
 2. Python Software Foundation, "sys - System-specific parameters and functions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/sys.html
 3. Python Software Foundation, "Built-in Exceptions," *The Python Standard Library*, Python 3.13. https://docs.python.org/3.13/library/exceptions.html
-4. Python Software Foundation, "What's New In Python 3.12," *Python 3.13 Documentation*. https://docs.python.org/3.13/whatsnew/3.12.html

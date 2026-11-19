@@ -639,8 +639,6 @@ ValueError: Unknown format code 'd' for object of type 'float'
 
 The first omits the leading `f`; there is no error, and the braces remain as literal characters. The second uses the integer format code `d` on a float, and because the value and the format do not match, a `ValueError` occurs. Use `f` for floats and `d` for integers, and to show an integer in float form, use `f`, as in `f"{7:.1f}"`.
 
-> **Note:** **Version differences in f-strings.** f-strings were introduced in Python 3.6 and gained features in later versions. Since Python 3.8, appending `=` to an expression, as in `f"{x=}"`, inserts the text of the expression, an equal sign, and the value together, producing a string such as `'x=7'`, which is convenient for debugging [4]. Since Python 3.12, the same kind of quotes as the enclosing string and backslashes can be used inside a replacement field, so `f"{", ".join(names)}"` is allowed, but in 3.11 and earlier this code raises a `SyntaxError`, so a different kind of quote must be used inside [8].
-
 ### 4.5 String Methods
 
 A string has many functions that process it. A function attached to a particular object and called by connecting it with a dot, as in `object.name()`, is called a **method**, and `s.upper()` calls the `upper()` method of the string `s` (methods are covered in detail in Lecture 7, Section 1.3, and Lecture 8). Frequently used string methods are as follows [1].
@@ -666,8 +664,6 @@ A string has many functions that process it. A function attached to a particular
 'Hello, Python'
 >>> s.upper()
 '  HELLO, PYTHON  '
->>> s.lower()
-'  hello, python  '
 >>> s
 '  Hello, Python  '
 >>> t = "apple,banana,cherry"
@@ -683,12 +679,6 @@ A string has many functions that process it. A function attached to a particular
 6
 >>> t.find("kiwi")
 -1
->>> t.count("a")
-4
->>> t.startswith("app")
-True
->>> "2024".isdigit()
-True
 >>> "ban" in t
 True
 >>> t.index("kiwi")
@@ -699,13 +689,12 @@ Traceback (most recent call last):
 ValueError: substring not found
 ```
 
-- **Lines 2-7:** `strip()`, `upper()`, and `lower()` only return a new string as their result, and as line 8 confirms, `s` itself is unchanged. Strings are immutable (Section 5.3), so string methods cannot change the original string and always create a new one.
-- **Lines 11-14:** `split(",")` splits at the commas to make a list (Section 8). `split()` without an argument treats a run of several spaces as a single boundary.
-- **Line 15:** `join()` takes the list of strings to join as its argument and is called on the separator `"-"`. It is the reverse operation of `split()`.
-- **Lines 19-22:** `"banana"` starts at index 6, and `find()` returns -1 when the string being searched for is absent.
-- **Line 23:** There is 1 in `apple` and 3 in `banana`, so the result is 4.
-- **Line 29:** To know only whether a substring is present, use the `in` operator instead of a method.
-- **Line 31:** `index()` raises a `ValueError` instead of returning -1 when it finds nothing. When the string being searched for may be absent, use `find()` or `in`.
+- **Lines 2-5:** `strip()` and `upper()` only return a new string as their result, and as line 6 confirms, `s` itself is unchanged. Strings are immutable (Section 5.3), so string methods cannot change the original string and always create a new one.
+- **Lines 9-12:** `split(",")` splits at the commas to make a list (Section 8). `split()` without an argument treats a run of several spaces as a single boundary.
+- **Line 13:** `join()` takes the list of strings to join as its argument and is called on the separator `"-"`. It is the reverse operation of `split()`.
+- **Lines 17-20:** `"banana"` starts at index 6, and `find()` returns -1 when the string being searched for is absent.
+- **Line 21:** To know only whether a substring is present, use the `in` operator instead of a method.
+- **Line 23:** `index()` raises a `ValueError` instead of returning -1 when it finds nothing. When the string being searched for may be absent, use `find()` or `in`.
 
 The most common mistake with string methods is not keeping the result. With `w = "hello"`, running only `w.upper()` shows `'HELLO'` in the shell, but `w` is still `'hello'`. To keep using the changed string, assign the result to the name, as in `w = w.upper()`. As explained in Section 1.3, this assignment moves the name `w` to a new string object.
 
@@ -757,7 +746,7 @@ Cutting out part of a string is called **slicing**. `s[start:end]` is the substr
 Pyth
 ```
 
-`s[6:10]` consists of the characters `P`, `y`, `t`, and `h` at indexes 6, 7, 8, and 9, and the `o` at index 10 is not included. The length of the result is `end - start`, that is, 10 - 6 = 4. It is easier to understand if the indexes are viewed as numbers attached to the boundaries between characters rather than to the characters themselves [9]. Seen this way, `s[6:10]` is the characters between boundary 6 and boundary 10.
+`s[6:10]` consists of the characters `P`, `y`, `t`, and `h` at indexes 6, 7, 8, and 9, and the `o` at index 10 is not included. The length of the result is `end - start`, that is, 10 - 6 = 4. It is easier to understand if the indexes are viewed as numbers attached to the boundaries between characters rather than to the characters themselves [8]. Seen this way, `s[6:10]` is the characters between boundary 6 and boundary 10.
 
 ```text
                          s[6:10] = "Pyth"
@@ -934,7 +923,7 @@ s = turtle.textinput("", "이름을 입력하시오: ")
 - **Line 1:** Loads the `turtle` module. A module is a file that collects functions and data and is covered in Lecture 6.
 - **Line 2:** Creates a turtle and stores it in the variable `t`. Commands are then given to `t`, as in `t.forward(100)`.
 - **Line 3:** Changes the shape of the cursor to a turtle. The default shape is an arrow.
-- **Line 4:** `textinput(title, prompt)` opens an input dialog. The first argument is the title of the dialog, and the second is the prompt shown inside it ("Enter your name: "). This example gives the empty string `""` as the title. When the user types and presses OK, the input is returned as a string and stored in `s` [10].
+- **Line 4:** `textinput(title, prompt)` opens an input dialog. The first argument is the title of the dialog, and the second is the prompt shown inside it ("Enter your name: "). This example gives the empty string `""` as the title. When the user types and presses OK, the input is returned as a string and stored in `s` [9].
 
 ![Figure 7. Input dialog opened by textinput()](../../images/Lec03_p13.png)
 
@@ -942,7 +931,7 @@ s = turtle.textinput("", "이름을 입력하시오: ")
 
 Like `input()`, `textinput()` always returns a string, so to compute with a number, convert it with `int()` or `float()` (Section 3.1).
 
-> **Caution:** If the user presses Cancel, `textinput()` returns `None`, a special value meaning no value, instead of a string [10]. Concatenating a string to this value with `+` raises a `TypeError`.
+> **Caution:** If the user presses Cancel, `textinput()` returns `None`, a special value meaning no value, instead of a string [9]. Concatenating a string to this value with `+` raises a `TypeError`.
 
 ### 7.2 String Output
 
@@ -952,13 +941,13 @@ To write a string in the turtle graphics window, use the turtle's `write()`.
 t.write("안녕하세요? 터틀 인사드립니다.")
 ```
 
-`write()` writes the string given as its argument at the turtle's current position. By default the string starts at the turtle's position and extends to the right, and the turtle does not move after writing [10]. In the following figure, the string ("Hello? The turtle greets you.") starts at the lower right corner of the square, where the turtle is, and extends to the right.
+`write()` writes the string given as its argument at the turtle's current position. By default the string starts at the turtle's position and extends to the right, and the turtle does not move after writing [9]. In the following figure, the string ("Hello? The turtle greets you.") starts at the lower right corner of the square, where the turtle is, and extends to the right.
 
 ![Figure 8. String written with write() in the turtle graphics window](../../images/Lec03_p14.png)
 
 *Figure 8. String written with write() in the turtle graphics window*
 
-> **Caution:** If a turtle graphics program is run from a command window with `python3 filename.py` instead of from IDLE, the drawing window closes as soon as the program ends. Placing `turtle.done()` on the last line of the program keeps the window open until the user closes it [10].
+> **Caution:** If a turtle graphics program is run from a command window with `python3 filename.py` instead of from IDLE, the drawing window closes as soon as the program ends. Placing `turtle.done()` on the last line of the program keeps the window open until the user closes it [9].
 
 ---
 
@@ -1232,6 +1221,5 @@ print(slist[0])
 5. Python Software Foundation, "Floating-Point Arithmetic: Issues and Limitations," *The Python Tutorial*, accessed Nov. 19, 2026. https://docs.python.org/3/tutorial/floatingpoint.html
 6. Python Software Foundation, "Lexical Analysis," *The Python Language Reference*. https://docs.python.org/3/reference/lexical_analysis.html
 7. Python Software Foundation, "Input and Output," *The Python Tutorial*. https://docs.python.org/3/tutorial/inputoutput.html
-8. Python Software Foundation, "What's New In Python 3.12," *Python 3 Documentation*, accessed Nov. 19, 2026. https://docs.python.org/3/whatsnew/3.12.html
-9. Python Software Foundation, "An Informal Introduction to Python," *The Python Tutorial*. https://docs.python.org/3/tutorial/introduction.html
-10. Python Software Foundation, "turtle: Turtle Graphics," *The Python Standard Library*. https://docs.python.org/3/library/turtle.html
+8. Python Software Foundation, "An Informal Introduction to Python," *The Python Tutorial*. https://docs.python.org/3/tutorial/introduction.html
+9. Python Software Foundation, "turtle: Turtle Graphics," *The Python Standard Library*. https://docs.python.org/3/library/turtle.html

@@ -639,8 +639,6 @@ ValueError: Unknown format code 'd' for object of type 'float'
 
 첫 번째는 앞의 `f`를 빠뜨린 경우로, 오류 없이 중괄호가 글자 그대로 남는다. 두 번째는 정수용 형식 코드 `d`를 실수에 쓴 경우이며, 값과 형식이 맞지 않으므로 `ValueError`가 발생한다. 실수에는 `f`, 정수에는 `d`를 쓰고, 정수를 실수 모양으로 보이려면 `f"{7:.1f}"`처럼 `f`를 쓴다.
 
-> **참고:** **f-문자열의 버전 차이.** f-문자열은 파이썬 3.6에서 도입된 뒤 이후 버전에서 기능이 늘었다. 파이썬 3.8부터는 `f"{x=}"`처럼 식 뒤에 `=`를 붙이면 식의 글자, 등호, 값을 함께 넣어 `'x=7'` 같은 문자열을 만들므로 디버깅에 편하다 [4]. 파이썬 3.12부터는 치환 필드 안에서 바깥과 같은 종류의 따옴표와 역슬래시를 쓸 수 있게 되어 `f"{", ".join(names)}"`가 허용되지만, 3.11 이전에서는 이 코드가 `SyntaxError`를 내므로 안쪽에 다른 종류의 따옴표를 써야 한다 [8].
-
 ### 4.5 문자열 메서드
 
 문자열은 자신을 가공하는 함수를 여러 개 가지고 있다. 특정 객체에 딸려 있어 `객체.이름()`처럼 점으로 연결하여 호출하는 함수를 **메서드(method)** 라고 하며, `s.upper()`는 문자열 `s`의 `upper()` 메서드를 호출한다(메서드는 7강 1.3절과 8강에서 자세히 다룬다). 자주 쓰는 문자열 메서드는 다음과 같다 [1].
@@ -666,8 +664,6 @@ ValueError: Unknown format code 'd' for object of type 'float'
 'Hello, Python'
 >>> s.upper()
 '  HELLO, PYTHON  '
->>> s.lower()
-'  hello, python  '
 >>> s
 '  Hello, Python  '
 >>> t = "apple,banana,cherry"
@@ -683,12 +679,6 @@ ValueError: Unknown format code 'd' for object of type 'float'
 6
 >>> t.find("kiwi")
 -1
->>> t.count("a")
-4
->>> t.startswith("app")
-True
->>> "2024".isdigit()
-True
 >>> "ban" in t
 True
 >>> t.index("kiwi")
@@ -699,13 +689,12 @@ Traceback (most recent call last):
 ValueError: substring not found
 ```
 
-- **2~7행:** `strip()`, `upper()`, `lower()`는 결과로 새 문자열을 돌려줄 뿐이며, 8행에서 확인하듯 `s` 자체는 그대로이다. 문자열은 불변이므로(5.3절) 문자열 메서드는 원래 문자열을 바꾸지 못하고 언제나 새 문자열을 만든다.
-- **11~14행:** `split(",")`는 쉼표를 경계로 나누어 리스트(8절)를 만든다. 인수 없는 `split()`은 공백이 여러 칸 이어져도 하나의 경계로 본다.
-- **15행:** `join()`은 이어 붙일 문자열의 리스트를 인수로 받고, 구분자인 `"-"`에 대해 호출한다. `split()`과 반대되는 연산이다.
-- **19~22행:** `"banana"`는 인덱스 6에서 시작하고, 없는 문자열을 찾으면 `find()`는 -1을 돌려준다.
-- **23행:** `apple`에 1개, `banana`에 3개가 있으므로 4이다.
-- **29행:** 부분 문자열이 들어 있는지만 알고 싶으면 메서드 대신 `in` 연산자를 쓴다.
-- **31행:** `index()`는 찾지 못하면 -1 대신 `ValueError`를 낸다. 찾는 문자열이 없을 수 있으면 `find()`나 `in`을 쓴다.
+- **2~5행:** `strip()`과 `upper()`는 결과로 새 문자열을 돌려줄 뿐이며, 6행에서 확인하듯 `s` 자체는 그대로이다. 문자열은 불변이므로(5.3절) 문자열 메서드는 원래 문자열을 바꾸지 못하고 언제나 새 문자열을 만든다.
+- **9~12행:** `split(",")`는 쉼표를 경계로 나누어 리스트(8절)를 만든다. 인수 없는 `split()`은 공백이 여러 칸 이어져도 하나의 경계로 본다.
+- **13행:** `join()`은 이어 붙일 문자열의 리스트를 인수로 받고, 구분자인 `"-"`에 대해 호출한다. `split()`과 반대되는 연산이다.
+- **17~20행:** `"banana"`는 인덱스 6에서 시작하고, 없는 문자열을 찾으면 `find()`는 -1을 돌려준다.
+- **21행:** 부분 문자열이 들어 있는지만 알고 싶으면 메서드 대신 `in` 연산자를 쓴다.
+- **23행:** `index()`는 찾지 못하면 -1 대신 `ValueError`를 낸다. 찾는 문자열이 없을 수 있으면 `find()`나 `in`을 쓴다.
 
 문자열 메서드에서 가장 흔한 실수는 결과를 받지 않는 것이다. `w = "hello"`에서 `w.upper()`만 실행하면 셸에는 `'HELLO'`가 표시되지만 `w`는 여전히 `'hello'`이다. 바뀐 문자열을 계속 쓰려면 `w = w.upper()`처럼 결과를 이름에 대입해야 한다. 이 대입은 1.3절의 설명대로 새 문자열 객체에 이름 `w`를 옮겨 붙이는 것이다.
 
@@ -757,7 +746,7 @@ IndexError: string index out of range
 Pyth
 ```
 
-`s[6:10]`은 인덱스 6, 7, 8, 9의 문자 `P`, `y`, `t`, `h`로 이루어지며, 인덱스 10의 `o`는 포함되지 않는다. 결과의 길이는 `end - start`, 곧 10 - 6 = 4이다. 인덱스를 문자 자체가 아니라 문자와 문자 사이의 경계에 붙은 번호로 보면 이해하기 쉽다 [9]. 이렇게 보면 `s[6:10]`은 경계 6과 경계 10 사이에 있는 문자들이다.
+`s[6:10]`은 인덱스 6, 7, 8, 9의 문자 `P`, `y`, `t`, `h`로 이루어지며, 인덱스 10의 `o`는 포함되지 않는다. 결과의 길이는 `end - start`, 곧 10 - 6 = 4이다. 인덱스를 문자 자체가 아니라 문자와 문자 사이의 경계에 붙은 번호로 보면 이해하기 쉽다 [8]. 이렇게 보면 `s[6:10]`은 경계 6과 경계 10 사이에 있는 문자들이다.
 
 ```text
                          s[6:10] = "Pyth"
@@ -934,7 +923,7 @@ s = turtle.textinput("", "이름을 입력하시오: ")
 - **1행:** `turtle` 모듈을 불러온다. 모듈은 함수와 자료를 모아 둔 파일이며 6강에서 다룬다.
 - **2행:** 거북이 하나를 만들어 변수 `t`에 저장한다. 이후 `t.forward(100)`처럼 `t`에게 명령을 내린다.
 - **3행:** 커서의 모양을 거북이로 바꾼다. 기본 모양은 화살표이다.
-- **4행:** `textinput(title, prompt)`는 입력 대화 상자를 띄운다. 첫 번째 인수는 대화 상자의 제목이고, 두 번째 인수는 대화 상자 안에 표시할 안내 문구이다. 이 예는 제목으로 빈 문자열 `""`을 주었다. 사용자가 입력하고 OK를 누르면 입력한 내용이 문자열로 반환되어 `s`에 저장된다 [10].
+- **4행:** `textinput(title, prompt)`는 입력 대화 상자를 띄운다. 첫 번째 인수는 대화 상자의 제목이고, 두 번째 인수는 대화 상자 안에 표시할 안내 문구이다. 이 예는 제목으로 빈 문자열 `""`을 주었다. 사용자가 입력하고 OK를 누르면 입력한 내용이 문자열로 반환되어 `s`에 저장된다 [9].
 
 ![그림 7. textinput()이 띄운 입력 대화 상자](../../images/Lec03_p13.png)
 
@@ -942,7 +931,7 @@ s = turtle.textinput("", "이름을 입력하시오: ")
 
 `input()`과 마찬가지로 `textinput()`도 항상 문자열을 돌려주므로, 숫자로 계산하려면 `int()`나 `float()`로 변환한다(3.1절).
 
-> **주의:** 사용자가 Cancel을 누르면 `textinput()`은 문자열이 아니라 값이 없음을 나타내는 특별한 값 `None`을 돌려준다 [10]. 이 값에 문자열을 `+`로 이어 붙이면 `TypeError`가 발생한다.
+> **주의:** 사용자가 Cancel을 누르면 `textinput()`은 문자열이 아니라 값이 없음을 나타내는 특별한 값 `None`을 돌려준다 [9]. 이 값에 문자열을 `+`로 이어 붙이면 `TypeError`가 발생한다.
 
 ### 7.2 문자열 출력
 
@@ -952,13 +941,13 @@ s = turtle.textinput("", "이름을 입력하시오: ")
 t.write("안녕하세요? 터틀 인사드립니다.")
 ```
 
-`write()`는 인수로 받은 문자열을 거북이의 현재 위치에 쓴다. 기본 설정에서 문자열은 거북이의 위치에서 시작하여 오른쪽으로 쓰이며, 쓴 뒤에도 거북이는 움직이지 않는다 [10]. 다음 그림에서 문자열은 거북이가 있는 정사각형의 오른쪽 아래 꼭짓점에서 시작하여 오른쪽으로 쓰여 있다.
+`write()`는 인수로 받은 문자열을 거북이의 현재 위치에 쓴다. 기본 설정에서 문자열은 거북이의 위치에서 시작하여 오른쪽으로 쓰이며, 쓴 뒤에도 거북이는 움직이지 않는다 [9]. 다음 그림에서 문자열은 거북이가 있는 정사각형의 오른쪽 아래 꼭짓점에서 시작하여 오른쪽으로 쓰여 있다.
 
 ![그림 8. 터틀 그래픽 창에 write()로 쓴 문자열](../../images/Lec03_p14.png)
 
 *그림 8. 터틀 그래픽 창에 write()로 쓴 문자열*
 
-> **주의:** 터틀 그래픽 프로그램을 IDLE이 아닌 명령 창에서 `python3 파일이름.py`로 실행하면 프로그램이 끝나는 즉시 그림 창이 닫힌다. 프로그램의 마지막 줄에 `turtle.done()`을 두면 사용자가 창을 닫을 때까지 창이 유지된다 [10].
+> **주의:** 터틀 그래픽 프로그램을 IDLE이 아닌 명령 창에서 `python3 파일이름.py`로 실행하면 프로그램이 끝나는 즉시 그림 창이 닫힌다. 프로그램의 마지막 줄에 `turtle.done()`을 두면 사용자가 창을 닫을 때까지 창이 유지된다 [9].
 
 ---
 
@@ -1232,6 +1221,5 @@ print(slist[0])
 5. Python Software Foundation, "Floating-Point Arithmetic: Issues and Limitations," *The Python Tutorial*, accessed Nov. 19, 2026. https://docs.python.org/3/tutorial/floatingpoint.html
 6. Python Software Foundation, "Lexical Analysis," *The Python Language Reference*. https://docs.python.org/3/reference/lexical_analysis.html
 7. Python Software Foundation, "Input and Output," *The Python Tutorial*. https://docs.python.org/3/tutorial/inputoutput.html
-8. Python Software Foundation, "What's New In Python 3.12," *Python 3 Documentation*, accessed Nov. 19, 2026. https://docs.python.org/3/whatsnew/3.12.html
-9. Python Software Foundation, "An Informal Introduction to Python," *The Python Tutorial*. https://docs.python.org/3/tutorial/introduction.html
-10. Python Software Foundation, "turtle: Turtle Graphics," *The Python Standard Library*. https://docs.python.org/3/library/turtle.html
+8. Python Software Foundation, "An Informal Introduction to Python," *The Python Tutorial*. https://docs.python.org/3/tutorial/introduction.html
+9. Python Software Foundation, "turtle: Turtle Graphics," *The Python Standard Library*. https://docs.python.org/3/library/turtle.html
