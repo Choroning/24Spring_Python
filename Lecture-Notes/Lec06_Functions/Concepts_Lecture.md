@@ -2,13 +2,13 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-18
+> **Last Updated:** 2026-11-19
 
 > **Learning Objectives:**
 > 1. Explain the concept and advantages of functions, and define and call functions with the `def` statement
 > 2. Distinguish parameters from arguments and write functions that receive arguments and return values
-> 3. Explain the scope of local and global variables and judge when the `global` statement is needed
-> 4. Write and call functions that use default arguments, keyword arguments, and multiple return values
+> 3. Explain the scope of local and global variables with the LEGB rule and decide when `global` and `nonlocal` statements are needed
+> 4. Write functions that use default arguments, keyword arguments, variable-length arguments (`*args`, `**kwargs`), and multiple return values, and trace the problem of using a mutable object as a default value
 > 5. Create anonymous functions with the `lambda` keyword
 > 6. Write modules, use functions from other files with the `import` statement, and explain how Python finds modules
 
@@ -25,6 +25,7 @@
   - [2.2 Function Calls and the Flow of Execution](#22-function-calls-and-the-flow-of-execution)
   - [2.3 The Error of Calling Before Defining](#23-the-error-of-calling-before-defining)
   - [2.4 Reducing Duplication with Functions](#24-reducing-duplication-with-functions)
+  - [2.5 Docstrings](#25-docstrings)
 - [3. Parameters and Arguments](#3-parameters-and-arguments)
   - [3.1 Passing Arguments](#31-passing-arguments)
   - [3.2 Multiple Arguments](#32-multiple-arguments)
@@ -38,9 +39,12 @@
   - [5.3 Reading a Global Variable Inside a Function](#53-reading-a-global-variable-inside-a-function)
   - [5.4 Changing a Global Variable Inside a Function](#54-changing-a-global-variable-inside-a-function)
   - [5.5 Global Constants](#55-global-constants)
+  - [5.6 Nested Functions and nonlocal](#56-nested-functions-and-nonlocal)
 - [6. Ways of Passing Arguments](#6-ways-of-passing-arguments)
   - [6.1 Default Arguments](#61-default-arguments)
   - [6.2 Keyword Arguments](#62-keyword-arguments)
+  - [6.3 The Problem of Using a Mutable Object as a Default Value](#63-the-problem-of-using-a-mutable-object-as-a-default-value)
+  - [6.4 Variable-Length Arguments](#64-variable-length-arguments)
 - [7. Anonymous Functions](#7-anonymous-functions)
 - [8. Modules](#8-modules)
   - [8.1 Modules and Packages](#81-modules-and-packages)
@@ -142,7 +146,7 @@ Gildong Hong
 ```
 
 - **Function definition (lines 1-4):** When the `def` statement is executed, Python only creates the function and binds it to the name `print_address`; it does not execute the `print()` statements of the body.
-- **Function call (line 6):** When `print_address()` is executed, the flow of execution moves into the body of the function and executes the three `print()` statements in order. When the body ends, the flow returns to the place of the call and continues with the next statement.
+- **Function call (line 6):** When `print_address()` is executed, the flow of execution moves into the body of the function and executes the three `print()` statements in order. When the body ends, the flow returns to the place of the call and continues with the next statement. The call stack, which Python builds up call by call to return to each place of the call, is covered in Lecture 12, Section 2.
 
 ```mermaid
 sequenceDiagram
@@ -239,6 +243,34 @@ average = 55.0
 ```
 
 The result of the division operator `/` is always a floating-point number, so the average is printed as `55.0`. However, this function always computes only 50 and 60. To compute with other numbers, the function must receive values (Section 3).
+
+### 2.5 Docstrings
+
+What a function does can be conveyed by its name and by comments, but Python provides a separate way to attach a description to the function itself. If a string literal is placed on the line right after the `def` statement, that is, as the first statement of the body, the string becomes the function's **docstring**. The docstring is stored in the `__doc__` attribute of the function object, and the built-in function `help()` reads and shows it. It is usually enclosed in three quotes (Lecture 3, Section 2.2) so that it can span several lines.
+
+```pycon
+>>> def area(w, h):
+...     """직사각형의 넓이를 반환한다.
+...
+...     w와 h는 0 이상의 수이다.
+...     """
+...     return w * h
+...
+>>> help(area)
+Help on function area in module __main__:
+
+area(w, h)
+    직사각형의 넓이를 반환한다.
+
+    w와 h는 0 이상의 수이다.
+```
+
+`help(area)` prints the name and parameters of the function and, below them, the docstring (here, "Return the area of a rectangle. w and h are numbers of 0 or more."). The conventions for docstrings recommended by the Python documentation are as follows [2].
+
+- Write the first line as one sentence briefly summarizing what the function does. In English, begin it with a capital letter and end it with a period.
+- If there is more to say, leave the second line blank to separate the summary from the rest, and from the third line on describe the conditions on the parameters, the return value, and points of caution.
+
+A comment (Lecture 2, Section 12) is an explanation for people reading the code that remains only in the source file, whereas a docstring is an explanation that can be retrieved with `help()` even in a running program. Running `help(print)` in interactive mode shows the docstring of the built-in function `print()` in the same way.
 
 ---
 
@@ -760,6 +792,96 @@ print(circle_area(10))
 
 Defining a value such as pi as a constant in one place means that only that one definition needs editing when the value must change, and a meaningful name appears in the code instead of a number. However, capitalized names are only a convention, and Python does not prevent the value from being changed. A program that computes the area and circumference of a circle with a global constant is covered in [Exercise 3](Exercises.md#exercise-3-circle-area-and-circumference-with-a-global-constant).
 
+### 5.6 Nested Functions and nonlocal
+
+A function can also be defined inside the body of another function. Such a function is called a nested function, and the function that encloses it is called the enclosing function. When there are nested functions, there is one more scope in which names are searched. At any moment during execution, Python searches for names in the following order [4].
+
+| Order | Scope | Names It Holds |
+|:-----|:-----|:-----|
+| 1 | Local | Names assigned and parameters in the function currently running |
+| 2 | Enclosing | Local names of the enclosing functions, from the nearest one |
+| 3 | Global | Names assigned at the top level of the module (source file) |
+| 4 | Built-in | Names that Python provides from the start, such as `print` and `len` |
+
+*Table 4. The four scopes in which names are searched and their order*
+
+This order is the LEGB rule introduced by its initials in the box at the end of Section 5.4. The following program places the same name `x` in three scopes.
+
+```python
+x = "전역"
+
+def outer():
+    x = "바깥 함수"
+    def inner():
+        x = "지역"
+        print("inner:", x)
+    inner()
+    print("outer:", x)
+
+outer()
+print("모듈:", x)
+print("내장:", len("abc"))
+```
+
+```text
+inner: 지역
+outer: 바깥 함수
+모듈: 전역
+내장: 3
+```
+
+The `x` inside `inner()` is found first in the local scope (지역), the `x` inside `outer()` in the local scope of `outer()` (바깥 함수, enclosing function), and the `x` at the bottom in the global scope (전역). The assignment `x = "지역"` in `inner()` only creates a new local variable and does not change the two outer `x` names. `len` has never been assigned in any of the three scopes, so it is found in the last one, the built-in scope (내장). Conversely, assigning a value to a name equal to a built-in function in the global scope makes that name found first, hiding the built-in function.
+
+```pycon
+>>> len = 5
+>>> len("abc")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    len("abc")
+    ~~~^^^^^^^
+TypeError: 'int' object is not callable
+>>> del len
+>>> len("abc")
+3
+```
+
+The global name `len` refers to the integer 5, so `len("abc")` calls an integer as if it were a function, and a `TypeError` occurred. Deleting the global name with `del len` lets the `len` of the built-in scope be found again. This is why the note box of Section 3.2 advised against using `sum` as a variable name.
+
+To change a variable of the enclosing function inside a nested function, declare with a **`nonlocal` statement** that the name is a variable of the enclosing function. Whereas the `global` statement (Section 5.4) binds a name to the global scope, the `nonlocal` statement binds it to the scope of the nearest enclosing function [4].
+
+```python
+def make_counter():
+    count = 0
+    def increase():
+        nonlocal count
+        count += 1
+        return count
+    return increase
+
+c = make_counter()
+print(c(), c(), c())
+```
+
+```text
+1 2 3
+```
+
+- **Lines 1-2:** `make_counter()` creates the local variable `count` as 0.
+- **Lines 3-6:** The nested function `increase()` states with `nonlocal count` that `count` is a variable of the enclosing function, increases its value by 1, and returns it.
+- **Line 7:** `make_counter()` returns the function `increase` itself. Functions are objects too, so they can be return values (without parentheses, it is not called).
+- **Lines 9-10:** `c` is the returned `increase` function. The execution of `make_counter()` has ended, but `increase` keeps remembering the outer variable `count` it refers to, so each call gives 1, 2, and 3.
+
+If `nonlocal count` is omitted, `count += 1` is an assignment statement, so `count` becomes a local variable of `increase()` (the caution box of Section 5.4), and an error occurs the moment its value is read.
+
+```text
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "<stdin>", line 4, in increase
+UnboundLocalError: cannot access local variable 'count' where it is not associated with a value
+```
+
+This traceback is the result of running the file with the `nonlocal count` line deleted, and it shows the path of calls in two lines. The last line of that file, `print(c(), c(), c())` on line 9, called `increase`, and the error occurred at `count += 1` on line 4 inside `increase`. As explained in Lecture 1, Section 7.3, the last entry is where the error occurred.
+
 ---
 
 <br>
@@ -812,7 +934,7 @@ The first call specifies all three arguments by name, so even in a different ord
 | Keyword argument | `calc(y=20, x=10, z=30)` | The names of the parameters | Order does not matter, but they come after positional arguments |
 | Default argument | `greet("Younghee")` | Omitted parameters take their default values | Parameters with defaults are placed last in the definition |
 
-*Table 4. Three ways of passing arguments*
+*Table 5. Three ways of passing arguments*
 
 Misusing keyword arguments causes the following errors.
 
@@ -820,6 +942,125 @@ Misusing keyword arguments causes the following errors.
 - **Passing a value to the same parameter twice:** In `calc(10, x=20, z=30)`, the positional argument 10 already corresponds to `x` and `x=20` is passed again, so it gives `TypeError: calc() got multiple values for argument 'x'`.
 
 Keyword arguments make the meaning of each value visible in the call of a function with many parameters, which makes code easier to read.
+
+### 6.3 The Problem of Using a Mutable Object as a Default Value
+
+A default value is not created anew every time the function is called. It is evaluated **only once**, when the `def` statement runs and the function is created, and stored in the function object, and all later calls use the same value [2]. If the default value is an immutable object, such as a number or a string, the difference does not show, but if it is a mutable object (Lecture 3, Section 1.3), such as a list, the contents changed by an earlier call remain in the next call.
+
+```python
+def add_item(item, basket=[]):
+    basket.append(item)
+    return basket
+
+print(add_item("사과"))
+print(add_item("배"))
+print(add_item("귤", ["포도"]))
+print(add_item("감"))
+print(add_item.__defaults__)
+```
+
+```text
+['사과']
+['사과', '배']
+['포도', '귤']
+['사과', '배', '감']
+(['사과', '배', '감'],)
+```
+
+The second call is easily expected to put only `배` (pear) into an empty basket, but it gave `['사과', '배']`. Tracing the object that the parameter `basket` refers to in each call reveals the cause.
+
+```text
+def runs:                 default storage ──→ [ ]          one list is created and stored
+add_item("사과")          basket ──→ ['사과']              appended to the default list
+add_item("배")            basket ──→ ['사과', '배']        appended to the same list again
+add_item("귤", ["포도"])  basket ──→ ['포도', '귤']        the new list passed, unrelated to the default
+add_item("감")            basket ──→ ['사과', '배', '감']  appended to the default list again
+```
+
+*Figure 6. The list that the parameter basket refers to in each call*
+
+In the three calls that omit the argument, `basket` refers to the single list created when the `def` statement ran. `append()` changes that list itself (Lecture 7), so the changed contents remain in the next call. When a list is passed directly, as in the third call, `basket` refers to that list, so it is unrelated to the default list. `add_item.__defaults__` on the last line is the tuple of default values stored in the function object, and it shows the list in which the three additions have accumulated.
+
+When a new list is needed on every call, use `None` as the default value, check in the body whether it is `None`, and create a new list at that point [2].
+
+```python
+def add_item(item, basket=None):
+    if basket is None:
+        basket = []
+    basket.append(item)
+    return basket
+
+print(add_item("사과"))
+print(add_item("배"))
+```
+
+```text
+['사과']
+['배']
+```
+
+`basket = []` runs on every call, so each call that omits the argument gets its own empty list. `None` is a unique object, so it is checked with `is` instead of `==` (Lecture 3, Section 1.3).
+
+### 6.4 Variable-Length Arguments
+
+Just as `print()` accepts any number of arguments, a function that accepts an unspecified number of arguments can be defined. Putting `*` before a parameter name bundles the remaining positional arguments into a tuple (Lecture 7) that goes into that parameter, and putting `**` bundles the remaining keyword arguments into a dictionary (Lecture 7) of `name: value` pairs [2]. The names `*args` and `**kwargs` are often used by convention, but any names may be used.
+
+```pycon
+>>> def total(*nums):
+...     print(type(nums), nums)
+...     s = 0
+...     for n in nums:
+...         s += n
+...     return s
+...
+>>> total(1, 2, 3)
+<class 'tuple'> (1, 2, 3)
+6
+>>> total()
+<class 'tuple'> ()
+0
+>>> def profile(name, **info):
+...     print(name, info)
+...
+>>> profile("홍길동", age=21, major="컴퓨터")
+홍길동 {'age': 21, 'major': '컴퓨터'}
+```
+
+In `total(1, 2, 3)` the three arguments are bundled into the tuple `(1, 2, 3)` that goes into `nums`, and with no arguments it becomes an empty tuple. In `profile()` the first positional argument corresponds to `name`, and the keyword arguments with unlisted names, `age=21` and `major="컴퓨터"`, are bundled into a dictionary that goes into `info`.
+
+Conversely, using `*` and `**` on the calling side unpacks a list or tuple into positional arguments and a dictionary into keyword arguments. When the kinds of parameters are used together, their order is fixed: ordinary parameters, `*args`, parameters placed after `*args`, and `**kwargs`. A parameter after `*args` cannot receive a value by position and must be passed as a keyword argument.
+
+```pycon
+>>> def show(a, b, c):
+...     print(a, b, c)
+...
+>>> nums = [1, 2, 3]
+>>> show(*nums)
+1 2 3
+>>> show(**{"a": 10, "b": 20, "c": 30})
+10 20 30
+>>> print(1, 2, 3, sep="-", end="!\n")
+1-2-3!
+>>> def f(a, *args, sep=" ", **kw):
+...     print(a, args, sep, kw)
+...
+>>> f(1, 2, 3, sep="/", x=9)
+1 (2, 3) / {'x': 9}
+>>> show(*[1, 2])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    show(*[1, 2])
+    ~~~~^^^^^^^^^
+TypeError: show() missing 1 required positional argument: 'c'
+```
+
+- **Lines 4-5:** `show(*nums)` is the same as `show(1, 2, 3)`.
+- **Line 7:** The keys of the dictionary correspond to the parameter names, so this is the same as `show(a=10, b=20, c=30)`.
+- **Line 9:** `print()` is also defined in this form: it accepts the values to print as variable-length arguments and accepts the separator `sep` between values and the string `end` appended at the end only as keyword arguments. So `sep="-"` put hyphens between the values and `end="!\n"` put an exclamation mark and a newline at the end.
+- **Line 14:** 1 goes into `a`, the remaining positional arguments 2 and 3 into `args`, `sep="/"` into `sep`, and `x=9`, which has no matching name, into `kw`.
+- **Line 16:** Only two values are unpacked, so there is no argument for the parameter `c`, and a `TypeError` occurs.
+
+> **Note:** Since Python 3.8, placing `/` in a parameter list makes the parameters before it accept only positional arguments [5]. In `def f(a, b, /, c):`, `a` and `b` cannot be passed as keyword arguments. This syntax does not exist in Python 3.7, and it often appears in the descriptions of built-in functions, as `help(len)` shows `len(obj, /)`.
 
 ---
 
@@ -891,9 +1132,9 @@ flowchart TB
     P --> I["__init__.py<br>(package initialization file)"]
 ```
 
-*Figure 6. A package made of the modules a.py and b.py and the initialization file __init__.py*
+*Figure 7. A package made of the modules a.py and b.py and the initialization file __init__.py*
 
-`__init__.py` is a file that marks the folder as a package and holds initialization code to run when the package is first imported. A folder without this file can also be imported in a special form called a namespace package, but an ordinary package contains this file [4]. Dividing a program into modules lets related functions be managed together in one file and lets a function written once be reused in several programs.
+`__init__.py` is a file that marks the folder as a package and holds initialization code to run when the package is first imported. A folder without this file can also be imported in a special form called a namespace package, but an ordinary package contains this file [6]. Dividing a program into modules lets related functions be managed together in one file and lets a function written once be reused in several programs.
 
 ### 8.2 Writing and Using a Module
 
@@ -929,7 +1170,7 @@ project/
 └── main.py     program: imports and uses the h module
 ```
 
-*Figure 7. Folder layout of a module and the program that uses it*
+*Figure 8. Folder layout of a module and the program that uses it*
 
 The content of `main.py` is as follows.
 
@@ -954,26 +1195,26 @@ The forms of the `import` statement can be summarized as follows.
 | `from h import add` | `add(10, 20)` | Brings in only the needed names and uses them without the module name |
 | `from h import *` | `add(10, 20)` | Brings in all names, so it can overwrite names of the same name in the current program |
 
-*Table 5. Four forms of the import statement*
+*Table 6. Four forms of the import statement*
 
 > **Caution:** With `from h import *`, the code does not show which names come in, and if the current program has a variable or function with the same name, it is silently overwritten. Except in short test code, it is better to make the imported names explicit, as in `import h` or `from h import add`.
 
 ### 8.3 How the import Statement Finds a Module
 
-When `import h` is executed, Python does the following in order [4].
+When `import h` is executed, Python does the following in order [6].
 
 1. **Checks whether the module has already been imported.** If the module was already imported in the same program, that module is reused and the steps below are skipped.
 2. **Looks for `h.py` on the module search path.** The search path is stored in a list called `sys.path`, and it is searched in the order of the folder containing the program file that was run (the current folder for the interactive shell), the folders specified in the environment variable `PYTHONPATH`, and the folders holding the standard library and installed third-party packages.
 3. **Executes the module.** The file found is compiled to bytecode, and the top-level code of the module is executed once from the top. `def` statements are executed at this point too, creating the functions. The compiled result is saved in the `__pycache__` folder under a name carrying the Python version, such as `h.cpython-313.pyc`, so that the next run skips compilation if the source has not changed.
 4. **Binds the name.** The created module object is bound to the name `h` in the current program.
 
-With the layout of Figure 7, running `python main.py` makes the `project/` folder containing `main.py` the first entry of the search path, so `h.py` in the same folder is found. If `h.py` is placed in a different folder, the error `ModuleNotFoundError: No module named 'h'` occurs.
+With the layout of Figure 8, running `python main.py` makes the `project/` folder containing `main.py` the first entry of the search path, so `h.py` in the same folder is found. If `h.py` is placed in a different folder, the error `ModuleNotFoundError: No module named 'h'` occurs.
 
 > **Caution:** If one of your files has the same name as a standard module, such as `turtle.py` or `random.py`, `import turtle` loads your file instead of the standard module, because the folder of the program is searched before the standard library. This leads to errors whose cause is hard to see, such as `AttributeError: module 'turtle' has no attribute 'Turtle'`. In this case Python 3.13 appends to the error message a hint to rename the file that has the same name as the standard module. Give module files names that do not clash with standard modules.
 
 ### 8.4 Running Directly Versus Being Imported
 
-The top-level code of a module is executed when it is imported. If one wants to keep code that tests the functions inside a module file, it is a problem if that code runs on every import. In this case one uses the variable `__name__`, created automatically for each module. `__name__` is `"__main__"` when the file is run directly and the module name when another file imports it [4].
+The top-level code of a module is executed when it is imported. If one wants to keep code that tests the functions inside a module file, it is a problem if that code runs on every import. In this case one uses the variable `__name__`, created automatically for each module. `__name__` is `"__main__"` when the file is run directly and the module name when another file imports it [6].
 
 `calc_mod.py`:
 
@@ -1035,10 +1276,14 @@ When run directly, `__name__` is `"__main__"`, so the test code in the `if` stat
 | Multiple return values | `return a, b` returns a single tuple, which the caller unpacks into the same number of variables. |
 | Local variable | A variable assigned inside a function, or a parameter, which disappears when the function ends and cannot be used outside it. |
 | Global variable | A variable declared outside functions, which can be read inside a function but requires a `global` declaration to be assigned. |
+| The LEGB rule and `nonlocal` | Names are searched in the local, enclosing, global, and built-in scopes in that order, and assigning to a variable of the enclosing function requires a `nonlocal` declaration. |
 | `UnboundLocalError` | A name assigned anywhere in a function is local throughout the function, so reading it before the assignment raises an error. |
 | Global constant | A global variable with a capitalized name representing an unchanging value, read only and therefore needing no `global`. |
 | Default argument | Gives a parameter a default value so that its argument can be omitted, and parameters with defaults are placed last. |
 | Keyword argument | Passed as `name=value` and matched regardless of order, written after positional arguments. |
+| Mutable default values | A default value is evaluated only once, when the `def` statement runs, so a list as a default accumulates contents across calls; avoid this by using `None` as the default. |
+| Variable-length arguments | `*args` receives the remaining positional arguments as a tuple and `**kwargs` the remaining keyword arguments as a dictionary, while `*` and `**` in a call conversely unpack and pass them. |
+| Docstrings | A string placed as the first statement of the body, stored in `__doc__` and viewable with `help()`. |
 | Anonymous function | A nameless function created with `lambda arguments: expression`, which returns the value of a single expression. |
 | Modules and packages | A module is a `.py` file collecting functions and variables, and a package is a folder collecting modules. |
 | `import` | Finds a module on the search path (`sys.path`), executes it only the first time, and binds the module object to a name. |
@@ -1134,6 +1379,56 @@ When run directly, `__name__` is `"__main__"`, so the test code in the `if` stat
 
    </details>
 
+7. **Tracing default values:** Write the output of the following program and explain why the third line is printed as it is.
+
+   ```python
+   def log(msg, history=[]):
+       history.append(msg)
+       return len(history)
+
+   print(log("a"))
+   print(log("b", []))
+   print(log("c"))
+   ```
+
+   <details>
+   <summary>Answer</summary>
+
+   `1`, `1`, and `2` are printed. The first and third calls omit the argument, so they use the same default list created once when the `def` statement ran; at the third call that list holds `"a"` and `"c"`, so its length is 2. The second call passes a new empty list, so its length is 1, unrelated to the default list.
+
+   </details>
+
+8. **Variable-length arguments:** With `def f(a, *b, c=0, **d): return (a, b, c, d)`, give the values of `f(1)`, `f(1, 2, 3)`, and `f(1, 2, c=5, e=6)`.
+
+   <details>
+   <summary>Answer</summary>
+
+   `f(1)` is `(1, (), 0, {})`. In `f(1, 2, 3)`, the remaining positional arguments 2 and 3 are bundled into `b`, giving `(1, (2, 3), 0, {})`. In `f(1, 2, c=5, e=6)`, `c` receives 5 as a keyword argument and `e=6`, whose name is not listed, is bundled into `d`, giving `(1, (2,), 5, {'e': 6})`.
+
+   </details>
+
+9. **nonlocal:** Write the output of the following program. What happens if `nonlocal n` is removed?
+
+   ```python
+   def outer():
+       n = 1
+       def inner():
+           nonlocal n
+           n = n * 10
+       inner()
+       inner()
+       return n
+
+   print(outer())
+   ```
+
+   <details>
+   <summary>Answer</summary>
+
+   `inner()` is called twice, changing the enclosing function's `n` from 1 to 10 and then 100, so `100` is printed. If `nonlocal n` is removed, the assignment `n = n * 10` makes `n` a local variable of `inner()`, and an `UnboundLocalError` occurs the moment the `n` on the right is read.
+
+   </details>
+
 ---
 
 <br>
@@ -1143,4 +1438,6 @@ When run directly, `__name__` is `"__main__"`, so the test code in the `if` stat
 1. G. van Rossum, B. Warsaw, and A. Coghlan, "PEP 8 - Style Guide for Python Code," *Python Enhancement Proposals*, 2001. https://peps.python.org/pep-0008/
 2. Python Software Foundation, "More Control Flow Tools," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/controlflow.html
 3. Python Software Foundation, "Execution model," *The Python Language Reference*, Python 3.13. https://docs.python.org/3.13/reference/executionmodel.html
-4. Python Software Foundation, "Modules," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/modules.html
+4. Python Software Foundation, "Classes," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/classes.html
+5. Python Software Foundation, "What's New In Python 3.8," *Python 3 Documentation*, Python 3.13. https://docs.python.org/3.13/whatsnew/3.8.html
+6. Python Software Foundation, "Modules," *The Python Tutorial*, Python 3.13. https://docs.python.org/3.13/tutorial/modules.html
