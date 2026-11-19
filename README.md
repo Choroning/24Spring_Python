@@ -22,9 +22,9 @@ This repository archives lecture notes and coursework for the Python course.
 <br><a name="about-this-repository"></a>
 ## 📝 About This Repository
 
-- `Lecture-Notes/` holds lecture notes in the order of the lecture decks, and some units also hold exercises collected from the problems in the decks, with their solutions.
+- `Lecture-Notes/` holds lecture notes in the order of the lecture decks, and some units also hold exercises collected from the problems in the decks or written for the unit, with their solutions.
 - `Coursework/` holds the Python lab code written in class for each unit (`Lab04`-`Lab08`) with explanations, and the library reading room seat reservation program presented in a voluntary presentation.
-- Units follow the order of the lecture decks (`Lec01`-`Lec08`), and every document comes as an English (`.md`) and Korean (`.ko.md`) pair.
+- Units follow the order of the lecture decks (`Lec01`-`Lec08`), and `Lec09`-`Lec12` are supplementary units on topics that were only in the syllabus and were not taught in class. Every document comes as an English (`.md`) and Korean (`.ko.md`) pair.
 
 > **🤖 Use of Generative AI Tools**
 > This repository uses [Claude Code](https://claude.ai/download) for documentation.
@@ -60,7 +60,7 @@ A course for first-year students on Python, a representative programming languag
 
 ```plaintext
 24Spring_Python
-├── Lecture-Notes               Lecture notes, exercises, and solutions (in lecture deck order)
+├── Lecture-Notes               Lecture notes, supplementary units, exercises, and solutions
 ├── Coursework                  Python lab code by unit with explanations, and the voluntary presentation program
 ├── images                      Figures in the lecture notes
 ├── Course-Information.ko.md    Course operations

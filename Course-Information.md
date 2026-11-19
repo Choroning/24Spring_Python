@@ -2,7 +2,7 @@
 
 [Repository Guide](README.md) | [English](Course-Information.md) | [한국어](Course-Information.ko.md)
 
-> **Last Updated:** 2026-11-04
+> **Last Updated:** 2026-11-19
 
 ## Table of Contents
 
@@ -127,6 +127,7 @@
   - CH5 함수_강의용: [Lec06](Lecture-Notes/Lec06_Functions/Concepts_Lecture.md)
   - CH6 리스트와 딕셔너리: [Lec07](Lecture-Notes/Lec07_Lists-and-Dictionaries/Concepts_Lecture.md)
   - CH7 클래스와 객체: [Lec08](Lecture-Notes/Lec08_Classes-and-Objects/Concepts_Lecture.md)
+- [`Lec09`](Lecture-Notes/Lec09_Inheritance-and-Polymorphism/Concepts_Lecture.md) (inheritance and polymorphism, week 12), [`Lec10`](Lecture-Notes/Lec10_File-Input-and-Output/Concepts_Lecture.md) and [`Lec11`](Lecture-Notes/Lec11_Exception-Handling/Concepts_Lecture.md) (files and exception handling, week 13), and [`Lec12`](Lecture-Notes/Lec12_Recursion/Concepts_Lecture.md) (recursion, week 15) are supplementary units on syllabus topics that were not taught in class.
 - The class times, room, textbook, and assessment announced in CH0 Intro Lecture are kept in this document, and the introduction of what the course covers is summarized in Lecture 1.
 - The lab code numbers in `Coursework` (`Lab04`-`Lab08`) follow the lecture units with the same numbers. The units are listed in the [`Lecture-Notes` index](Lecture-Notes/README.md), and the lab code in the [`Coursework` index](Coursework/README.md).
 
@@ -142,6 +143,7 @@
 | Reference Book | S. Kim, C. Kim, and C. Park, *컴퓨팅 사고와 함께하는 파이썬 기초부터 인공지능 응용까지*. Yeondu Edition, 2019. |
 | Lecture Slides | PDF slides for each chapter provided by the instructor (CH0-CH7) and supplementary decks (CH1_2 연산자, CH3_2 조건문_추가문제) |
 | Lecture Videos | Two lecture videos of week 14 |
+| Supplementary-Unit Reference | Python Software Foundation, *The Python Tutorial*, *The Python Language Reference*, *The Python Standard Library*, Python 3.13 (<https://docs.python.org/3.13/>) |
 
 - The syllabus states that the main textbook would be announced later. The Week 1 course introduction material states that the lecture slides refer to 두근두근 파이썬 (Life & Power Press) and that any Python book is acceptable.
 - The lecture slides were made with reference to 두근두근 파이썬 and do not correspond one to one with its chapters.

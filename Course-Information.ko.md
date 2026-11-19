@@ -2,7 +2,7 @@
 
 [레포지토리 안내](README.ko.md) | [English](Course-Information.md) | [한국어](Course-Information.ko.md)
 
-> **최종 수정일:** 2026-11-18
+> **최종 수정일:** 2026-11-19
 
 ## 목차
 
@@ -127,6 +127,7 @@
   - CH5 함수_강의용: [Lec06](Lecture-Notes/Lec06_Functions/Concepts_Lecture.ko.md)
   - CH6 리스트와 딕셔너리: [Lec07](Lecture-Notes/Lec07_Lists-and-Dictionaries/Concepts_Lecture.ko.md)
   - CH7 클래스와 객체: [Lec08](Lecture-Notes/Lec08_Classes-and-Objects/Concepts_Lecture.ko.md)
+- [`Lec09`](Lecture-Notes/Lec09_Inheritance-and-Polymorphism/Concepts_Lecture.ko.md)(12주차의 상속과 다형성), [`Lec10`](Lecture-Notes/Lec10_File-Input-and-Output/Concepts_Lecture.ko.md)과 [`Lec11`](Lecture-Notes/Lec11_Exception-Handling/Concepts_Lecture.ko.md)(13주차의 파일과 예외 처리), [`Lec12`](Lecture-Notes/Lec12_Recursion/Concepts_Lecture.ko.md)(15주차의 재귀)는 강의계획서의 주제이지만 수업에서 진행하지 않아 보충한 단원입니다.
 - CH0 Intro Lecture의 강의 시간, 장소, 교재, 평가 안내는 이 문서에 두고, 과목이 다루는 내용의 소개는 1강에 정리했습니다.
 - `Coursework`의 실습 코드 번호(`Lab04`\~`Lab08`)는 같은 번호의 강의 단원을 따릅니다. 단원 목록은 [`Lecture-Notes` 색인](Lecture-Notes/README.ko.md)에, 실습 코드는 [`Coursework` 색인](Coursework/README.ko.md)에 있습니다.
 
@@ -142,6 +143,7 @@
 | 참고 도서 | 김성백, 김철민, 박찬정, *컴퓨팅 사고와 함께하는 파이썬 기초부터 인공지능 응용까지*. 연두에디션, 2019. |
 | 강의자료 | 교수자가 제공한 장별 슬라이드 PDF(CH0\~CH7)와 보충 자료(CH1_2 연산자, CH3_2 조건문_추가문제) |
 | 강의 영상 | 14주차의 강의 영상 2개 |
+| 보충 단원 참고 자료 | Python Software Foundation, *The Python Tutorial*, *The Python Language Reference*, *The Python Standard Library*, Python 3.13 (<https://docs.python.org/3.13/>) |
 
 - 강의계획서는 주교재를 추후 공지한다고 밝혔습니다. 1주차 강의 소개 자료는 강의자료가 두근두근 파이썬(생능출판사)을 참고했으며, 파이썬 책은 어떤 것이든 상관없다고 안내했습니다.
 - 강의자료는 두근두근 파이썬을 참고하여 만든 자료이며, 책의 장과 일대일로 대응하지 않습니다.
