@@ -2,15 +2,15 @@
 
 [Repository Guide](../../README.md) | [English](Concepts_Lecture.md) | [한국어](Concepts_Lecture.ko.md)
 
-> **Last Updated:** 2026-11-17
+> **Last Updated:** 2026-11-19
 
 > **Learning Objectives:**
 > 1. Explain the relationship among programs, programming languages, and translator programs
 > 2. Install Python and write and run programs in the interactive mode and the script mode of IDLE
 > 3. Write programs that print values and read input with `print()`, `input()`, and `int()`
 > 4. Draw shapes with turtle graphics by tracking the position and heading of the turtle
-> 5. Create variables that follow the naming rules and store integers, floating-point numbers, and strings in them
-> 6. Evaluate expressions step by step using arithmetic operators, compound assignment operators, and operator precedence
+> 5. Create variables that follow the naming rules to store integers, floats, and strings, and assign several variables at once to swap values
+> 6. Use arithmetic operators, compound assignment operators, and operator precedence to work out the value of an expression and the data type of its result step by step
 
 ---
 
@@ -35,9 +35,11 @@
   - [7.1 Variables and Assignment](#71-variables-and-assignment)
   - [7.2 Kinds of Data Stored in Variables](#72-kinds-of-data-stored-in-variables)
   - [7.3 Rules for Variable Names](#73-rules-for-variable-names)
+  - [7.4 Assigning Several Variables](#74-assigning-several-variables)
 - [8. Expressions and Arithmetic Operators](#8-expressions-and-arithmetic-operators)
   - [8.1 Expressions, Operators, and Operands](#81-expressions-operators-and-operands)
   - [8.2 Arithmetic Operators](#82-arithmetic-operators)
+  - [8.3 Calculations Mixing Integers and Floats](#83-calculations-mixing-integers-and-floats)
 - [9. User Input](#9-user-input)
   - [9.1 Integer Input: `input()` and `int()`](#91-integer-input-input-and-int)
   - [9.2 String Input](#92-string-input)
@@ -444,6 +446,54 @@ Using a name that breaks the rules causes an error. A name starting with a digit
 
 There are two conventions for names made of several words. **Camel case** writes the first letter of the variable in lowercase and the first letter of each remaining word in uppercase. For example, as in `myNewCar`, the first `m` is lowercase and the first letters of the remaining words are uppercase. The name comes from the capital letters rising like the humps of a camel. On the other hand, PEP 8, Python's official style guide, recommends **snake case**, which joins lowercase words with underscores, for variable and function names (`my_new_car`) [6]. Whichever is chosen, it is best to use one consistently within a program and to use names that reveal the meaning of the value, such as `score` and `total_price`, rather than `a` and `b`.
 
+### 7.4 Assigning Several Variables
+
+Python provides two forms that store values in several variables with a single assignment statement. The first is **multiple assignment**, which lists the same number of names and values, separated by commas, on the left and right of `=`; the second is chained assignment, which writes `=` repeatedly to store the same value in several names.
+
+```pycon
+>>> a, b = 1, 2
+>>> a
+1
+>>> b
+2
+>>> x = y = 0
+>>> x, y
+(0, 0)
+>>> a, b = b, a
+>>> a, b
+(2, 1)
+```
+
+- **Line 1:** The values 1 and 2 on the right are stored in `a` and `b` on the left, in order.
+- **Line 6:** 0 is stored in both `x` and `y`. Typing `x, y` next shows the two values grouped in parentheses as `(0, 0)`; this form, in which values listed with commas are bundled into one, is the tuple covered in Lecture 7.
+- **Line 9:** Swaps the values of `a` and `b`.
+
+The swap on line 9 is explained by the assignment rule of Section 7.1, namely that the whole right side is computed before anything is stored on the left. Just before execution, `a` is 1 and `b` is 2. Python first computes the right side `b, a` to make the bundle of values (2, 1), and then stores the first value of this bundle, 2, in `a` and the second value, 1, in `b`. Because the values on the right are all obtained before anything is stored, every value is read before it can be overwritten.
+
+```text
+Before:                  a = 1, b = 2
+① Compute right side:    (b, a) → (2, 1)
+② Store on the left:     a ← 2, b ← 1
+After:                   a = 2, b = 1
+```
+
+*Figure 10. How the multiple assignment `a, b = b, a` swaps two values*
+
+If assignment could target only one variable at a time, as in C, the original value 1 of `a` would be lost the moment `a = b` ran, so a swap would need one more temporary variable, as in `temp = a`, `a = b`, `b = temp`. Multiple assignment reduces these three statements to one.
+
+If the number of names on the left differs from the number of values on the right, multiple assignment raises an error.
+
+```pycon
+>>> c, d = 1, 2, 3
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    c, d = 1, 2, 3
+    ^^^^
+ValueError: too many values to unpack (expected 2)
+```
+
+There are three values but only two names to receive them, so a `ValueError` occurred. When there are fewer values than names, the description reads `not enough values to unpack`. The chained assignment `x = y = 0` makes two names refer to one value; this causes no problem for a value that cannot change, such as an integer, but if a value whose contents can change, such as a list, is assigned this way, a change made through one name is visible through the other (Lecture 3, Section 1.3; Lecture 7).
+
 ---
 
 <br>
@@ -464,7 +514,7 @@ graph TD
     E -->|"evaluate"| V["Value of the expression 40"]
 ```
 
-*Figure 10. The operands and operator that make up the expression 5 * 8, and its value*
+*Figure 11. The operands and operator that make up the expression 5 * 8, and its value*
 
 ### 8.2 Arithmetic Operators
 
@@ -484,6 +534,69 @@ Python represents addition, subtraction, multiplication, division, and the remai
 The multiplication symbol is `*`, not ×. There are two division operators. `/` is division calculated to the digits after the decimal point, and even `8 / 4`, which divides evenly, gives the floating-point number `2.0`. `//` is **floor division**, which gives only the quotient, and `%` gives the **remainder** left after division. Dividing 7 by 4 gives a quotient of 1 and a remainder of 3, so `7 // 4` is 1 and `7 % 4` is 3. In C, the same `/` produces a quotient or a floating-point result depending on whether the operands are integers or floating-point numbers, but in Python variables are not declared with data types, so the data types of the operands cannot be known just by looking at the code, and the two divisions are therefore distinguished as different operators [4].
 
 > **Caution:** When negative numbers are involved, `//` does not discard the digits after the decimal point but rounds down toward the left on the number line, that is, toward the smaller integer. So `-7 // 2` is -4, not -3, and `-7 % 2` is 1. For integers `a` and `b` (with `b` not 0), `a == (a // b) * b + a % b` always holds in Python, and the result of `%` is 0 or has the same sign as the divisor `b` [7]. For example, (-4) × 2 + 1 = -7.
+
+### 8.3 Calculations Mixing Integers and Floats
+
+Whether the result of an arithmetic operation is an integer or a float is determined by the data types of the operands and by the operator. There are three rules.
+
+| Operands | Operators | Data Type of the Result | Example |
+|:-----|:-----|:-----|:-----|
+| Integer and integer | `+`, `-`, `*`, `//`, `%` | Integer | `7 + 2` is 9, `7 // 2` is 3 |
+| Integer and integer | `/` | Always a float | `7 / 7` is 1.0 |
+| At least one float | All arithmetic operators | Float | `7 + 2.0` is 9.0, `7 // 2.0` is 3.0 |
+
+*Table 6. Data type of the result of arithmetic operations by operands and operator*
+
+When an integer and a float are computed together, Python converts the integer to a float before computing, because Python treats the integer as narrower than the float and, in mixed arithmetic, widens the narrower operand to the type of the other. A float does not hold every integer exactly, however, so an integer with many digits gains an error or exceeds the range when it is converted to a float (Lecture 3, Section 1.4). So `//` and `%` also give the quotient and remainder as floats when an operand is a float. Exponentiation `**` gives a float when the exponent is negative or a float.
+
+```pycon
+>>> 7 + 2.0
+9.0
+>>> 7 / 7
+1.0
+>>> 7 // 2.0
+3.0
+>>> 7 % 2.5
+2.0
+>>> 2 ** 3
+8
+>>> 2 ** -1
+0.5
+>>> 2 ** 0.5
+1.4142135623730951
+```
+
+`7 % 2.5` is 2.0 because 7 = 2 × 2.5 + 2.0. `2 ** -1` is $2^{-1} = 1/2$, and `2 ** 0.5` is the square root of 2. As the last digits of the final result suggest, a float is stored as an approximation within a fixed number of digits, so the result of a float calculation can differ very slightly from the mathematically exact value (Lecture 3, Section 1.4).
+
+When both the quotient and the remainder are needed, use the built-in function `divmod()`. `divmod(a, b)` returns `(a // b, a % b)` at once, and the two values can be received separately with multiple assignment (Section 7.4). The rule of Section 8.2 applies to negative numbers as well.
+
+```pycon
+>>> divmod(17, 5)
+(3, 2)
+>>> divmod(-17, 5)
+(-4, 3)
+```
+
+Running `q, r = divmod(17, 5)` makes `q` 3 and `r` 2. The second result is the quotient -4 and the remainder 3, because -17 = (-4) × 5 + 3.
+
+Division by zero is undefined in mathematics, so a `ZeroDivisionError` occurs when the right operand of `/`, `//`, or `%` is 0.
+
+```pycon
+>>> 10 / 0
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    10 / 0
+    ~~~^~~
+ZeroDivisionError: division by zero
+>>> 10 % 0
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+    10 % 0
+    ~~~^~~
+ZeroDivisionError: integer modulo by zero
+```
+
+The `~~~^~~` marker, shown in tracebacks from Python 3.11 on, points to the position of the operator that caused the error. A program that divides by a number the user entered must check whether that number is 0 before dividing, and the conditional statements used for the check are covered in Lecture 4.
 
 ---
 
@@ -523,11 +636,11 @@ flowchart LR
     P -->|"700"| S["sum"]
 ```
 
-*Figure 11. How two inputs become 700 through input(), int(), and addition*
+*Figure 12. How two inputs become 700 through input(), int(), and addition*
 
 If `int()` is removed and the lines are written as `x = input(...)` and `y = input(...)`, then `x` and `y` are the strings `"300"` and `"400"`, and `+` joins the two strings (Section 7.2). So the output is `The sum of 300 and 400 is 300400`. Using `float()` instead of `int()` converts the input to floating-point numbers, printing `The sum of 300.0 and 400.0 is 700.0`.
 
-> **Caution:** `int()` converts only strings that look like integers. Entering `3.5` or `abc` where an integer is expected causes an error such as `ValueError: invalid literal for int() with base 10: '3.5'`, and the program stops. Also, this program stores the sum in a variable named `sum`, but `sum` is also the name of a Python built-in function that adds up several values. Using the same name for a variable makes the built-in function `sum()` unusable in that program, so a name that does not clash, such as `total`, is safer.
+> **Caution:** `int()` converts only strings that look like integers. Entering `3.5` or `abc` where an integer is expected causes an error such as `ValueError: invalid literal for int() with base 10: '3.5'`, and the program stops (handling such errors is covered in Lecture 11). Also, this program stores the sum in a variable named `sum`, but `sum` is also the name of a Python built-in function that adds up several values. Using the same name for a variable makes the built-in function `sum()` unusable in that program, so a name that does not clash, such as `total`, is safer.
 
 ### 9.2 String Input
 
@@ -649,7 +762,7 @@ A **compound assignment operator** is an operator, such as `+=`, that combines t
 | `x /= y` | `x = x / y` |
 | `x %= y` | `x = x % y` |
 
-*Table 6. Compound assignment operators and their meanings*
+*Table 7. Compound assignment operators and their meanings*
 
 Other arithmetic operators have compound assignment operators of the same form, such as `//=` and `**=`. The following program increases the value of `x` by 2 and then decreases it by 2 again.
 
@@ -720,9 +833,9 @@ graph TD
     end
 ```
 
-*Figure 12. Expression trees showing the order of calculation in x + y * z and (x + y) * z*
+*Figure 13. Expression trees showing the order of calculation in x + y * z and (x + y) * z*
 
-In Figure 12, the lower operator is calculated first (①). In `x + y * z`, `y * z` is calculated first and `x` is added to the result, while in `(x + y) * z`, `x + y` in the parentheses is calculated first and the result is multiplied by `z`.
+In Figure 13, the lower operator is calculated first (①). In `x + y * z`, `y * z` is calculated first and `x` is added to the result, while in `(x + y) * z`, `x + y` in the parentheses is calculated first and the result is multiplied by `z`.
 
 ```pycon
 >>> 10 + 20 / 2
@@ -745,7 +858,7 @@ The first expression calculates 20 / 2 = 10.0 first, giving 10 + 10.0 = 20.0. Th
 | 6 | `&` | Bitwise AND operator |
 | 7 | `^` `\|` | Bitwise XOR operator, bitwise OR operator |
 
-*Table 7. Precedence of the arithmetic and bitwise operators (1 is the highest)*
+*Table 8. Precedence of the arithmetic and bitwise operators (1 is the highest)*
 
 The **unary operators** of rank 2 are operators attached to a single operand: the sign `-` in `-5`, the sign `+` in `+5`, and `~`, which flips bits (Section 13.3). The `+` and `-` of rank 4 are addition and subtraction as binary operators placed between two operands.
 
@@ -762,11 +875,11 @@ When operators of the same precedence follow one another, they are calculated ac
 4
 ```
 
-> **Caution:** `**` is calculated before a unary operator on its left, so `-2 ** 2` is $-(2^2) = -4$. To square a negative number, use parentheses, as in `(-2) ** 2`. On the other hand, a unary operator on the right is applied first, so `2 ** -1` is $2^{-1} = 0.5$. Also, Table 7 is simplified; in Python, `&`, `^`, and `|` each have a different rank, in that order. Relational operators (`<`, `==`, and so on) and logical operators (`not`, `and`, `or`) have lower precedence than all the operators in the table and are covered in Lecture 4 [7].
+> **Caution:** `**` is calculated before a unary operator on its left, so `-2 ** 2` is $-(2^2) = -4$. To square a negative number, use parentheses, as in `(-2) ** 2`. On the other hand, a unary operator on the right is applied first, so `2 ** -1` is $2^{-1} = 0.5$. Also, Table 8 is simplified; in Python, `&`, `^`, and `|` each have a different rank, in that order. Relational operators (`<`, `==`, and so on) and logical operators (`not`, `and`, `or`) have lower precedence than all the operators in the table and are covered in Lecture 4 [7].
 
 ### 13.3 Bitwise Operators
 
-Ranks 5-7 of Table 7 are **bitwise operators**, which calculate bit by bit (0 or 1) when integers are written in binary. 6 is `110` in binary and 3 is `011`, so the following rules are applied to each position.
+Ranks 5-7 of Table 8 are **bitwise operators**, which calculate bit by bit (0 or 1) when integers are written in binary. 6 is `110` in binary and 3 is `011`, so the following rules are applied to each position.
 
 | A | B | A AND B (`&`) | A OR B (`\|`) | A XOR B (`^`) |
 |:-----|:-----|:-----|:-----|:-----|
@@ -775,7 +888,7 @@ Ranks 5-7 of Table 7 are **bitwise operators**, which calculate bit by bit (0 or
 | 1 | 0 | 0 | 1 | 1 |
 | 1 | 1 | 1 | 1 | 0 |
 
-*Table 8. Results of AND, OR, and XOR on a single bit*
+*Table 9. Results of AND, OR, and XOR on a single bit*
 
 AND is 1 only when both bits are 1, OR is 1 when at least one is 1, and XOR is 1 only when the two bits differ.
 
@@ -824,7 +937,7 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
 | 7. Four arithmetic operations on two integers | Arithmetic operators and the floating-point result of `/` (Section 8.2) |
 | 8. Sum of digits | Taking out digits one at a time with `//` and `%` (Section 10) |
 
-*Table 9. The exercises and the concepts each one uses*
+*Table 10. The exercises and the concepts each one uses*
 
 **True/False Check:**
 
@@ -858,7 +971,9 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
 | Variables and assignment | A variable is a name that stores a value, and `=` is the assignment operator, which evaluates the right side and stores it in the variable on the left. |
 | Data types | There are integers (`int`), floating-point numbers (`float`), and strings (`str`), which can be checked with `type()`. |
 | Variable names | Made of English letters, digits, and underscores; cannot start with a digit; case-sensitive; and keywords cannot be used. |
+| Multiple assignment | Assigns several names at once, as in `a, b = 1, 2`, and because the whole right side is computed before storing, `a, b = b, a` swaps two values. |
 | Arithmetic operators | `+`, `-`, `*`, `/` (floating-point division), `//` (quotient), `%` (remainder), and `**` (exponentiation). |
+| Data type of a result | Between integers only `/` gives a float, the result is a float if any operand is a float, and dividing by 0 raises a `ZeroDivisionError`. |
 | `input()` and `int()` | `input()` always returns its input as a string, so to calculate with it as a number, convert it with `int()` or `float()`. |
 | Remainder operator | Used where a quotient and remainder are needed, such as telling even from odd, converting seconds to minutes and seconds, and calculating change. |
 | Compound assignment operators | `x += y` is the same as `x = x + y`, and Python has no `++` or `--`. |
@@ -965,6 +1080,24 @@ The bit shift operators `<<` and `>>` move all bits to the left or right. `6 << 
     <summary>Answer</summary>
 
     5 is `101` and 6 is `110`. AND is 1 only where both are 1, giving `100` = 4; OR is 1 where at least one is 1, giving `111` = 7; and XOR is 1 only where they differ, giving `011` = 3.
+
+    </details>
+
+11. **Tracing multiple assignment:** After running `x, y = 3, 8`, what are `x` and `y` when `x, y = y, x + y` is run twice? Write the bundle of values on the right at each step.
+
+    <details>
+    <summary>Answer</summary>
+
+    At first `x` is 3 and `y` is 8. On the first run the right side is (8, 3 + 8) = (8, 11), so `x` becomes 8 and `y` becomes 11. On the second run the right side is (11, 8 + 11) = (11, 19), so `x` is 11 and `y` is 19. Because the whole right side is computed before storing, `x + y` uses the value of `x` before it changes.
+
+    </details>
+
+12. **Data type of a result:** Give the value and data type of `9 // 2`, `9 / 3`, `9 // 2.0`, `-9 % 4`, and `divmod(9, 4)`.
+
+    <details>
+    <summary>Answer</summary>
+
+    `9 // 2` is the integer 4, `9 / 3` is the float 3.0, and `9 // 2.0` is the float 4.0. `-9 % 4` is the integer 3, because -9 = (-3) × 4 + 3. `divmod(9, 4)` is the bundle of quotient and remainder `(2, 1)`.
 
     </details>
 
